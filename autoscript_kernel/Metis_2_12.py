@@ -8,14 +8,15 @@ import time
 try:
     from PyQt6 import QtWidgets
     from PyQt6.QtGui import QImage, QPixmap
+    import wda  # type: ignore
 except:
-    print('No module named PyQt6')
+    print('No module')
 
 from os import listdir
 from os.path import isdir, isfile, join
 from pathlib import Path
 from typing import Dict, Tuple
-import wda  # type: ignore
+
 import cv2
 import numpy as np  # type: ignore
 from cv2 import Mat
