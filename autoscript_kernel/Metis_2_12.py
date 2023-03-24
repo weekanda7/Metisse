@@ -5,8 +5,12 @@ import io
 import logging
 import os
 import time
-from PyQt6 import QtWidgets
-from PyQt6.QtGui import QImage, QPixmap
+try:
+    from PyQt6 import QtWidgets
+    from PyQt6.QtGui import QImage, QPixmap
+except:
+    print('No module named PyQt6')
+
 from os import listdir
 from os.path import isdir, isfile, join
 from pathlib import Path
