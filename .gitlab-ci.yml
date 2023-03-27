@@ -38,6 +38,7 @@ install_dependencies:
 run_unittests:
   stage: test
   script:
+    - pip install -r requirements.txt
     - python -m unittest discover -s unittest -p "CheckImageRecognition.py"
   needs:
     - install_dependencies
