@@ -39,7 +39,7 @@ class TestCheckImageRecognition(unittest.TestCase):
         
 
         # Copy test images to the temporary directory
-        src_test_images = 'C:\\Users\\henrychen\\Documents\\gitlab\\metis\\unittest\\tmp\\'
+        src_test_images = curPath + '/tmp'
         dst_test_images = os.path.join(self.test_dir, 'tmp.png')
         shutil.copytree(src_test_images, dst_test_images)
 
