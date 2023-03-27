@@ -50,7 +50,7 @@ class Metis_2_12_class(Template_Metis_2_12):
                 self._sub_root_dict[_key] = _value.replace(':', '_')
         #assert os_environment in OS_ENVIRONMENT
         self._os_environment = os_environment  # android , ios
-
+        self.ios_device_scale = 2 # init var
         if self._os_environment == 'ios':
             self.wda_client = wda.USBClient(device_id, port=8100)
             try:
