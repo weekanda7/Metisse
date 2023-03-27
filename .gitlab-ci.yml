@@ -15,7 +15,7 @@
 # https://docs.gitlab.com/ee/development/cicd/templates.html
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-image: python:3.8
+
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
@@ -23,35 +23,25 @@ stages:          # List of stages for jobs, and their order of execution
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
+  tags:
+    - shell
   script:
     - echo "Compiling the code..."
     - echo "Compile complete."
-install_dependencies:
-  stage: test    # It only starts when the job in the build stage completes successfully.
-  script:
-    - python -V  # Print out python version for debugging
-    - pip install -r requirements.txt  # Install dependencies
-  artifacts:
-    paths:
-      - .venv/
 
 run_unittests:
   stage: test
+  tags:
+    - shell
   script:
     - pip install -r requirements.txt
     - python -m unittest discover -s unittest -p "CheckImageRecognition.py"
-  needs:
-    - install_dependencies
 
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
-  script:
-    - echo "Linting code... This will take about 10 seconds."
-    - sleep 10
-    - echo "No lint issues found."
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  tags:
+    - shell
   environment: production
   script:
     - echo "Deploying application..."
