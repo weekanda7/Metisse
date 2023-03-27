@@ -34,7 +34,7 @@ run_unittests:
   tags:
     - shell
   script:
-    - python -m unittest discover -s unittest "
+    - python -m unittest discover -s unittest -p "test*.py"
 
 
 deploy-job:      # This job runs in the deploy stage.
