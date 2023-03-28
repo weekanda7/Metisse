@@ -7,8 +7,6 @@ version 2.12.2
 """
 
 from __future__ import annotations
-from .params import ImageRecognitionParams, SaveParams
-from .template_metis import TemplateMetisClass
 import io
 import logging
 import os
