@@ -1,15 +1,16 @@
-from autoscript_kernel.parms import ImageRecognitionParams
-from autoscript_kernel.metis import MetisClass
+
 import unittest
 import sys
 import os
 from unittest.mock import patch, MagicMock
+
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
 
 # Import other necessary modules and classes
-
+from autoscript_kernel.parms import ImageRecognitionParams
+from autoscript_kernel.metis import MetisClass
 
 class TestMyModule(unittest.TestCase):
 
@@ -33,7 +34,7 @@ class TestMyModule(unittest.TestCase):
             os_environment='android',
         )
         self.test_metis.create_sub_root_file()
-        self.test_metis.is_backup = True   # check save backup image
+        self.test_metis.is_backup = True  # check save backup image
         self.test_metis.screenshot_wait_time_increase = 1
         self.test_metis.is_check_gamelog = False
 
@@ -42,11 +43,9 @@ class TestMyModule(unittest.TestCase):
     @patch.object(MetisClass, 'save_screenshot_compression')
     def test_adb_default_tap(self, mock_save_screenshot_compression, mock_tap, mock_check_image_recognition):
         # Set up the necessary input parameters and objects
-        params = ImageRecognitionParams(
-            template_image_name="example_template",
-            template_image_root_dict_key="example_root_key",
-            is_backup=True
-        )
+        params = ImageRecognitionParams(template_image_name="example_template",
+                                        template_image_root_dict_key="example_root_key",
+                                        is_backup=True)
 
         # Call the adb_default_tap method with the prepared input parameters
         result = self.test_metis.adb_default_tap(params)

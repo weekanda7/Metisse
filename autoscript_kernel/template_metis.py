@@ -65,11 +65,7 @@ class TemplateMetisClass(ABC):
         ...
 
     @abstractmethod
-    def check_image_recognition(
-        self,
-        params: ImageRecognitionParams
-
-    ) -> bool:
+    def check_image_recognition(self, params: ImageRecognitionParams) -> bool:
         ...
 
     @abstractmethod
