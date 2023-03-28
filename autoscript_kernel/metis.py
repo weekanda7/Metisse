@@ -87,7 +87,6 @@ class MetisClass(TemplateMetisClass):
             self._device_id.replace(":", "_")
         self._logfile_path = self.get_current_root + \
             self._device_id.replace(":", "_")
-
         if not self._logfile_path:
             self._logfile_path += '/'
         if not os.path.isdir(self._logfile_path + '/log'):
