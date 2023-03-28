@@ -1,5 +1,0 @@
-repos:
--   repo: https://github.com/PyCQA/pylint
-    rev: pylint-2.11.1
-    hooks:
-    -   id: pylint

@@ -18,6 +18,7 @@
 
 stages:          # List of stages for jobs, and their order of execution
   - build
+  - lint
   - test
   - deploy
 
@@ -28,6 +29,20 @@ build-job:       # This job runs in the build stage, which runs first.
   script:
     - echo "Compiling the code..."
     - echo "Compile complete."
+
+pylint:
+  stage: lint
+  tags:
+    - shell
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install pylint
+  script:
+    - pylint autoscript_kernel
+  allow_failure: true  # 设置为 false，如果您希望 lint 失败时停止整个 CI/CD 流程
+  artifacts:
+    reports:
+      codequality: pylint-report.txt
 
 run_unittests:
   stage: test
