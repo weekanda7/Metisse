@@ -35,7 +35,7 @@ class TestMyModule(unittest.TestCase):
         self.test_metis.is_check_gamelog = False
 
     @patch('os.system')
-    @patch('autoscript_kernel.Metis_2_12.MetisClass')
+    @patch('autoscript_kernel.metis.MetisClass')
     def test_tap_ios(self, mock_wda_client, mock_os_system):
         # Set the _os_environment attribute to 'ios'
         self.test_metis._os_environment = 'ios'
@@ -51,7 +51,7 @@ class TestMyModule(unittest.TestCase):
                                                           int(200 / self.test_metis.ios_device_scale))
 
     @patch('os.system')
-    @patch('autoscript_kernel.Metis_2_12.MetisClass')
+    @patch('autoscript_kernel.metis.MetisClass')
     def test_swipe_ios(self, mock_wda_client, mock_os_system):
         # Set the _os_environment attribute to 'ios'
         self.test_metis._os_environment = 'ios'

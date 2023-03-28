@@ -36,7 +36,7 @@ class TestMyModule(unittest.TestCase):
         self.test_metis.is_check_gamelog = False
 
     @patch('os.system')
-    @patch('autoscript_kernel.Metis_2_12.MetisClass')
+    @patch('autoscript_kernel.metis.MetisClass')
     def test_tap_android(self, mock_wda_client, mock_os_system):
         # Set the _os_environment attribute to 'android'
         self.test_metis._os_environment = 'android'
@@ -48,7 +48,7 @@ class TestMyModule(unittest.TestCase):
         mock_os_system.assert_called_with("adb {} shell input tap {} {}".format(self.test_metis.get_device_id, 100, 200))
 
     @patch('os.system')
-    @patch('autoscript_kernel.Metis_2_12.MetisClass')
+    @patch('autoscript_kernel.metis.MetisClass')
     def test_swipe_android(self, mock_wda_client, mock_os_system):
         # Set the _os_environment attribute to 'android'
         self.test_metis._os_environment = 'android'
