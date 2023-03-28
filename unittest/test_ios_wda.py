@@ -38,7 +38,7 @@ class TestMyModule(unittest.TestCase):
 
 
     @patch('os.system')
-    @patch('autoscript_kernel.Metis_2_12.Metis_2_12_class')
+    @patch('autoscript_kernel.metis.Metis_2_12_class')
     def test_tap_ios(self, mock_wda_client, mock_os_system):
         # Set the _os_environment attribute to 'ios'
         self.test_metis._os_environment = 'ios'
@@ -55,7 +55,7 @@ class TestMyModule(unittest.TestCase):
 
 
     @patch('os.system')
-    @patch('autoscript_kernel.Metis_2_12.Metis_2_12_class')
+    @patch('autoscript_kernel.metis.Metis_2_12_class')
     def test_swipe_ios(self, mock_wda_client, mock_os_system):
         # Set the _os_environment attribute to 'ios'
         self.test_metis._os_environment = 'ios'
