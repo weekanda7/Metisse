@@ -1,3 +1,5 @@
+from autoscript_kernel.parms import SaveParams
+from autoscript_kernel.metis import MetisClass
 import os
 import sys
 import unittest
@@ -7,8 +9,7 @@ from PIL import Image
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
-from autoscript_kernel.metis import Metis_2_12_class
-from autoscript_kernel.parms import SaveParams
+
 
 class TestCropScreenshot(unittest.TestCase):
 
@@ -17,8 +18,9 @@ class TestCropScreenshot(unittest.TestCase):
         curPath = os.path.abspath(os.path.dirname(__file__))
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
-        relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = Metis_2_12_class(
+        relatively_path = './{}/'.format(
+            os.path.relpath(curPath, start=os.curdir))
+        self.test_metis = MetisClass(
             device_id='test_device_id',
             sub_root_dict={
                 'tmp_root': 'tmp/',
@@ -52,19 +54,25 @@ class TestCropScreenshot(unittest.TestCase):
 
         expected_output_path = os.path.join(
             self.test_metis.get_current_root,
-            self.test_metis.get_sub_root_path(save_params.save_image_root_dict_key),
-            self.test_metis._check_additional_root(save_params.save_image_additional_root),
+            self.test_metis.get_sub_root_path(
+                save_params.save_image_root_dict_key),
+            self.test_metis._check_additional_root(
+                save_params.save_image_additional_root),
             save_params.save_image_name + '.png'
         )
 
-        self.assertTrue(os.path.exists(expected_output_path), 'Cropped image file was not created.')
+        self.assertTrue(os.path.exists(expected_output_path),
+                        'Cropped image file was not created.')
 
         with Image.open(expected_output_path) as cropped_image:
-            expected_size = (coordinate2[0] - coordinate1[0], coordinate2[1] - coordinate1[1])
-            self.assertEqual(cropped_image.size, expected_size, 'Cropped image size does not match expected size.')
+            expected_size = (
+                coordinate2[0] - coordinate1[0], coordinate2[1] - coordinate1[1])
+            self.assertEqual(cropped_image.size, expected_size,
+                             'Cropped image size does not match expected size.')
 
     def tearDown(self):
         self.test_metis = None
+
 
 if __name__ == '__main__':
     unittest.main()

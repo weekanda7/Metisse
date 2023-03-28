@@ -31,7 +31,7 @@ OS_ENVIRONMENT = ['android', 'ios']
 from .parms import ImageRecognitionParams, SaveParams
 
 
-class Metis_2_12_class(Template_Metis_2_12):
+class MetisClass(Template_Metis_2_12):
 
     def __init__(self,
                  device_id: str,
