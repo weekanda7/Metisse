@@ -28,7 +28,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'fine_key.json'
 from .Template_Metis_2_12 import Template_Metis_2_12
 
 OS_ENVIRONMENT = ['android', 'ios']
-from .Params import ImageRecognitionParams, SaveParams
+from .parms import ImageRecognitionParams, SaveParams
 
 
 class Metis_2_12_class(Template_Metis_2_12):

@@ -6,7 +6,7 @@ curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
 from autoscript_kernel.Metis_2_12 import Metis_2_12_class
-from autoscript_kernel.Params import ImageRecognitionParams
+from autoscript_kernel.parms import ImageRecognitionParams
 
 # Import other necessary modules and classes
 
@@ -34,7 +34,7 @@ class TestMyModule(unittest.TestCase):
         self.test_metis.is_backup = True   # check save backup image
         self.test_metis.screenshot_wait_time_increase = 1
         self.test_metis.is_check_gamelog = False
-        
+
     @patch.object(Metis_2_12_class, 'check_image_recognition', return_value=True)
     @patch.object(Metis_2_12_class, 'tap')
     @patch.object(Metis_2_12_class, 'save_screenshot_compression')

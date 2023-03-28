@@ -7,7 +7,7 @@ curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
 from autoscript_kernel.Metis_2_12 import Metis_2_12_class
-from autoscript_kernel.Params import ImageRecognitionParams
+from autoscript_kernel.parms import ImageRecognitionParams
 
 class TestMyModule(unittest.TestCase):
 
@@ -37,8 +37,8 @@ class TestMyModule(unittest.TestCase):
         # Set up the necessary input parameters and objects
         # You need to replace the paths with the actual paths of your sample images
 
-        
-        
+
+
         screen_image_path = os.path.join(curPath+'/tmp', 'tmp0.png')
         template_image_path = os.path.join(curPath+'/icon', 'test_tamplate.png')
 

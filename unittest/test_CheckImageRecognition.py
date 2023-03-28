@@ -7,7 +7,7 @@ curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
 from autoscript_kernel.Metis_2_12 import Metis_2_12_class
-from autoscript_kernel.Params import ImageRecognitionParams
+from autoscript_kernel.parms import ImageRecognitionParams
 
 
 class TestCheckImageRecognition(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestCheckImageRecognition(unittest.TestCase):
     def setUp(self):
         # Set up a temporary directory for storing test images
         self.test_dir = tempfile.mkdtemp()
-        
+
         # Initialize your class object here
         curPath = os.path.abspath(os.path.dirname(__file__))
         rootPath = os.path.split(curPath)[0]
@@ -36,7 +36,7 @@ class TestCheckImageRecognition(unittest.TestCase):
         self.test_metis.is_backup = False
         self.test_metis.screenshot_wait_time_increase = 1
         self.test_metis.is_check_gamelog = False
-        
+
 
         # Copy test images to the temporary directory
         src_test_images = curPath + '/tmp'
