@@ -34,7 +34,8 @@ run_unittests:
   tags:
     - shell
   script:
-    - python -m unittest discover -s unittest -p "test*.py"
+    - pip install -r requirements.txt
+    - python -m unittest discover -s unittest -p "CheckImageRecognition.py"
 
 
 deploy-job:      # This job runs in the deploy stage.
