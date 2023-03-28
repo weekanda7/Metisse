@@ -7,7 +7,7 @@ import os
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
-from autoscript_kernel.Metis_2_12 import Metis_2_12_class
+from autoscript_kernel.metis import Metis_2_12_class
 
 
 
@@ -34,7 +34,7 @@ class TestMyModule(unittest.TestCase):
         self.test_metis.is_backup = False
         self.test_metis.screenshot_wait_time_increase = 1
         self.test_metis.is_check_gamelog = False
-    
+
 
 
     @patch('os.system')
@@ -42,7 +42,7 @@ class TestMyModule(unittest.TestCase):
     def test_tap_ios(self, mock_wda_client, mock_os_system):
         # Set the _os_environment attribute to 'ios'
         self.test_metis._os_environment = 'ios'
-        
+
         # Set up a MagicMock for wda_client
         self.test_metis.wda_client = MagicMock()
 
@@ -59,7 +59,7 @@ class TestMyModule(unittest.TestCase):
     def test_swipe_ios(self, mock_wda_client, mock_os_system):
         # Set the _os_environment attribute to 'ios'
         self.test_metis._os_environment = 'ios'
-        
+
         # Set up a MagicMock for wda_client
         self.test_metis.wda_client = MagicMock()
 
