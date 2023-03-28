@@ -35,7 +35,7 @@ run_unittests:
     - shell
   script:
     - pip install -r requirements.txt
-    - python -m unittest discover -s unittest -p "CheckImageRecognition.py"
+    - python -m unittest discover -s unittest -p "test*.py"
 
 
 deploy-job:      # This job runs in the deploy stage.
