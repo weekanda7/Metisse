@@ -7,12 +7,10 @@ version 2.12.2
 """
 
 from __future__ import annotations
-
 import io
 import logging
 import os
 import time
-import sys
 try:
     from PyQt6 import QtWidgets
     from PyQt6.QtGui import QImage, QPixmap
@@ -30,11 +28,9 @@ from cv2 import Mat
 from PIL import Image
 import natsort
 from google.cloud import vision  # type: ignore
-curPath = os.path.abspath(os.path.dirname(__file__))
-rootPath = os.path.split(curPath)[0]
-sys.path.append(rootPath)
-from .params import ImageRecognitionParams, SaveParams
 from .template_metis import TemplateMetis
+from .params import ImageRecognitionParams, SaveParams
+
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'fine_key.json'
 
