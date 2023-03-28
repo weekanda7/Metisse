@@ -3,11 +3,13 @@ import sys
 import unittest
 import cv2
 import numpy as np
+
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
-from autoscript_kernel.Metis_2_12 import Metis_2_12_class
-from autoscript_kernel.Params import ImageRecognitionParams
+from autoscript_kernel.metis import MetisClass
+from autoscript_kernel.params import ImageRecognitionParams
+
 
 class TestMyModule(unittest.TestCase):
 
@@ -17,10 +19,10 @@ class TestMyModule(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = Metis_2_12_class(
+        self.test_metis = MetisClass(
             device_id='test_device_id',
             sub_root_dict={
-                'tmp_root': 'tmp/' ,
+                'tmp_root': 'tmp/',
                 'icon_root': 'icon/',
                 'save_root': 'storage/temp/',
             },
@@ -37,10 +39,8 @@ class TestMyModule(unittest.TestCase):
         # Set up the necessary input parameters and objects
         # You need to replace the paths with the actual paths of your sample images
 
-        
-        
-        screen_image_path = os.path.join(curPath+'/tmp', 'tmp0.png')
-        template_image_path = os.path.join(curPath+'/icon', 'test_tamplate.png')
+        screen_image_path = os.path.join(curPath + '/tmp', 'tmp0.png')
+        template_image_path = os.path.join(curPath + '/icon', 'test_tamplate.png')
 
         screen_image = cv2.imread(screen_image_path, cv2.IMREAD_GRAYSCALE)
         template_image = cv2.imread(template_image_path, cv2.IMREAD_GRAYSCALE)
@@ -62,6 +62,7 @@ class TestMyModule(unittest.TestCase):
 
         # If needed, you can also check the _itp_center_list attribute
         # ...
+
 
 if __name__ == '__main__':
     unittest.main()

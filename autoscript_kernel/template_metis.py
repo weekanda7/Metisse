@@ -6,9 +6,10 @@ from abc import ABC, abstractmethod
 from typing import Tuple
 
 from cv2 import Mat
-from .Params import ImageRecognitionParams ,SaveParams
+from .params import ImageRecognitionParams, SaveParams
 
-class Template_Metis_2_12(ABC):
+
+class TemplateMetis(ABC):
     """_summary_
         adb fuction template
     Args:
@@ -39,9 +40,9 @@ class Template_Metis_2_12(ABC):
 
     @abstractmethod
     def _set_screen_image_imread_cv2(self,
-                                       _screen_image_root_dict_key: str = '',
-                                       _image_name: str = '',
-                                       _additional_root: str = '') -> None:
+                                     _screen_image_root_dict_key: str = '',
+                                     _image_name: str = '',
+                                     _additional_root: str = '') -> None:
         ...
 
     @abstractmethod
@@ -64,11 +65,7 @@ class Template_Metis_2_12(ABC):
         ...
 
     @abstractmethod
-    def check_image_recognition(
-        self,
-        params: ImageRecognitionParams
-
-    ) -> bool:
+    def check_image_recognition(self, params: ImageRecognitionParams) -> bool:
         ...
 
     @abstractmethod
@@ -89,8 +86,8 @@ class Template_Metis_2_12(ABC):
     def adb_default_tap(
         self,
         params: ImageRecognitionParams,
-        tap_execute_wait_time: float ,
-        tap_execute_counter_times: int ,
+        tap_execute_wait_time: float,
+        tap_execute_counter_times: int,
         tap_offset: Tuple[int, int],
     ) -> bool:
         ...
@@ -117,30 +114,37 @@ class Template_Metis_2_12(ABC):
         ...
 
     @abstractmethod
-    def save_screenshot_compression(self,
-                                    save_params : SaveParams 
-                                    ) -> None:
+    def save_screenshot_compression(self, save_params: SaveParams) -> None:
         ...
 
     @abstractmethod
-    def crop_screenshot(self, save_params : SaveParams ,coordinate1_tuple1: Tuple[int, int], coordinate2_tuple2: Tuple[int, int],
-                        ) -> None:
+    def crop_screenshot(
+        self,
+        save_params: SaveParams,
+        coordinate1_tuple1: Tuple[int, int],
+        coordinate2_tuple2: Tuple[int, int],
+    ) -> None:
         ...
 
     @abstractmethod
     def scan_icon_png_to_list(self) -> list[str]:
         ...
+
     @abstractmethod
     def detect_text(
         self,
-        load_image_name: str ,
+        load_image_name: str,
         load_image_root_dict_key: str,
         load_image_additional_root: str,
     ) -> str:
         ...
+
     @abstractmethod
-    def process_itp_center_list(self)->list[tuple[int,int]]|None:
+    def process_itp_center_list(self) -> list[tuple[int, int]] | None:
         ...
+
     @abstractmethod
-    def except_within_range_position(self,_center_list:list[tuple[int,int]]|None,_except_list:list[tuple[int,int]]|None,within_range_x:int,within_range_y:int)->list[tuple[int,int]]|None:     
+    def except_within_range_position(self, _center_list: list[tuple[int, int]] | None,
+                                     _except_list: list[tuple[int, int]] | None, within_range_x: int,
+                                     within_range_y: int) -> list[tuple[int, int]] | None:
         ...
