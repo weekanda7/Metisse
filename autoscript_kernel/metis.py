@@ -29,8 +29,8 @@ from cv2 import Mat
 from PIL import Image
 import natsort
 from google.cloud import vision  # type: ignore
-from params import ImageRecognitionParams, SaveParams
-from template_metis import TemplateMetis
+from .params import ImageRecognitionParams, SaveParams
+from .template_metis import TemplateMetis
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'fine_key.json'
 
