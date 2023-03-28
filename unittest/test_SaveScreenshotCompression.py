@@ -10,7 +10,7 @@ import numpy as np
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
-from autoscript_kernel.parms import SaveParams
+from autoscript_kernel.params import SaveParams
 from autoscript_kernel.metis import MetisClass
 
 

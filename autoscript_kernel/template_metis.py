@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from typing import Tuple
 
 from cv2 import Mat
-from .parms import ImageRecognitionParams, SaveParams
+from .params import ImageRecognitionParams, SaveParams
 
 
 class TemplateMetisClass(ABC):

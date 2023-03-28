@@ -9,7 +9,7 @@ rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
 
 # Import other necessary modules and classes
-from autoscript_kernel.parms import ImageRecognitionParams
+from autoscript_kernel.params import ImageRecognitionParams
 from autoscript_kernel.metis import MetisClass
 
 class TestMyModule(unittest.TestCase):

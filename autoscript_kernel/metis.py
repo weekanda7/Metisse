@@ -7,7 +7,7 @@ version 2.12.2
 """
 
 from __future__ import annotations
-from .parms import ImageRecognitionParams, SaveParams
+from .params import ImageRecognitionParams, SaveParams
 from .template_metis import TemplateMetisClass
 import io
 import logging
@@ -30,7 +30,7 @@ from cv2 import Mat
 from PIL import Image
 import natsort
 from google.cloud import vision  # type: ignore
-from .parms import ImageRecognitionParams, SaveParams
+from .params import ImageRecognitionParams, SaveParams
 from .template_metis import TemplateMetisClass
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'fine_key.json'
