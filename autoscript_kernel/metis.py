@@ -2,7 +2,7 @@
 # pyright: strict
 from __future__ import annotations
 from .parms import ImageRecognitionParams, SaveParams
-from .TemplateMetisClass import TemplateMetisClass
+from .template_metis import TemplateMetisClass
 import io
 import logging
 import os
