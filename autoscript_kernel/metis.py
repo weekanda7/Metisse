@@ -63,8 +63,8 @@ class MetisClass(TemplateMetisClass):
             except AttributeError:
                 self.ios_device_scale = 2
         self._log()
-        self._screen_image_Mat: Mat
-        self._template_image_Mat: Mat
+        self._screen_image_mat: Mat
+        self._template_image_mat: Mat
         self._itp_bool = False
         self._itp_center = (0, 0)
         self._itp_center_list: list[tuple[int, int]]
@@ -116,15 +116,17 @@ class MetisClass(TemplateMetisClass):
             self._pyqt_img = cv2.imread(_image_path)
             _height, _width, _ = self._pyqt_img.shape
             _bytes_perline = 3 * _width
-            self.qimg = QImage(self._pyqt_img, _width, _height, _bytes_perline,# type: ignore
-                               QImage.Format.Format_RGB888).rgbSwapped()  # type: ignore
-            self._ui_label_dict['image_label'].setPixmap(
-                QPixmap.fromImage(self.qimg))
+            self.qimg = QImage(
+                self._pyqt_img,  # type: ignore
+                _width,
+                _height,
+                _bytes_perline,  # type: ignore
+                QImage.Format.Format_RGB888).rgbSwapped()  # type: ignore
+            self._ui_label_dict['image_label'].setPixmap(QPixmap.fromImage(self.qimg))
 
     def execute_time_sleep(self, wait_time: float = 0):
         self._logger.info("execute_time_sleep : wait_time= %.2f", wait_time)
-        self._logger.info(
-            "execute_time_sleep method : \n wait_time= %.2f", wait_time)
+        self._logger.info("execute_time_sleep method : \n wait_time= %.2f", wait_time)
         time.sleep(wait_time)
 
     @property
@@ -158,23 +160,23 @@ class MetisClass(TemplateMetisClass):
                                      _image_name: str = '',
                                      _screen_image_root_dict_key: str = '',
                                      _additional_root: str = '') -> None:
-        self._screen_image_Mat = cv2.imread(
-            f'{self.get_current_root + self.get_sub_root_path(_screen_image_root_dict_key)}{ self._check_additional_root(_additional_root)}{self._check_image_name_pngFormat(_image_name)}'
+        self._screen_image_mat = cv2.imread(
+            f'{self.get_current_root+ self.get_sub_root_path(_screen_image_root_dict_key)}{ self._check_additional_root(_additional_root)}{self._check_image_name_pngFormat(_image_name)}'
         )
 
     def _get_screen_image_imread_cv2(self) -> cv2.Mat:
-        return self._screen_image_Mat
+        return self._screen_image_mat
 
     def _set_template_image_imread_cv2(self,
                                        _image_name: str = '',
                                        _template_image_root_dict_key: str = '',
                                        _additional_root: str = '') -> None:
-        self._template_image_Mat = cv2.imread(
+        self._template_image_mat = cv2.imread(
             f'{self.get_current_root + self.get_sub_root_path(_template_image_root_dict_key)}{self._check_additional_root(_additional_root)}{self._check_image_name_pngFormat(_image_name)}'
         )
 
     def _get_template_image_imread_cv2(self) -> cv2.Mat:
-        return self._template_image_Mat
+        return self._template_image_mat
 
     def get_sub_root_path(self, root_key: str) -> str:
         if len(self._sub_root_dict) != 0:
@@ -188,18 +190,18 @@ class MetisClass(TemplateMetisClass):
                                               params.screen_image_additional_root)
             self._set_template_image_imread_cv2(params.template_image_name, params.template_image_root_dict_key,
                                                 params.template_image_additional_root)
-            self._image_to_position(
-                self._screen_image_Mat, self._template_image_Mat, params.accuracy_val)
-        except Exception as e:
-            self._logger.info(e)
+            self._image_to_position(self._screen_image_mat, self._template_image_mat, params.accuracy_val)
+        except FileNotFoundError as error_msg:
+            self._logger.info("FileNotFoundError: %s", error_msg)
+        except ValueError as error_msg:
+            self._logger.info("ValueError: %s", error_msg)
 
             self.screenshot()
             self._set_screen_image_imread_cv2(params.screen_image_name, params.screen_image_root_dict_key,
                                               params.screen_image_additional_root)
             self._set_template_image_imread_cv2(params.template_image_name, params.template_image_root_dict_key,
                                                 params.template_image_additional_root)
-            self._image_to_position(
-                self._screen_image_Mat, self._template_image_Mat, params.accuracy_val)
+            self._image_to_position(self._screen_image_mat, self._template_image_mat, params.accuracy_val)
 
         if self._itp_bool:
             self._logger.info("_image_to_position method : template_name=%s prob=%.4f accuracy_val=%.4f %s",
@@ -214,7 +216,8 @@ class MetisClass(TemplateMetisClass):
             if self.is_backup and params.is_backup:
                 self.save_screenshot_compression(
                     SaveParams(save_image_root_dict_key='backup_root',
-                               save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
+                               save_image_name=
+                               f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
                                save_image_additional_root=self.backup_time,
                                is_refresh_screenshot=False))
             self.tap(self._itp_center)
@@ -238,8 +241,7 @@ class MetisClass(TemplateMetisClass):
     ) -> None:
 
         if self._os_environment == 'android':
-            os.system(
-                f"adb  {self.get_device_id}  shell screencap -p /sdcard/screenshot.png")
+            os.system(f"adb  {self.get_device_id}  shell screencap -p /sdcard/screenshot.png")
             os.system(
                 f"adb  {self.get_device_id}  pull /sdcard/screenshot.png {self.get_current_root + self.get_sub_root_path(save_screenshot_root_key) +self._check_additional_root(save_screenshot_additional_root)}{self._check_image_name_pngFormat(save_screenshot_name)}"
             )
@@ -248,22 +250,17 @@ class MetisClass(TemplateMetisClass):
                 f"{self.get_current_root + self.get_sub_root_path(save_screenshot_root_key) +self._check_additional_root(save_screenshot_additional_root)}{self._check_image_name_pngFormat(save_screenshot_name)}"
             )
         else:
-            raise Exception
-        self._logger.debug(
-            "adb_screenshot method : process %s", save_screenshot_name)
-        self._send_log_to_ui(
-            f"adb_screenshot method : \n process {save_screenshot_name:s}")
+            raise RuntimeError("Unsupported OS environment")
+        self._logger.debug("adb_screenshot method : process %s", save_screenshot_name)
+        self._send_log_to_ui(f"adb_screenshot method : \n process {save_screenshot_name:s}")
 
-    def _image_to_position(self, _screen_image_Mat: Mat, _template_image_Mat: Mat, _accuracy_val: float) -> None:
-        image_x, image_y = _template_image_Mat.shape[:2]
-        result = cv2.matchTemplate(
-            _screen_image_Mat, _template_image_Mat, cv2.TM_CCOEFF_NORMED)
-        _, max_val, _, max_loc = cv2.minMaxLoc(
-            result)  # type: ignore unused var
+    def _image_to_position(self, _screen_image_mat: Mat, _template_image_mat: Mat, _accuracy_val: float) -> None:
+        image_x, image_y = _template_image_mat.shape[:2]
+        result = cv2.matchTemplate(_screen_image_mat, _template_image_mat, cv2.TM_CCOEFF_NORMED)
+        _, max_val, _, max_loc = cv2.minMaxLoc(result)  # type: ignore unused var
 
         if max_val > _accuracy_val:  # accuracy between two image
-            _temp_center = (int(max_loc[0] + image_y / 2),
-                            int(max_loc[1] + image_x / 2))
+            _temp_center = (int(max_loc[0] + image_y / 2), int(max_loc[1] + image_x / 2))
             self._itp_bool = True
             self._itp_center = _temp_center
             self._itp_max_val = max_val
@@ -274,9 +271,9 @@ class MetisClass(TemplateMetisClass):
                 for i in range(loc_ren):
                     # type: ignore
                     # type: ignore
-                    _temp_center = (
-                        int(loc[1][i] + image_y / 2), int(loc[0][i] + image_x / 2)) # type: ignore
-                    _temp_center_list.append(_temp_center) # type: ignore
+                    # type: ignore
+                    _temp_center = (int(loc[1][i] + image_y / 2), int(loc[0][i] + image_x / 2))  # type: ignore
+                    _temp_center_list.append(_temp_center)  # type: ignore
                     #if (): print("pos:", _temp_center)
                 self._itp_center_list = _temp_center_list
         else:
@@ -290,23 +287,21 @@ class MetisClass(TemplateMetisClass):
             save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
             save_image_additional_root=self.backup_time,
             is_refresh_screenshot=False)
-        if params.repeatedly_screenshot_times <= 1:
+        def _single_time()->bool:
             if params.compare_times_counter > 1 and params.is_refresh_screenshot is False:
                 self._logger.info('warring efficient lost')
             for _num in range(params.compare_times_counter):
                 if self.is_check_gamelog:
                     self.check_gamelog(ImageRecognitionParams())
                 if params.is_refresh_screenshot:
-                    time.sleep(params.screenshot_wait_time +
-                               self.screenshot_wait_time_increase)
+                    time.sleep(params.screenshot_wait_time + self.screenshot_wait_time_increase)
                     self.screenshot(params.screen_image_name, params.screen_image_root_dict_key,
                                     params.screen_image_additional_root)
                 self._set_screen_image_imread_cv2(params.screen_image_name, params.screen_image_root_dict_key,
                                                   params.screen_image_additional_root)
                 self._set_template_image_imread_cv2(params.template_image_name, params.template_image_root_dict_key,
                                                     params.template_image_additional_root)
-                self._image_to_position(
-                    self._screen_image_Mat, self._template_image_Mat, params.accuracy_val)
+                self._image_to_position(self._screen_image_mat, self._template_image_mat, params.accuracy_val)
 
                 self._logger.info("_image_to_position method : template_name=%s  prob=%.4f accuracy_val=%.4f %s",
                                   params.template_image_name, self._itp_max_val, params.accuracy_val, self._itp_bool)
@@ -321,16 +316,14 @@ class MetisClass(TemplateMetisClass):
                     if self.is_backup and params.is_backup:
                         self.save_screenshot_compression(save_params)
                     return True
-        else:
-            _screen_image_name_list = [f'tmp{x}' for x in range(
-                params.repeatedly_screenshot_times)]
-
+            return False
+        def _multiple_times()->bool:
+            _screen_image_name_list = [f'tmp{x}' for x in range(params.repeatedly_screenshot_times)]
             if self.is_check_gamelog:
                 self.check_gamelog(ImageRecognitionParams())
             self._set_template_image_imread_cv2(params.template_image_name, params.template_image_root_dict_key,
                                                 params.template_image_additional_root)
-            time.sleep(params.screenshot_wait_time +
-                       self.screenshot_wait_time_increase)
+            time.sleep(params.screenshot_wait_time + self.screenshot_wait_time_increase)
 
             for _num in range(params.compare_times_counter):
                 for _temp_screen_image_name in _screen_image_name_list:
@@ -340,8 +333,7 @@ class MetisClass(TemplateMetisClass):
                 for _temp_screen_image_name in _screen_image_name_list:
                     self._set_screen_image_imread_cv2(_temp_screen_image_name, params.screen_image_root_dict_key,
                                                       params.screen_image_additional_root)
-                    self._image_to_position(
-                        self._screen_image_Mat, self._template_image_Mat, params.accuracy_val)
+                    self._image_to_position(self._screen_image_mat, self._template_image_mat, params.accuracy_val)
                     self._logger.info("_image_to_position method : template_name=%s  prob=%.4f accuracy_val=%.4f %s",
                                       params.template_image_name, self._itp_max_val, params.accuracy_val, self._itp_bool)
                     self._send_image_path_to_ui(_image_path=self.get_current_root +
@@ -355,6 +347,13 @@ class MetisClass(TemplateMetisClass):
                         if self.is_backup and params.is_backup:
                             self.save_screenshot_compression(save_params)
                         return True
+            return False
+        if params.repeatedly_screenshot_times <= 1:
+            if _single_time():
+                return True
+        else:
+            if _multiple_times():
+                return True
         if self.is_backup and params.is_backup:
             self.save_screenshot_compression(save_params)
         return False
@@ -374,18 +373,16 @@ class MetisClass(TemplateMetisClass):
             _y += tap_offset[1]
 
             if self._os_environment == 'android':
-                os.system(
-                    f"adb {self.get_device_id} shell input tap {_x} {_y}")
+                os.system(f"adb {self.get_device_id} shell input tap {_x} {_y}")
             elif self._os_environment == 'ios':
-                self.wda_client.tap(int(_x / self.ios_device_scale),  # type: ignore
-                                    int(_y / self.ios_device_scale))  # type: ignore
+                self.wda_client.tap(  # type: ignore
+                    int(_x / self.ios_device_scale),  # type: ignore
+                    int(_y / self.ios_device_scale))  # type: ignore
             else:
-                raise Exception
+                raise RuntimeError("Unsupported OS environment")
 
-            self._logger.info(
-                "tap method : (x,y) = %s offset = %s", center, tap_offset)
-            self._send_log_to_ui(
-                f"tap method : \n (x,y) = {center} \n offset = {tap_offset}")
+            self._logger.info("tap method : (x,y) = %s offset = %s", center, tap_offset)
+            self._send_log_to_ui(f"tap method : \n (x,y) = {center} \n offset = {tap_offset}")
 
     def swipe(
         self,
@@ -402,8 +399,7 @@ class MetisClass(TemplateMetisClass):
             (_x2, _y2) = swipe_offset_position
 
             if self._os_environment == 'android':
-                os.system(
-                    f"adb  {self.get_device_id} shell input swipe {_x} {_y} {_x2} {_y2} {swiping_time}")
+                os.system(f"adb  {self.get_device_id} shell input swipe {_x} {_y} {_x2} {_y2} {swiping_time}")
             elif self._os_environment == 'ios':
                 _ios_swipe_time = float(swiping_time) / 1000
                 self.wda_client.swipe(  # type: ignore
@@ -413,7 +409,7 @@ class MetisClass(TemplateMetisClass):
                     int(_y2 / self.ios_device_scale),  # type: ignore
                     _ios_swipe_time)  # type: ignore
             else:
-                raise Exception
+                raise RuntimeError("Unsupported OS environment")
 
             self._logger.info("swipe method : (x,y) = %s (x2,y2) = %s swiping_time = %.2f", center, swipe_offset_position,
                               swiping_time)
@@ -432,13 +428,11 @@ class MetisClass(TemplateMetisClass):
             try:
                 time.sleep(press_execute_wait_time)
                 self.swipe(center, center, pressing_time)
-                self._logger.info(
-                    "adb_press method : (x,y) = %s pressing_time = %d", center, pressing_time)
-                self._send_log_to_ui(
-                    f"adb_press method : \n (x,y) = {center} \n pressing_time = {pressing_time}")
-            except Exception as e:
-                self._logger.exception(f"adb_press method :  {e}")
-                self._send_log_to_ui(f"adb_press method : \n {e}")
+                self._logger.info("adb_press method : (x,y) = %s pressing_time = %d", center, pressing_time)
+                self._send_log_to_ui(f"adb_press method : \n (x,y) = {center} \n pressing_time = {pressing_time}")
+            except OSError as error_msg:
+                self._logger.exception("adb_press method :  %s", error_msg)
+                self._send_log_to_ui(f"adb_press method : \n {error_msg}")
 
     def adb_default_tap(
             self,
@@ -447,14 +441,13 @@ class MetisClass(TemplateMetisClass):
             tap_execute_counter_times: int = 1,
             tap_offset: Tuple[int, int] = (0, 0),
     ) -> bool:
-        save_params = SaveParams(save_image_root_dict_key='backup_root',
-                                 save_image_name='{}_{}_{:.2f}{}'.format(self.get_time(), params.template_image_name,
-                                                                         self._itp_max_val, self._itp_bool),
-                                 save_image_additional_root=self.backup_time,
-                                 is_refresh_screenshot=False)
+        save_params = SaveParams(
+            save_image_root_dict_key='backup_root',
+            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
+            save_image_additional_root=self.backup_time,
+            is_refresh_screenshot=False)
         if self.check_image_recognition(params):
-            self.tap(self._itp_center, tap_execute_counter_times,
-                     tap_execute_wait_time, tap_offset)
+            self.tap(self._itp_center, tap_execute_counter_times, tap_execute_wait_time, tap_offset)
             self._logger.info("adb_default_tap method : template_name=%s  prob=%.4f %s", params.template_image_name,
                               self._itp_max_val, self._itp_bool)
             self._send_log_to_ui(
@@ -511,8 +504,7 @@ class MetisClass(TemplateMetisClass):
             save_image_additional_root=self.backup_time,
             is_refresh_screenshot=False)
         if self.check_image_recognition(params):
-            self.press(self._itp_center, pressing_time,
-                       press_execute_counter_times, press_execute_wait_time)
+            self.press(self._itp_center, pressing_time, press_execute_counter_times, press_execute_wait_time)
             if self.is_backup and params.is_backup:
                 self.save_screenshot_compression(save_params)
             return True
@@ -576,7 +568,7 @@ class MetisClass(TemplateMetisClass):
         _pos_x2 -= _pos_x
         _pos_y2 -= _pos_y
         _region = (_pos_x, _pos_y, _pos_x + _pos_x2, _pos_y + _pos_y2)
-        _cropImg = _img.crop(_region)
+        _crop_img = _img.crop(_region)
         if save_params.is_save_image_name_add_time:
             _save_png_image_name = self.get_time() + save_params.save_image_name + '.png'
         else:
@@ -585,11 +577,9 @@ class MetisClass(TemplateMetisClass):
         _save_image_path = self._check_path(self.get_current_root +
                                             self.get_sub_root_path(save_params.save_image_root_dict_key) +
                                             self._check_additional_root(save_params.save_image_additional_root))
-        _cropImg.save(_save_image_path + _save_png_image_name)
-        self._logger.info(
-            "crop_screenshot method : exported : w=%s", _save_png_image_name)
-        self._send_log_to_ui(
-            f"crop_screenshot method : \n exported : w={_save_png_image_name}")
+        _crop_img.save(_save_image_path + _save_png_image_name)
+        self._logger.info("crop_screenshot method : exported : w=%s", _save_png_image_name)
+        self._send_log_to_ui(f"crop_screenshot method : \n exported : w={_save_png_image_name}")
         #print("exported:", path+png_string)
 
     def scan_icon_png_to_list(
@@ -604,9 +594,7 @@ class MetisClass(TemplateMetisClass):
 
         for _f in _files:
             _fullpath = join(
-                self.get_current_root +
-                self.get_sub_root_path(
-                    template_image_root_dict_key) + template_image_additional_root,
+                self.get_current_root + self.get_sub_root_path(template_image_root_dict_key) + template_image_additional_root,
                 _f)
             if isfile(_fullpath):
                 if (_f[len(_f) - 1] == 'g' or _f[len(_f) - 1] == 'G') and _f[:3] != 'tmp':
@@ -644,13 +632,9 @@ class MetisClass(TemplateMetisClass):
         """Detects text in the file."""
 
         client = vision.ImageAnnotatorClient()
-        image_file = io.open(
-            "{}{}".format(
-                self.get_current_root +
-                self.get_sub_root_path(
-                    load_image_root_dict_key) + self._check_additional_root(load_image_additional_root),
-                self._check_image_name_pngFormat(load_image_name)), 'rb')
-        content = image_file.read()
+        file_path = f"{self.get_current_root + self.get_sub_root_path(load_image_root_dict_key) + self._check_additional_root(load_image_additional_root)}{self._check_image_name_pngFormat(load_image_name)}"
+        with io.open(file_path, 'rb') as image_file:
+            content = image_file.read()
         image = vision.Image(content=content)
         response = client.text_detection(image=image)  # type: ignore
         texts = response.text_annotations  # type: ignore
@@ -659,18 +643,17 @@ class MetisClass(TemplateMetisClass):
         if texts != []:  # type: ignore
             txt = texts[0].description  # type: ignore
             # print(txt)
-            self._logger.info("detect_text method : txt = %s",
-                              texts)  # type: ignore
+            self._logger.info("detect_text method : txt = %s", texts)  # type: ignore
             self._send_log_to_ui(f"detect_text method : \n txt = {texts}")
             return txt  # type: ignore
 
         self._logger.info("detect_text method : txt = none")
-        self._send_log_to_ui(f"detect_text method : \n txt = none")
+        self._send_log_to_ui("detect_text method : \n txt = none")
         return ""  # type: ignore
 
     def process_itp_center_list(self) -> list[tuple[int, int]] | None:
         if not self._itp_bool:
-            return
+            return None
         _temp_center_list = self._itp_center_list
 
         assert len(_temp_center_list) > 0
@@ -683,17 +666,14 @@ class MetisClass(TemplateMetisClass):
                 if abs(tmp_x - tmp_x2) > 5 or abs(tmp_y - tmp_y2) > 5:
                     tmp_x, tmp_y = tmp_x2, tmp_y2
                     tmp_list.append((tmp_x, tmp_y))
-            self._logger.info(
-                "process_itp_center_list method : list = %s", tmp_list)
-            self._send_log_to_ui(
-                f"process_itp_center_list method : \n list = {tmp_list}")
+            self._logger.info("process_itp_center_list method : list = %s", tmp_list)
+            self._send_log_to_ui(f"process_itp_center_list method : \n list = {tmp_list}")
             return tmp_list
         if len(_temp_center_list) == 1:
-            self._logger.info(
-                "process_itp_center_list method : list = %s", _temp_center_list)
-            self._send_log_to_ui(
-                f"process_itp_center_list method : \n list = {_temp_center_list}")
+            self._logger.info("process_itp_center_list method : list = %s", _temp_center_list)
+            self._send_log_to_ui(f"process_itp_center_list method : \n list = {_temp_center_list}")
             return _temp_center_list
+        return None
 
     def except_within_range_position(self, _center_list: list[tuple[int, int]] | None,
                                      _except_list: list[tuple[int, int]] | None, within_range_x: int,
@@ -713,17 +693,16 @@ class MetisClass(TemplateMetisClass):
                         break
                 if flag:
                     tmp_list.append((tmp_x, tmp_y))
+            return None
 
         assert within_range_x >= 0
         assert within_range_y >= 0
         if _center_list == []:
-            return []
+            return None
         if _except_list == []:
             return _center_list
         tmp_list: list[tuple[int, int]] = []
         do_except()
-        self._logger.info(
-            "except_within_range_position method : list = %s", tmp_list)
-        self._send_log_to_ui(
-            f"except_within_range_position method : \n list = {tmp_list}")
+        self._logger.info("except_within_range_position method : list = %s", tmp_list)
+        self._send_log_to_ui(f"except_within_range_position method : \n list = {tmp_list}")
         return tmp_list
