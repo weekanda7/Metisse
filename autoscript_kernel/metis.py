@@ -3,7 +3,6 @@
 """
 This module contains functions for android and ios script.
 It includes device port connect, screen shoot ,image similarity calculation, device control.
-version 2.12.2
 """
 
 from __future__ import annotations
