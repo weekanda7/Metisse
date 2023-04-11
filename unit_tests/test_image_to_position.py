@@ -5,11 +5,10 @@ import unittest
 import cv2
 import numpy as np
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from core.params import ImageRecognitionParams,UiClientParams
+from core.metis import MetisClass
 curPath = os.path.abspath(os.path.dirname(__file__))
-rootPath = os.path.split(curPath)[0]
-sys.path.append(rootPath)
-from autoscript_kernel.params import ImageRecognitionParams
-from autoscript_kernel.metis import MetisClass
 
 class TestMyModule(unittest.TestCase):
 
@@ -18,20 +17,15 @@ class TestMyModule(unittest.TestCase):
         curPath = os.path.abspath(os.path.dirname(__file__))
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
+
         relatively_path = './{}/'.format(
             os.path.relpath(curPath, start=os.curdir))
         self.test_metis = MetisClass(
-            device_id='test_device_id',
-            sub_root_dict={
-                'tmp_root': 'tmp/',
-                'icon_root': 'icon/',
-                'save_root': 'storage/temp/',
-            },
+            device_id='test_virtual_device',
             relatively_path=relatively_path,
-            pyqt6_ui_label_dict='',
+            pyqt6_ui_label_dict=UiClientParams(),
             os_environment='android',
         )
-        self.test_metis.create_sub_root_file()
         self.test_metis.is_backup = False
         self.test_metis.screenshot_wait_time_increase = 1
         self.test_metis.is_check_gamelog = False
@@ -40,9 +34,9 @@ class TestMyModule(unittest.TestCase):
         # Set up the necessary input parameters and objects
         # You need to replace the paths with the actual paths of your sample images
 
-        screen_image_path = os.path.join(curPath+'/tmp', 'tmp0.png')
+        screen_image_path = os.path.join(curPath,'test_virtual_device/tmp_root', 'tmp0.png')
         template_image_path = os.path.join(
-            curPath+'/icon', 'test_tamplate.png')
+            curPath,'test_virtual_device/icon', 'test_tamplate.png')
 
         screen_image = cv2.imread(screen_image_path, cv2.IMREAD_GRAYSCALE)
         template_image = cv2.imread(template_image_path, cv2.IMREAD_GRAYSCALE)
