@@ -1,8 +1,8 @@
 # -*- coding=UTF-8 -*-
 # pyright: strict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from PyQt6 import QtWidgets
-
+from typing import List, Tuple
 @dataclass
 class ImageRecognitionParams:
     template_image_name: str = ''
@@ -41,3 +41,10 @@ class DeviceParams:
 class UiClientParams:
     image_label: QtWidgets.QLabel = None # type: ignore
     log_label:  QtWidgets.QLabel = None # type: ignore
+
+@dataclass
+class ImageRecognitionResult:
+    is_recognized: bool = False
+    coordinate: Tuple[int, int] = (0, 0)
+    coordinates_list: List[Tuple[int, int]] = field(default_factory=list)
+    recognition_threshold: float = 0.9

@@ -4,7 +4,6 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Tuple
 
-from cv2 import Mat
 from .params import ImageRecognitionParams, SaveParams
 
 
@@ -18,10 +17,6 @@ class TemplateMetisClass(ABC):
     @property
     @abstractmethod
     def get_device_id(self) -> str:
-        ...
-
-    @abstractmethod
-    def _image_to_position(self, _compared_image_Mat: Mat, _template_image_Mat: Mat, _accuracy_val: float) -> None:
         ...
 
     @abstractmethod

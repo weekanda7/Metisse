@@ -17,14 +17,11 @@ except ImportError:
 from os import listdir
 from os.path import isdir, isfile, join
 from typing import Tuple
-import cv2
-import numpy as np  # type: ignore
 # pylint: disable=no-member
-from cv2 import Mat
 from PIL import Image
 import natsort
 from google.cloud import vision  # type: ignore
-from .params import ImageRecognitionParams, SaveParams, DeviceParams, UiClientParams
+from .params import ImageRecognitionParams, SaveParams, DeviceParams, UiClientParams, ImageRecognitionResult
 from .template_metis import TemplateMetisClass
 from .clients.ios.wda import WdaClient
 from .clients.andriod.adb import AdbClient
@@ -32,6 +29,7 @@ from .utils.metis_path import DevPath
 from .utils.opencv_utils import Opencv_utils
 from .utils.ui_client import UiClient
 from .utils.metis_log import MetisLogger
+from .utils import image_recognition
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'fine_key.json'
 
 OS_ENVIRONMENT = ['android', 'ios']
@@ -62,10 +60,9 @@ class MetisClass(TemplateMetisClass):
             self._client = AdbClient(DeviceParams(device_id, os_environment))
         else:
             raise ValueError('os_environment must be android or ios')
-        self._itp_bool = False
-        self._itp_center = (0, 0)
-        self._itp_center_list: list[tuple[int, int]]
-        self._itp_max_val = 0.9
+
+        self._img_recog_result =ImageRecognitionResult()
+
         self._ui_client = UiClient(pyqt6_ui_label_dict)
 
         self.is_backup = False
@@ -91,7 +88,7 @@ class MetisClass(TemplateMetisClass):
             _screen_image_path = self._script_path.get_screen_image_path(params)
             _template_image_path = self._script_path.get_template_image_path(params)
             self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-            self._image_to_position(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
+            self._img_recog_result=image_recognition.match_template(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
                                     params.accuracy_val)
         except FileNotFoundError as error_msg:
             self._logger.info("FileNotFoundError: %s", error_msg)
@@ -101,24 +98,24 @@ class MetisClass(TemplateMetisClass):
             _screen_image_path = self._script_path.get_screen_image_path(params)
             _template_image_path = self._script_path.get_template_image_path(params)
             self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-            self._image_to_position(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
+            self._img_recog_result=image_recognition.match_template(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
                                     params.accuracy_val)
 
-        if self._itp_bool:
-            self._logger.info("_image_to_position method : template_name=%s prob=%.4f accuracy_val=%.4f %s",
-                              params.template_image_name, self._itp_max_val, params.accuracy_val, self._itp_bool)
+        if self._img_recog_result.is_recognized:
+            self._logger.info("match_template method : template_name=%s prob=%.4f accuracy_val=%.4f %s",
+                              params.template_image_name, self._img_recog_result.recognition_threshold, params.accuracy_val, self._img_recog_result.is_recognized)
             self._ui_client.send_image_path_to_ui(_image_path=_template_image_path)
             self._ui_client.send_log_to_ui(
-                f"_image_to_position method : \n template_name={params.template_image_name}  \n prob={self._itp_max_val:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._itp_bool}"
+                f"match_template method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._img_recog_result.is_recognized}"
             )
             if self.is_backup and params.is_backup:
                 self.save_screenshot_compression(
                     SaveParams(save_image_root_name='backup_root',
                                save_image_name=
-                               f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
+                               f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
                                save_image_additional_root_name=self.backup_time,
                                is_refresh_screenshot=False))
-            self.tap(self._itp_center)
+            self.tap(self._img_recog_result.coordinate)
 
     def get_time(self) -> str:
         return time.strftime("%Y-%m-%d_%H_%M_%S_", time.localtime())
@@ -144,37 +141,10 @@ class MetisClass(TemplateMetisClass):
         self._logger.debug("adb_screenshot method : process %s", save_screenshot_name)
         self._ui_client.send_log_to_ui(f"adb_screenshot method : \n process {save_screenshot_name:s}")
 
-    def _image_to_position(self, _screen_image_mat: Mat, _template_image_mat: Mat, _accuracy_val: float) -> None:
-        image_x, image_y = _template_image_mat.shape[:2]
-        result = cv2.matchTemplate(_screen_image_mat, _template_image_mat, cv2.TM_CCOEFF_NORMED)
-        _, max_val, _, max_loc = cv2.minMaxLoc(result)  # type: ignore unused var
-
-        if max_val > _accuracy_val:  # accuracy between two image
-            _temp_center = (int(max_loc[0] + image_y / 2), int(max_loc[1] + image_x / 2))
-            self._itp_bool = True
-            self._itp_center = _temp_center
-            self._itp_max_val = max_val
-            loc = np.where(result >= _accuracy_val)  # type: ignore
-            loc_ren = len(loc[-1][:])  # type: ignore
-            if loc_ren > 0:
-                _temp_center_list = []
-                for i in range(loc_ren):
-                    # type: ignore
-                    # type: ignore
-                    # type: ignore
-                    _temp_center = (int(loc[1][i] + image_y / 2), int(loc[0][i] + image_x / 2))  # type: ignore
-                    _temp_center_list.append(_temp_center)  # type: ignore
-                    #if (): print("pos:", _temp_center)
-                self._itp_center_list = _temp_center_list
-        else:
-            self._itp_bool = False
-            self._itp_center = (0, 0)
-            self._itp_max_val = max_val
-
     def check_image_recognition(self, params: ImageRecognitionParams) -> bool:
         save_params = SaveParams(
             save_image_root_name='backup_root',
-            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
+            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
             save_image_additional_root_name=self.backup_time,
             is_refresh_screenshot=False)
 
@@ -192,16 +162,16 @@ class MetisClass(TemplateMetisClass):
                 _screen_image_path = self._script_path.get_screen_image_path(params)
                 _template_image_path = self._script_path.get_template_image_path(params)
                 self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-                self._image_to_position(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
+                self._img_recog_result=image_recognition.match_template(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
                                         params.accuracy_val)
 
-                self._logger.info("_image_to_position method : template_name=%s  prob=%.4f accuracy_val=%.4f %s",
-                                  params.template_image_name, self._itp_max_val, params.accuracy_val, self._itp_bool)
+                self._logger.info("image_recognition method : template_name=%s  prob=%.4f accuracy_val=%.4f %s",
+                                  params.template_image_name, self._img_recog_result.recognition_threshold, params.accuracy_val, self._img_recog_result.is_recognized)
                 self._ui_client.send_image_path_to_ui(_image_path=_template_image_path)
                 self._ui_client.send_log_to_ui(
-                    "_image_to_position method : \n template_name={params.template_image_name}  \n prob={self._itp_max_val:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._itp_bool}"
+                    "image_recognition method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._img_recog_result.is_recognized}"
                 )
-                if self._itp_bool:
+                if self._img_recog_result.is_recognized:
                     if self.is_backup and params.is_backup:
                         self.save_screenshot_compression(save_params)
                     return True
@@ -223,15 +193,15 @@ class MetisClass(TemplateMetisClass):
                     _screen_image_path = self._script_path.get_screen_image_path(params)
 
                     self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-                    self._image_to_position(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
+                    self._img_recog_result=image_recognition.match_template(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
                                             params.accuracy_val)
-                    self._logger.info("_image_to_position method : template_name=%s  prob=%.4f accuracy_val=%.4f %s",
-                                      params.template_image_name, self._itp_max_val, params.accuracy_val, self._itp_bool)
+                    self._logger.info("match_template method : template_name=%s  prob=%.4f accuracy_val=%.4f %s",
+                                      params.template_image_name, self._img_recog_result.recognition_threshold, params.accuracy_val, self._img_recog_result.is_recognized)
                     self._ui_client.send_image_path_to_ui(_image_path=_template_image_path)
                     self._ui_client.send_log_to_ui(
-                        f"_image_to_position method : \n template_name={params.template_image_name}  \n prob={self._itp_max_val:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._itp_bool}"
+                        f"match_template method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._img_recog_result.is_recognized}"
                     )
-                    if self._itp_bool:
+                    if self._img_recog_result.is_recognized:
                         if self.is_backup and params.is_backup:
                             self.save_screenshot_compression(save_params)
                         return True
@@ -310,24 +280,24 @@ class MetisClass(TemplateMetisClass):
     ) -> bool:
         save_params = SaveParams(
             save_image_root_name='backup_root',
-            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
+            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
             save_image_additional_root_name=self.backup_time,
             is_refresh_screenshot=False)
         if self.check_image_recognition(params):
-            self.tap(self._itp_center, tap_execute_counter_times, tap_execute_wait_time, tap_offset)
+            self.tap(self._img_recog_result.coordinate, tap_execute_counter_times, tap_execute_wait_time, tap_offset)
             self._logger.info("adb_default_tap method : template_name=%s  prob=%.4f %s", params.template_image_name,
-                              self._itp_max_val, self._itp_bool)
+                              self._img_recog_result.recognition_threshold, self._img_recog_result.is_recognized)
             self._ui_client.send_log_to_ui(
-                f"adb_default_tap method : \n template_name={params.template_image_name}  \n prob={self._itp_max_val:.4f} \n {self._itp_bool}"
+                f"adb_default_tap method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
             )
             if self.is_backup and params.is_backup:
                 self.save_screenshot_compression(save_params)
             return True
 
         self._logger.info("adb_default_tap method : template_name=%s  prob=%.4f %s", params.template_image_name,
-                          self._itp_max_val, self._itp_bool)
+                          self._img_recog_result.recognition_threshold, self._img_recog_result.is_recognized)
         self._ui_client.send_log_to_ui(
-            f"adb_default_tap method : \n template_name={params.template_image_name}  \n prob={self._itp_max_val:.4f} \n {self._itp_bool}"
+            f"adb_default_tap method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
         )
         if self.is_backup and params.is_backup:
             self.save_screenshot_compression(save_params)
@@ -343,12 +313,12 @@ class MetisClass(TemplateMetisClass):
     ) -> bool:
         save_params = SaveParams(
             save_image_root_name='backup_root',
-            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
+            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
             save_image_additional_root_name=self.backup_time,
             is_refresh_screenshot=False)
         # itp is accuracy between png_name and screenshot ,if > 0.9 return position else return false
         if self.check_image_recognition(params):
-            self.swipe(self._itp_center, swipe_offset_position, swiping_time, swipe_execute_counter_times,
+            self.swipe(self._img_recog_result.coordinate, swipe_offset_position, swiping_time, swipe_execute_counter_times,
                        swipe_execute_wait_time)
             if self.is_backup and params.is_backup:
                 self.save_screenshot_compression(save_params)
@@ -367,11 +337,11 @@ class MetisClass(TemplateMetisClass):
     ) -> bool:
         save_params = SaveParams(
             save_image_root_name='backup_root',
-            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._itp_max_val:.2f}{self._itp_bool}',
+            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
             save_image_additional_root_name=self.backup_time,
             is_refresh_screenshot=False)
         if self.check_image_recognition(params):
-            self.press(self._itp_center, pressing_time, press_execute_counter_times, press_execute_wait_time)
+            self.press(self._img_recog_result.coordinate, pressing_time, press_execute_counter_times, press_execute_wait_time)
             if self.is_backup and params.is_backup:
                 self.save_screenshot_compression(save_params)
             return True
@@ -522,9 +492,9 @@ class MetisClass(TemplateMetisClass):
         return ""  # type: ignore
 
     def process_itp_center_list(self) -> list[tuple[int, int]] | None:
-        if not self._itp_bool:
+        if not self._img_recog_result.is_recognized:
             return None
-        _temp_center_list = self._itp_center_list
+        _temp_center_list = self._img_recog_result.coordinates_list
 
         assert len(_temp_center_list) > 0
 
