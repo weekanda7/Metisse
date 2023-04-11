@@ -21,6 +21,8 @@ stages:          # List of stages for jobs, and their order of execution
   - lint
   - test
   - deploy
+  - cleanup
+
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -48,8 +50,12 @@ run_unittests:
   stage: test
   tags:
     - shell
+  before_script:
+    - python -V
+    - $env:PYTHONPATH = "$($env:PYTHONPATH);$($env:CI_PROJECT_DIR)"
+    - echo $env:PYTHONPATH
   script:
-    - python -m unittest discover -s unittest -p "test*.py"
+    - python -m unittest discover -s unit_tests -p "test*.py"
 
 
 deploy-job:      # This job runs in the deploy stage.
@@ -60,3 +66,10 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
+
+cleanup_pyc:
+  stage: cleanup
+  tags:
+    - shell
+  script:
+    - Get-ChildItem -Path . -Filter *.pyc -Recurse -File | Remove-Item -Force
