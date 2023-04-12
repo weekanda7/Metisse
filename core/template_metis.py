@@ -86,15 +86,6 @@ class TemplateMetisClass(ABC):
         ...
 
     @abstractmethod
-    def detect_text(
-        self,
-        load_image_name: str,
-        load_image_root_name: str,
-        load_image_additional_root: str,
-    ) -> str:
-        ...
-
-    @abstractmethod
     def process_itp_center_list(self) -> list[tuple[int, int]] | None:
         ...
 

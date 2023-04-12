@@ -16,6 +16,7 @@ class DevPath(object):
             print("Path exists:", self._absolute_path)
         else:
             print("Path does not exist:", self._absolute_path)
+        self.initialize_dev_environment()
 
     def initialize_dev_environment(self) -> None:
         """
@@ -25,6 +26,8 @@ class DevPath(object):
             _document_path_temp = os.path.join(self._absolute_path,_document_path)
             if not os.path.isdir(_document_path_temp):
                 os.makedirs(_document_path_temp)
+
+
     @staticmethod
     def auto_generate_dev_path():
         """
@@ -63,6 +66,7 @@ class ScriptPath(DevPath):
         else:
             print("Path does not exist:", self.absolute_path)
         self.device_id = device_id
+        self.initialize_script_environment()
 
     def initialize_script_environment(self) -> None:
         """
@@ -82,7 +86,7 @@ class ScriptPath(DevPath):
         caller_file_path = caller_frame.filename  # 获取调用该方法的文件路径
 
         _path = os.path.dirname(os.path.abspath(caller_file_path))
-        _path = os.path.join(_path, ".")
+        _path = os.path.join(_path, device_id)
         script_path = ScriptPath(device_id, _path)
         script_path.initialize_script_environment()
         return script_path

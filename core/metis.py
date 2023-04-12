@@ -6,7 +6,6 @@ It includes device port connect, screen shoot ,image similarity calculation, dev
 """
 
 from __future__ import annotations
-import io
 import logging
 import os
 import time
@@ -20,7 +19,7 @@ from typing import Tuple
 # pylint: disable=no-member
 from PIL import Image
 import natsort
-from google.cloud import vision  # type: ignore
+import inspect
 from .params import ImageRecognitionParams, SaveParams, DeviceParams, UiClientParams, ImageRecognitionResult
 from .template_metis import TemplateMetisClass
 from .clients.ios.wda import WdaClient
@@ -30,9 +29,9 @@ from .utils.opencv_utils import Opencv_utils
 from .utils.ui_client import UiClient
 from .utils.metis_log import MetisLogger
 from .utils import image_recognition
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'fine_key.json'
+from .settings import Settings as ST
 
-OS_ENVIRONMENT = ['android', 'ios']
+
 
 
 class MetisClass(TemplateMetisClass):
@@ -42,15 +41,18 @@ class MetisClass(TemplateMetisClass):
                  relatively_path: str,
                  pyqt6_ui_label_dict: UiClientParams,
                  os_environment: str = 'android'):
-        self._relatively_path = relatively_path
+        if not relatively_path:
+            self._relatively_path = MetisClass.get_current_path()
+        else:
+            self._relatively_path = relatively_path
 
         super(TemplateMetisClass, self).__init__()
 
         self._device_id = device_id
-        self._dev_path = DevPath(relatively_path)
+        self._dev_path = DevPath(self._relatively_path)
         self._script_path = self._dev_path.create_extended_script_path(self._device_id)
         self._logger = MetisLogger("MetisClass_logger", log_level=logging.DEBUG, log_file=os.path.join(self._script_path.absolute_path , "log" , self._device_id + ".log"))
-        assert os_environment in OS_ENVIRONMENT
+        assert os_environment in ST.OS_ENVIRONMENT
         self._os_environment = os_environment  # android , ios
         self.ios_device_scale = 2  # init var
 
@@ -70,6 +72,16 @@ class MetisClass(TemplateMetisClass):
         assert isinstance(self.backup_time, str)
         self.screenshot_wait_time_increase: float = 1
         self.is_check_gamelog: bool = False
+
+    @staticmethod
+    def get_current_path()-> str:
+        """
+        get current path
+        """
+        caller_frame = inspect.stack()[2]  # 获取调用栈的上一级帧
+        caller_file_path = caller_frame.filename  # 获取调用该方法的文件路径
+        _path = os.path.dirname(os.path.abspath(caller_file_path))
+        return _path
 
     def execute_time_sleep(self, wait_time: float = 0):
         self._logger.info("execute_time_sleep : wait_time= %.2f", wait_time)
@@ -462,34 +474,7 @@ class MetisClass(TemplateMetisClass):
                 _png_file_list.append(_f)
         return natsort.natsorted(_png_file_list)
 
-    def detect_text(
-        self,
-        load_image_name: str = '',
-        load_image_root_name: str = 'tmp_root',
-        load_image_additional_root: str = '',
-    ) -> str:
-        """Detects text in the file."""
 
-        client = vision.ImageAnnotatorClient()
-
-        file_path = f"{self._script_path.get_image_path(load_image_name,load_image_root_name,load_image_additional_root)}"
-        with io.open(file_path, 'rb') as image_file:
-            content = image_file.read()
-        image = vision.Image(content=content)
-        response = client.text_detection(image=image)  # type: ignore
-        texts = response.text_annotations  # type: ignore
-        # print('Texts:')
-        # print()
-        if texts != []:  # type: ignore
-            txt = texts[0].description  # type: ignore
-            # print(txt)
-            self._logger.info("detect_text method : txt = %s", texts)  # type: ignore
-            self._ui_client.send_log_to_ui(f"detect_text method : \n txt = {texts}")
-            return txt  # type: ignore
-
-        self._logger.info("detect_text method : txt = none")
-        self._ui_client.send_log_to_ui("detect_text method : \n txt = none")
-        return ""  # type: ignore
 
     def process_itp_center_list(self) -> list[tuple[int, int]] | None:
         if not self._img_recog_result.is_recognized:
