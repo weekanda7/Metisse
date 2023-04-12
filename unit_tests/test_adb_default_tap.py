@@ -5,8 +5,8 @@ from unittest.mock import patch, MagicMock
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Import other necessary modules and classes
-from core.params import ImageRecognitionParams,UiClientParams
-from core.metis import MetisClass
+from metis.params import ImageRecognitionParams,UiClientParams
+from metis.metis import MetisClass
 
 
 class TestMyModule(unittest.TestCase):

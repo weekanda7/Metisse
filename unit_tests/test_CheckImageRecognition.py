@@ -5,8 +5,8 @@ import os
 import shutil
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from core.params import ImageRecognitionParams,UiClientParams
-from core.metis import MetisClass
+from metis.params import ImageRecognitionParams,UiClientParams
+from metis.metis import MetisClass
 
 
 class TestCheckImageRecognition(unittest.TestCase):

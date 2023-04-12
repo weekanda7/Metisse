@@ -1,8 +1,8 @@
 facebook_wda==1.4.6
 natsort==8.2.0
 numpy==1.19.5
-opencv_python==4.7.0.68
+opencv_python==4.5.1.48
 Pillow==9.4.0
-protobuf==4.22.1
-PyQt6==6.4.2
+protobuf==4.21.4
+PyQt6==6.0.0
 

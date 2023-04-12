@@ -4,8 +4,8 @@ import sys
 import unittest
 from unittest import mock
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from core.settings import Settings as ST
-from core.utils.metis_path import DevPath
+from metis.settings import Settings as ST
+from metis.utils.metis_path import DevPath
 
 class TestDevPath(unittest.TestCase):
     def setUp(self):

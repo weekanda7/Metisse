@@ -5,8 +5,8 @@ from unittest.mock import MagicMock
 import numpy as np
 from PyQt6.QtWidgets import QApplication, QLabel
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from core.params import UiClientParams
-from core.utils.ui_client import UiClient
+from metis.params import UiClientParams
+from metis.utils.ui_client import UiClient
 
 app = QApplication(sys.argv)
 

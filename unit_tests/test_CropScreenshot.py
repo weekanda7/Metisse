@@ -6,8 +6,8 @@ import numpy as np
 from PIL import Image
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from core.params import SaveParams,UiClientParams
-from core.metis import MetisClass
+from metis.params import SaveParams,UiClientParams
+from metis.metis import MetisClass
 
 curPath = os.path.abspath(os.path.dirname(__file__))
 

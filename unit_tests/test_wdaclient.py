@@ -4,8 +4,8 @@ import unittest
 from unittest import mock
 from unittest.mock import MagicMock
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from core.clients.ios.wda import WdaClient
-from core.params import DeviceParams
+from metis.clients.ios.wda import WdaClient
+from metis.params import DeviceParams
 
 
 class TestWdaClient(unittest.TestCase):
@@ -15,19 +15,19 @@ class TestWdaClient(unittest.TestCase):
         self.client = WdaClient(self.device_params, skip_wda_launch=True)
         self.client.wda_client = MagicMock()  # Add this line to create a mock object for wda_client
 
-    @mock.patch("core.clients.ios.wda.WdaClient.screenshot")
+    @mock.patch("metis.clients.ios.wda.WdaClient.screenshot")
     def test_screenshot(self, mock_screenshot):
         save_screenshot_path = "test_screenshot.png"
         self.client.screenshot(save_screenshot_path)
         mock_screenshot.assert_called_once()
 
-    @mock.patch("core.clients.ios.wda.WdaClient.tap")
+    @mock.patch("metis.clients.ios.wda.WdaClient.tap")
     def test_tap(self, mock_tap):
         coordinates = (100, 200)
         self.client.tap(coordinates)
         mock_tap.assert_called_once()
 
-    @mock.patch("core.clients.ios.wda.WdaClient.swipe")
+    @mock.patch("metis.clients.ios.wda.WdaClient.swipe")
     def test_swipe(self, mock_swipe):
         start_coordinates = (100, 200)
         end_coordinates = (300, 400)

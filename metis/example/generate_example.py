@@ -39,8 +39,8 @@ def create_example_py_file():
     content = '''import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from core.metis import MetisClass
-from core.params import ImageRecognitionParams
+from metis.metis import MetisClass
+from metis.params import ImageRecognitionParams
 
 class Example(MetisClass):
 
