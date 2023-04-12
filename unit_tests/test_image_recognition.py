@@ -14,7 +14,7 @@ class TestImageRecognition(unittest.TestCase):
 
     def test_match_template(self):
         # Load test images
-        screen_image_path = os.path.join(curPath,'test_virtual_device/tmp_root', 'tmp0.png')
+        screen_image_path = os.path.join(curPath,'test_virtual_device/temp_image', 'tmp0.png')
         template_image_path = os.path.join(
             curPath,'test_virtual_device/icon', 'test_tamplate.png')
 

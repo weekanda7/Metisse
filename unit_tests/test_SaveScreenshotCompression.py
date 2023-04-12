@@ -32,7 +32,7 @@ class TestSaveScreenshotCompression(unittest.TestCase):
         self.test_metis.is_check_gamelog = False
 
     def test_save_screenshot_compression(self):
-        save_params = SaveParams(load_image_root_name='tmp_root',
+        save_params = SaveParams(load_image_root_name='temp_image',
                                  load_image_name='tmp0',
                                  save_image_root_name='storage',
                                  save_image_name='save0',

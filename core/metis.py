@@ -51,7 +51,7 @@ class MetisClass(TemplateMetisClass):
         self._device_id = device_id
         self._dev_path = DevPath(self._relatively_path)
         self._script_path = self._dev_path.create_extended_script_path(self._device_id)
-        self._logger = MetisLogger("MetisClass_logger", log_level=logging.DEBUG, log_file=os.path.join(self._script_path.absolute_path , "log" , self._device_id + ".log"))
+        self._logger = MetisLogger("MetisClass_logger", log_level=logging.DEBUG, log_file=os.path.join(self._script_path.absolute_path  , "log" ,self.get_time()+self._device_id + ".log"))
         assert os_environment in ST.OS_ENVIRONMENT
         self._os_environment = os_environment  # android , ios
         self.ios_device_scale = 2  # init var
@@ -78,14 +78,14 @@ class MetisClass(TemplateMetisClass):
         """
         get current path
         """
-        caller_frame = inspect.stack()[2]  # 获取调用栈的上一级帧
-        caller_file_path = caller_frame.filename  # 获取调用该方法的文件路径
+        caller_frame = inspect.stack()[2]
+        caller_file_path = caller_frame.filename
         _path = os.path.dirname(os.path.abspath(caller_file_path))
         return _path
 
     def execute_time_sleep(self, wait_time: float = 0):
         self._logger.info("execute_time_sleep : wait_time= %.2f", wait_time)
-        self._logger.info("execute_time_sleep method : \n wait_time= %.2f", wait_time)
+        self._ui_client.send_log_to_ui(f"execute_time_sleep method : \n wait_time= {wait_time:.2f}")
         time.sleep(wait_time)
 
     @property

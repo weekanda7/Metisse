@@ -6,11 +6,11 @@ class UiClient(object):
         self.ui_client_params = ui_client_params
 
     def send_log_to_ui(self, _log_message: str):
-        if self.ui_client_params.log_label:
+        if self.ui_client_params and self.ui_client_params.log_label:
             self.ui_client_params.log_label.setText(_log_message)
 
     def send_image_path_to_ui(self, _image_path: str):
-        if self.ui_client_params.image_label:
+        if self.ui_client_params and self.ui_client_params.image_label:
             self._pyqt_img = cv2.imread(_image_path)
             _height, _width, _ = self._pyqt_img.shape
             _bytes_perline = 3 * _width

@@ -11,9 +11,9 @@ class ImageRecognitionParams:
     accuracy_val: float = 0.9
     is_refresh_screenshot: bool = True
     screen_image_name: str = 'tmp0'
-    screen_image_root_name: str = 'tmp_root'
+    screen_image_root_name: str = 'temp_image'
     screen_image_additional_root_name: str = ''
-    template_image_root_name: str = 'icon_root'
+    template_image_root_name: str = 'icon'
     template_image_additional_root_name: str = ''
     is_backup: bool = True
     repeatedly_screenshot_times: int = 1
@@ -21,8 +21,8 @@ class ImageRecognitionParams:
 
 @dataclass
 class SaveParams:
-    load_image_root_name: str = 'tmp_root'
-    save_image_root_name: str = 'save_root'
+    load_image_root_name: str = 'temp_image'
+    save_image_root_name: str = 'storage'
     save_image_name: str = ''
     screenshot_wait_time: float = 0.1
     compression: float = 1

@@ -31,7 +31,7 @@ class TestCheckImageRecognition(unittest.TestCase):
         self.test_metis.is_check_gamelog = False
 
         # Copy test images to the temporary directory
-        src_test_images = curPath + '/test_virtual_device/tmp_root'
+        src_test_images = curPath + '/test_virtual_device/temp_image'
         dst_test_images = os.path.join(self.test_dir, 'tmp.png')
         shutil.copytree(src_test_images, dst_test_images)
 
@@ -43,7 +43,7 @@ class TestCheckImageRecognition(unittest.TestCase):
         # Create a basic ImageRecognitionParams object
         params = ImageRecognitionParams(
             template_image_name='test_tamplate',
-            template_image_root_name='icon_root',
+            template_image_root_name='test_virtual_device/icon',
             # Fill in other appropriate values for the parameters
         )
 
@@ -54,7 +54,7 @@ class TestCheckImageRecognition(unittest.TestCase):
         # Create a specific ImageRecognitionParams object for a particular test case
         params = ImageRecognitionParams(
             template_image_name='test_tamplate',
-            template_image_root_name='icon_root',
+            template_image_root_name='test_virtual_device/icon',
             # Fill in other appropriate values for the parameters
         )
 
