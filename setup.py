@@ -2,18 +2,24 @@ from setuptools import setup, find_packages
 
 setup(
     name='metis',
-    version='2.12.2',
-    description='UI Test Automation Framework for Games and Apps on Android/iOS',
+    version="0.1.0",
+    description="A versatile and automated testing framework for games and apps on Android and iOS platforms",
     author='Henry Chen',
     author_email='weekand7@gmail.com',
     packages=find_packages(),
     install_requires=[
-        # List your package dependencies here, e.g. 'numpy>=1.18.0'
+        'facebook_wda>=1.4.6',
+        'natsort>=8.2.0',
+        'numpy<=1.19.5',
+        'opencv_python>=4.7.0.68',
+        'Pillow>=9.4.0',
+        'protobuf>=4.22.1',
+        'PyQt6>=6.4.2',
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
 )
