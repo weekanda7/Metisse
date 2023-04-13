@@ -12,12 +12,11 @@ setup(
         'metis': ['example/**/*.png'],
     },
     install_requires=[
-        'facebook_wda>=1.4.6',
+        'facebook_wda>=1.3.3',
         'natsort>=8.2.0',
-        'numpy>=1.19.5',
+        'numpy>=1.17.3',
         'opencv_python>=4.5.1.48',
-        'Pillow>=8.0.0.dev0',
-        'protobuf>= 4.21.4',
+        'Pillow>=3.4.0',
         'PyQt6>=6.0.0',
     ],
     classifiers=[
