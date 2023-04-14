@@ -1,7 +1,10 @@
-from ..params import  UiClientParams
+from ..params import UiClientParams
 from PyQt6.QtGui import QImage, QPixmap
 import cv2
+
+
 class UiClient(object):
+
     def __init__(self, ui_client_params: UiClientParams) -> None:
         self.ui_client_params = ui_client_params
 

@@ -1,6 +1,7 @@
 import logging
 import os
 
+
 class MetisLogger(logging.Logger):
 
     def __init__(self, logger_name, log_level=logging.INFO, log_file=None):
@@ -31,6 +32,7 @@ class MetisLogger(logging.Logger):
         if hasattr(self, 'file_handler'):
             self.file_handler.close()
             self.logger.removeHandler(self.file_handler)
+
     def debug(self, msg, *args, exc_info=None, stack_info=False, stacklevel=1, extra=None):
         self.logger.debug(msg, *args, exc_info=exc_info, stack_info=stack_info, stacklevel=stacklevel, extra=extra)
 

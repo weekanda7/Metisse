@@ -44,7 +44,7 @@ class TestCropScreenshot(unittest.TestCase):
 
         self.test_metis.crop_screenshot(coordinate1, coordinate2, save_params)
 
-        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_primary_dir,
+        expected_output_path = os.path.join(self.test_metis._script_path.device_id_path, save_params.save_image_primary_dir,
                                             save_params.save_image_name)
         self.assertTrue(os.path.exists(expected_output_path), 'Cropped image file was not created.')
 
