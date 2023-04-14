@@ -58,15 +58,14 @@ if __name__ == "__main__":
 ```
 For more detailed information about the available methods and their usage, please refer to the MetisClass Methods documentation.
 
-##Contributing
-We welcome contributions to Metis! If you'd like to contribute, please follow these steps:
+## Contributing
+We welcome contributions to Metis! If you'd like to contribute, please follow these steps:  
+- Fork the repository
+- Create a new branch for your changes
+- Make your changes and test them thoroughly
+- Commit your changes and push them to your forked repository
+- Create a pull request with a detailed description of your changes
+- Please make sure to follow the code style and conventions used in the project.
 
-Fork the repository
-Create a new branch for your changes
-Make your changes and test them thoroughly
-Commit your changes and push them to your forked repository
-Create a pull request with a detailed description of your changes
-Please make sure to follow the code style and conventions used in the project.
-
-License
-Metis is licensed under the MIT License.
+## License
+Metis is licensed under the Apache License 2.0.
