@@ -34,11 +34,7 @@ from .settings import Settings as ST
 
 class MetisClass(TemplateMetisClass):
 
-    def __init__(self,
-                 device_id: str,
-                 relatively_path: str,
-                 pyqt6_ui_label_dict: UiClientParams,
-                 os_environment: str = 'android'):
+    def __init__(self, device_id: str, relatively_path: str, pyqt6_ui_label: UiClientParams, os_environment: str = 'android'):
         if not relatively_path:
             self._relatively_path = MetisClass.get_current_path()
         else:
@@ -63,10 +59,9 @@ class MetisClass(TemplateMetisClass):
             self._client = AdbClient(DeviceParams(device_id, os_environment))
         else:
             raise ValueError('os_environment must be android or ios')
-
         self._img_recog_result = ImageRecognitionResult()
 
-        self._ui_client = UiClient(pyqt6_ui_label_dict)
+        self._ui_client = UiClient(pyqt6_ui_label)
 
         self.is_backup = False
         self.backup_time = time.strftime("%Y-%m-%d_%H_%M_%S", time.localtime())

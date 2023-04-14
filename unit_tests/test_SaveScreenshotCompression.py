@@ -24,7 +24,7 @@ class TestSaveScreenshotCompression(unittest.TestCase):
         self.test_metis = MetisClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
-            pyqt6_ui_label_dict=UiClientParams(),
+            pyqt6_ui_label=UiClientParams(),
             os_environment='android',
         )
         self.test_metis.is_backup = False
