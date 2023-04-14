@@ -63,7 +63,7 @@ class Example(MetisClass):
         self.execute_time_sleep(1) # wait 1 second
 
 
-        self.adb_default_tap(ImageRecognitionParams(screen_image_name='example_screen',template_image_name='example_template_face',is_refresh_screenshot=False)) # simulate image recognition face icon and tap face pos
+        self.default_tap(ImageRecognitionParams(screen_image_name='example_screen',template_image_name='example_template_face',is_refresh_screenshot=False)) # simulate image recognition face icon and tap face pos
 
 
 a = Example('test', None, None , 'android')

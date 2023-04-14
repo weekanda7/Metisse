@@ -285,7 +285,7 @@ class MetisClass(TemplateMetisClass):
                 self._logger.exception("adb_press method :  %s", error_msg)
                 self._ui_client.send_log_to_ui(f"adb_press method : \n {error_msg}")
 
-    def adb_default_tap(
+    def default_tap(
             self,
             params: ImageRecognitionParams,
             tap_execute_wait_time: float = 0.1,
@@ -300,25 +300,25 @@ class MetisClass(TemplateMetisClass):
             is_refresh_screenshot=False)
         if self.check_image_recognition(params):
             self.tap(self._img_recog_result.coordinate, tap_execute_counter_times, tap_execute_wait_time, tap_offset)
-            self._logger.info("adb_default_tap method : template_name=%s  prob=%.4f %s", params.template_image_name,
+            self._logger.info("default_tap method : template_name=%s  prob=%.4f %s", params.template_image_name,
                               self._img_recog_result.recognition_threshold, self._img_recog_result.is_recognized)
             self._ui_client.send_log_to_ui(
-                f"adb_default_tap method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
+                f"default_tap method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
             )
             if self.is_backup and params.is_backup:
                 self.save_screenshot_compression(save_params)
             return True
 
-        self._logger.info("adb_default_tap method : template_name=%s  prob=%.4f %s", params.template_image_name,
+        self._logger.info("default_tap method : template_name=%s  prob=%.4f %s", params.template_image_name,
                           self._img_recog_result.recognition_threshold, self._img_recog_result.is_recognized)
         self._ui_client.send_log_to_ui(
-            f"adb_default_tap method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
+            f"default_tap method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
         )
         if self.is_backup and params.is_backup:
             self.save_screenshot_compression(save_params)
         return False
 
-    def adb_default_swipe(
+    def default_swipe(
         self,
         params: ImageRecognitionParams,
         swipe_offset_position: Tuple[int, int] = (0, 0),
@@ -344,7 +344,7 @@ class MetisClass(TemplateMetisClass):
             self.save_screenshot_compression(save_params)
         return False
 
-    def adb_default_press(
+    def default_press(
         self,
         params: ImageRecognitionParams,
         pressing_time: int = 300,
