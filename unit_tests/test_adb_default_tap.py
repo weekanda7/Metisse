@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Import other necessary modules and classes
-from metis.params import ImageRecognitionParams,UiClientParams
+from metis.params import ImageRecognitionParams, UiClientParams
 from metis.metis import MetisClass
 
 
@@ -34,7 +34,7 @@ class TestMyModule(unittest.TestCase):
     def test_adb_default_tap(self, mock_save_screenshot_compression, mock_tap, mock_check_image_recognition):
         # Set up the necessary input parameters and objects
         params = ImageRecognitionParams(template_image_name="example_template",
-                                        template_image_root_name="example_root_key",
+                                        template_image_primary_dir="example_root_key",
                                         is_backup=True)
 
         # Call the adb_default_tap method with the prepared input parameters

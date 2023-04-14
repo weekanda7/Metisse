@@ -75,9 +75,9 @@ class TemplateMetisClass(ABC):
     @abstractmethod
     def crop_screenshot(
         self,
-        save_params: SaveParams,
         coordinate1_tuple1: Tuple[int, int],
         coordinate2_tuple2: Tuple[int, int],
+        save_params: SaveParams,
     ) -> None:
         ...
 

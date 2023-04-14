@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.params import SaveParams,UiClientParams
+from metis.params import SaveParams, UiClientParams
 from metis.metis import MetisClass
 
 curPath = os.path.abspath(os.path.dirname(__file__))
@@ -31,9 +31,9 @@ class TestCropScreenshot(unittest.TestCase):
         self.test_metis.is_check_gamelog = False
 
     def test_crop_screenshot(self):
-        save_params = SaveParams(save_image_root_name='storage',
+        save_params = SaveParams(save_image_primary_dir='storage',
                                  save_image_name='test_cropped_image',
-                                 save_image_additional_root_name='',
+                                 save_image_secondary_dir='',
                                  is_refresh_screenshot=True,
                                  screenshot_wait_time=0.1,
                                  is_save_image_name_add_time=False,
@@ -42,10 +42,10 @@ class TestCropScreenshot(unittest.TestCase):
         coordinate1 = (100, 50)
         coordinate2 = (300, 400)
 
-        self.test_metis.crop_screenshot(save_params, coordinate1, coordinate2)
+        self.test_metis.crop_screenshot(coordinate1, coordinate2, save_params)
 
-        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_root_name,
-                                            save_params.save_image_name + '.png')
+        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_primary_dir,
+                                            save_params.save_image_name)
         self.assertTrue(os.path.exists(expected_output_path), 'Cropped image file was not created.')
 
         with Image.open(expected_output_path) as cropped_image:

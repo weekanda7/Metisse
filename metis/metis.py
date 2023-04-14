@@ -32,8 +32,6 @@ from .utils import image_recognition
 from .settings import Settings as ST
 
 
-
-
 class MetisClass(TemplateMetisClass):
 
     def __init__(self,
@@ -51,7 +49,10 @@ class MetisClass(TemplateMetisClass):
         self._device_id = device_id
         self._dev_path = DevPath(self._relatively_path)
         self._script_path = self._dev_path.create_extended_script_path(self._device_id)
-        self._logger = MetisLogger("MetisClass_logger", log_level=logging.DEBUG, log_file=os.path.join(self._script_path.absolute_path  , "log" ,self.get_time()+self._device_id + ".log"))
+        self._logger = MetisLogger("MetisClass_logger",
+                                   log_level=logging.DEBUG,
+                                   log_file=os.path.join(self._script_path.absolute_path, "log",
+                                                         self.get_time() + self._device_id + ".log"))
         assert os_environment in ST.OS_ENVIRONMENT
         self._os_environment = os_environment  # android , ios
         self.ios_device_scale = 2  # init var
@@ -63,7 +64,7 @@ class MetisClass(TemplateMetisClass):
         else:
             raise ValueError('os_environment must be android or ios')
 
-        self._img_recog_result =ImageRecognitionResult()
+        self._img_recog_result = ImageRecognitionResult()
 
         self._ui_client = UiClient(pyqt6_ui_label_dict)
 
@@ -74,7 +75,7 @@ class MetisClass(TemplateMetisClass):
         self.is_check_gamelog: bool = False
 
     @staticmethod
-    def get_current_path()-> str:
+    def get_current_path() -> str:
         """
         get current path
         """
@@ -100,8 +101,8 @@ class MetisClass(TemplateMetisClass):
             _screen_image_path = self._script_path.get_screen_image_path(params)
             _template_image_path = self._script_path.get_template_image_path(params)
             self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-            self._img_recog_result=image_recognition.match_template(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
-                                    params.accuracy_val)
+            self._img_recog_result = image_recognition.match_template(self.opencv_utils.screen_image_mat,
+                                                                      self.opencv_utils.template_image_mat, params.accuracy_val)
         except FileNotFoundError as error_msg:
             self._logger.info("FileNotFoundError: %s", error_msg)
         except ValueError as error_msg:
@@ -110,23 +111,25 @@ class MetisClass(TemplateMetisClass):
             _screen_image_path = self._script_path.get_screen_image_path(params)
             _template_image_path = self._script_path.get_template_image_path(params)
             self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-            self._img_recog_result=image_recognition.match_template(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
-                                    params.accuracy_val)
+            self._img_recog_result = image_recognition.match_template(self.opencv_utils.screen_image_mat,
+                                                                      self.opencv_utils.template_image_mat, params.accuracy_val)
 
         if self._img_recog_result.is_recognized:
             self._logger.info("match_template method : template_name=%s prob=%.4f accuracy_val=%.4f %s",
-                              params.template_image_name, self._img_recog_result.recognition_threshold, params.accuracy_val, self._img_recog_result.is_recognized)
+                              params.template_image_name, self._img_recog_result.recognition_threshold, params.accuracy_val,
+                              self._img_recog_result.is_recognized)
             self._ui_client.send_image_path_to_ui(_image_path=_template_image_path)
             self._ui_client.send_log_to_ui(
                 f"match_template method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._img_recog_result.is_recognized}"
             )
             if self.is_backup and params.is_backup:
                 self.save_screenshot_compression(
-                    SaveParams(save_image_root_name='backup_root',
-                               save_image_name=
-                               f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
-                               save_image_additional_root_name=self.backup_time,
-                               is_refresh_screenshot=False))
+                    SaveParams(
+                        save_image_primary_dir='storage',
+                        save_image_name=
+                        f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
+                        save_image_secondary_dir=self.backup_time,
+                        is_refresh_screenshot=False))
             self.tap(self._img_recog_result.coordinate)
 
     def get_time(self) -> str:
@@ -135,14 +138,14 @@ class MetisClass(TemplateMetisClass):
     def screenshot(
         self,
         save_screenshot_name: str = 'tmp0.png',
-        save_screenshot_root_key: str = 'tmp_root',
+        save_screenshot_root_key: str = 'temp_image',
         save_screenshot_additional_root: str = '',
     ) -> None:
 
         if self._os_environment == 'android':
 
             self._client.screenshot(
-                f"adb  {self.get_device_id}  pull /sdcard/screenshot.png {self._script_path.get_image_path(save_screenshot_name,save_screenshot_root_key,save_screenshot_additional_root)}"
+                f"{self._script_path.get_image_path(save_screenshot_name,save_screenshot_root_key,save_screenshot_additional_root)}"
             )
         elif self._os_environment == 'ios':
             self._client.screenshot(
@@ -155,9 +158,10 @@ class MetisClass(TemplateMetisClass):
 
     def check_image_recognition(self, params: ImageRecognitionParams) -> bool:
         save_params = SaveParams(
-            save_image_root_name='backup_root',
-            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
-            save_image_additional_root_name=self.backup_time,
+            save_image_primary_dir='storage',
+            save_image_name=
+            f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
+            save_image_secondary_dir=self.backup_time,
             is_refresh_screenshot=False)
 
         def _single_time() -> bool:
@@ -168,17 +172,19 @@ class MetisClass(TemplateMetisClass):
                     self.check_gamelog(ImageRecognitionParams())
                 if params.is_refresh_screenshot:
                     time.sleep(params.screenshot_wait_time + self.screenshot_wait_time_increase)
-                    self.screenshot(params.screen_image_name, params.screen_image_root_name,
-                                    params.screen_image_additional_root_name)
+                    self.screenshot(params.screen_image_name, params.screen_image_primary_dir,
+                                    params.screen_image_secondary_dir)
 
                 _screen_image_path = self._script_path.get_screen_image_path(params)
                 _template_image_path = self._script_path.get_template_image_path(params)
                 self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-                self._img_recog_result=image_recognition.match_template(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
-                                        params.accuracy_val)
+                self._img_recog_result = image_recognition.match_template(self.opencv_utils.screen_image_mat,
+                                                                          self.opencv_utils.template_image_mat,
+                                                                          params.accuracy_val)
 
                 self._logger.info("image_recognition method : template_name=%s  prob=%.4f accuracy_val=%.4f %s",
-                                  params.template_image_name, self._img_recog_result.recognition_threshold, params.accuracy_val, self._img_recog_result.is_recognized)
+                                  params.template_image_name, self._img_recog_result.recognition_threshold, params.accuracy_val,
+                                  self._img_recog_result.is_recognized)
                 self._ui_client.send_image_path_to_ui(_image_path=_template_image_path)
                 self._ui_client.send_log_to_ui(
                     "image_recognition method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._img_recog_result.is_recognized}"
@@ -199,16 +205,17 @@ class MetisClass(TemplateMetisClass):
             for _num in range(params.compare_times_counter):
                 for _temp_screen_image_name in _screen_image_name_list:
 
-                    self.screenshot(_temp_screen_image_name, params.screen_image_root_name,
-                                    params.screen_image_additional_root_name)
+                    self.screenshot(_temp_screen_image_name, params.screen_image_primary_dir, params.screen_image_secondary_dir)
                 for _temp_screen_image_name in _screen_image_name_list:
                     _screen_image_path = self._script_path.get_screen_image_path(params)
 
                     self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-                    self._img_recog_result=image_recognition.match_template(self.opencv_utils.screen_image_mat, self.opencv_utils.template_image_mat,
-                                            params.accuracy_val)
+                    self._img_recog_result = image_recognition.match_template(self.opencv_utils.screen_image_mat,
+                                                                              self.opencv_utils.template_image_mat,
+                                                                              params.accuracy_val)
                     self._logger.info("match_template method : template_name=%s  prob=%.4f accuracy_val=%.4f %s",
-                                      params.template_image_name, self._img_recog_result.recognition_threshold, params.accuracy_val, self._img_recog_result.is_recognized)
+                                      params.template_image_name, self._img_recog_result.recognition_threshold,
+                                      params.accuracy_val, self._img_recog_result.is_recognized)
                     self._ui_client.send_image_path_to_ui(_image_path=_template_image_path)
                     self._ui_client.send_log_to_ui(
                         f"match_template method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._img_recog_result.is_recognized}"
@@ -291,9 +298,10 @@ class MetisClass(TemplateMetisClass):
             tap_offset: Tuple[int, int] = (0, 0),
     ) -> bool:
         save_params = SaveParams(
-            save_image_root_name='backup_root',
-            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
-            save_image_additional_root_name=self.backup_time,
+            save_image_primary_dir='storage',
+            save_image_name=
+            f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
+            save_image_secondary_dir=self.backup_time,
             is_refresh_screenshot=False)
         if self.check_image_recognition(params):
             self.tap(self._img_recog_result.coordinate, tap_execute_counter_times, tap_execute_wait_time, tap_offset)
@@ -324,9 +332,10 @@ class MetisClass(TemplateMetisClass):
         swipe_execute_wait_time: float = 0,
     ) -> bool:
         save_params = SaveParams(
-            save_image_root_name='backup_root',
-            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
-            save_image_additional_root_name=self.backup_time,
+            save_image_primary_dir='storage',
+            save_image_name=
+            f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
+            save_image_secondary_dir=self.backup_time,
             is_refresh_screenshot=False)
         # itp is accuracy between png_name and screenshot ,if > 0.9 return position else return false
         if self.check_image_recognition(params):
@@ -348,9 +357,10 @@ class MetisClass(TemplateMetisClass):
         press_execute_wait_time: float = 0,
     ) -> bool:
         save_params = SaveParams(
-            save_image_root_name='backup_root',
-            save_image_name=f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
-            save_image_additional_root_name=self.backup_time,
+            save_image_primary_dir='storage',
+            save_image_name=
+            f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
+            save_image_secondary_dir=self.backup_time,
             is_refresh_screenshot=False)
         if self.check_image_recognition(params):
             self.press(self._img_recog_result.coordinate, pressing_time, press_execute_counter_times, press_execute_wait_time)
@@ -366,13 +376,15 @@ class MetisClass(TemplateMetisClass):
         if save_params.is_refresh_screenshot:
             time.sleep(save_params.screenshot_wait_time)
             self.screenshot()
-        _img = Image.open(self._script_path.get_image_path(save_params.load_image_name, save_params.load_image_root_name))
+        _img = Image.open(self._script_path.get_load_image_path(save_params))
         if save_params.is_save_image_name_add_time:
             _save_png_image_name = self.get_time() + save_params.save_image_name + '.png'
         else:
             _save_png_image_name = save_params.save_image_name + '.png'
+        save_params.save_image_name = _save_png_image_name
+        _image_path = self._script_path.get_save_image_path(save_params)
+        self._script_path.check_path(os.path.dirname(_image_path))
 
-        _image_path = self._script_path.get_image_path(_save_png_image_name, save_params.save_image_root_name)
         if save_params.compression != 1:
             (_w, _h) = _img.size
             #print('原始像素'+'w=%d, h=%d', w, h)
@@ -397,15 +409,15 @@ class MetisClass(TemplateMetisClass):
 
     def crop_screenshot(
         self,
-        save_params: SaveParams,
         coordinate1_tuple1: Tuple[int, int],
         coordinate2_tuple2: Tuple[int, int],
+        save_params: SaveParams,
     ) -> None:
 
         if save_params.is_refresh_screenshot:
             time.sleep(save_params.screenshot_wait_time)
             self.screenshot()
-        _img = Image.open(self._script_path.get_image_path(save_params.load_image_name, save_params.load_image_root_name))
+        _img = Image.open(self._script_path.get_load_image_path(save_params))
         _pos_x, _pos_y = coordinate1_tuple1
         _pos_x2, _pos_y2 = coordinate2_tuple2
 
@@ -417,33 +429,33 @@ class MetisClass(TemplateMetisClass):
             _save_png_image_name = self.get_time() + save_params.save_image_name + '.png'
         else:
             _save_png_image_name = save_params.save_image_name + '.png'
-        # png_string =self.get_time()+save_name+'.png'
 
-        _crop_img.save(
-            self._script_path.get_image_path(_save_png_image_name, save_params.save_image_root_name,
-                                             save_params.save_image_additional_root_name))
+        save_params.save_image_name = _save_png_image_name
+        _image_path = self._script_path.get_save_image_path(save_params)
+        self._script_path.check_path(os.path.dirname(_image_path))
+        _crop_img.save(_image_path)
         self._logger.info("crop_screenshot method : exported : w=%s", _save_png_image_name)
         self._ui_client.send_log_to_ui(f"crop_screenshot method : \n exported : w={_save_png_image_name}")
         #print("exported:", path+png_string)
 
     def scan_icon_png_to_list(
         self,
-        template_image_root_name: str = 'icon_root',
-        template_image_additional_root_name: str = '',
+        template_image_primary_dir: str = 'icon_root',
+        template_image_secondary_dir: str = '',
     ) -> list[str]:
         #files = listdir(path)
 
         _files = listdir(
             self._script_path.get_image_path(_image_name='',
-                                             _image_root=template_image_root_name,
-                                             _additional_root=template_image_additional_root_name))
+                                             _image_root=template_image_primary_dir,
+                                             _additional_root=template_image_secondary_dir))
         _png_file_list: list[str] = []
 
         for _f in _files:
             _fullpath = join(
                 self._script_path.get_image_path(_image_name='',
-                                                 _image_root=template_image_root_name,
-                                                 _additional_root=template_image_additional_root_name), _f)
+                                                 _image_root=template_image_primary_dir,
+                                                 _additional_root=template_image_secondary_dir), _f)
             if isfile(_fullpath):
                 if (_f[len(_f) - 1] == 'g' or _f[len(_f) - 1] == 'G') and _f[:3] != 'tmp':
                     _png_file_list.append(_f.replace('.png', ''))
@@ -453,28 +465,26 @@ class MetisClass(TemplateMetisClass):
 
     def scan_dir_to_list(
         self,
-        template_image_root_name: str = 'icon_root',
-        template_image_additional_root_name: str = '',
+        template_image_primary_dir: str = 'icon_root',
+        template_image_secondary_dir: str = '',
     ) -> list[str]:
         #files = listdir(path)
         _files = listdir(
             self._script_path.get_image_path(_image_name='',
-                                             _image_root=template_image_root_name,
-                                             _additional_root=template_image_additional_root_name))
+                                             _image_root=template_image_primary_dir,
+                                             _additional_root=template_image_secondary_dir))
         _png_file_list: list[str] = []
 
         for _f in _files:
             _fullpath = join(
                 self._script_path.get_image_path(_image_name='',
-                                                 _image_root=template_image_root_name,
-                                                 _additional_root=template_image_additional_root_name), _f)
+                                                 _image_root=template_image_primary_dir,
+                                                 _additional_root=template_image_secondary_dir), _f)
             if isfile(_fullpath):
                 pass
             elif isdir(_fullpath):
                 _png_file_list.append(_f)
         return natsort.natsorted(_png_file_list)
-
-
 
     def process_itp_center_list(self) -> list[tuple[int, int]] | None:
         if not self._img_recog_result.is_recognized:
