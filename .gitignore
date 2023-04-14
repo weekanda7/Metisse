@@ -4,3 +4,4 @@ __pycache__/
 *.pyd
 dist/
 *.egg-info/
+test_init/

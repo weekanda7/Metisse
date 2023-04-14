@@ -5,7 +5,7 @@ import os
 import shutil
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.params import ImageRecognitionParams,UiClientParams
+from metis.params import ImageRecognitionParams, UiClientParams
 from metis.metis import MetisClass
 
 
@@ -43,7 +43,7 @@ class TestCheckImageRecognition(unittest.TestCase):
         # Create a basic ImageRecognitionParams object
         params = ImageRecognitionParams(
             template_image_name='test_tamplate',
-            template_image_root_name='test_virtual_device/icon',
+            template_image_primary_dir='test_virtual_device/icon',
             # Fill in other appropriate values for the parameters
         )
 
@@ -54,7 +54,7 @@ class TestCheckImageRecognition(unittest.TestCase):
         # Create a specific ImageRecognitionParams object for a particular test case
         params = ImageRecognitionParams(
             template_image_name='test_tamplate',
-            template_image_root_name='test_virtual_device/icon',
+            template_image_primary_dir='test_virtual_device/icon',
             # Fill in other appropriate values for the parameters
         )
 

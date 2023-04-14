@@ -7,7 +7,7 @@ from PIL import Image
 import numpy as np
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.params import SaveParams,UiClientParams
+from metis.params import SaveParams, UiClientParams
 from metis.metis import MetisClass
 
 curPath = os.path.abspath(os.path.dirname(__file__))
@@ -32,9 +32,9 @@ class TestSaveScreenshotCompression(unittest.TestCase):
         self.test_metis.is_check_gamelog = False
 
     def test_save_screenshot_compression(self):
-        save_params = SaveParams(load_image_root_name='temp_image',
+        save_params = SaveParams(load_image_primary_dir='temp_image',
                                  load_image_name='tmp0',
-                                 save_image_root_name='storage',
+                                 save_image_primary_dir='storage',
                                  save_image_name='save0',
                                  compression=0.5,
                                  is_refresh_screenshot=False,
@@ -42,17 +42,17 @@ class TestSaveScreenshotCompression(unittest.TestCase):
 
         self.test_metis.save_screenshot_compression(save_params)
 
-        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_root_name,
-                                            save_params.save_image_name + '.png')
+        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_primary_dir,
+                                            save_params.save_image_name)
         print(expected_output_path)
         self.assertTrue(os.path.exists(expected_output_path), 'Output file not found.')
-        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_root_name,
-                                            save_params.save_image_name + '.png')
+        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_primary_dir,
+                                            save_params.save_image_name)
         self.assertTrue(os.path.exists(expected_output_path), 'Output file not found.')
 
         with Image.open(expected_output_path) as output_image:  # avoid ResourceWarning
             with Image.open(
-                    os.path.join(self.test_metis._script_path.absolute_path, save_params.load_image_root_name,
+                    os.path.join(self.test_metis._script_path.absolute_path, save_params.load_image_primary_dir,
                                  self.test_metis._script_path._check_image_name_pngFormat(
                                      save_params.load_image_name))) as original_image:
 
