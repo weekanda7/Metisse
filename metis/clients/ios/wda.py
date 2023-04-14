@@ -11,7 +11,7 @@ class WdaClient(Client):
     ios client
     """
 
-    def __init__(self, device_params: DeviceParams,skip_wda_launch:bool=False):
+    def __init__(self, device_params: DeviceParams, skip_wda_launch: bool = False):
         assert device_params.os_environment == 'ios', 'device_params.os_environment must be ios'
         self.device_params = device_params
         if not skip_wda_launch:

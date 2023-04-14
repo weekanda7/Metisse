@@ -24,7 +24,7 @@ class TestSaveScreenshotCompression(unittest.TestCase):
         self.test_metis = MetisClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
-            pyqt6_ui_label_dict=UiClientParams(),
+            pyqt6_ui_label=UiClientParams(),
             os_environment='android',
         )
         self.test_metis.is_backup = False
@@ -42,17 +42,17 @@ class TestSaveScreenshotCompression(unittest.TestCase):
 
         self.test_metis.save_screenshot_compression(save_params)
 
-        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_primary_dir,
+        expected_output_path = os.path.join(self.test_metis._script_path.device_id_path, save_params.save_image_primary_dir,
                                             save_params.save_image_name)
         print(expected_output_path)
         self.assertTrue(os.path.exists(expected_output_path), 'Output file not found.')
-        expected_output_path = os.path.join(self.test_metis._script_path.absolute_path, save_params.save_image_primary_dir,
+        expected_output_path = os.path.join(self.test_metis._script_path.device_id_path, save_params.save_image_primary_dir,
                                             save_params.save_image_name)
         self.assertTrue(os.path.exists(expected_output_path), 'Output file not found.')
 
         with Image.open(expected_output_path) as output_image:  # avoid ResourceWarning
             with Image.open(
-                    os.path.join(self.test_metis._script_path.absolute_path, save_params.load_image_primary_dir,
+                    os.path.join(self.test_metis._script_path.device_id_path, save_params.load_image_primary_dir,
                                  self.test_metis._script_path._check_image_name_pngFormat(
                                      save_params.load_image_name))) as original_image:
 

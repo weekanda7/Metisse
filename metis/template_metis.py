@@ -38,7 +38,7 @@ class TemplateMetisClass(ABC):
         ...
 
     @abstractmethod
-    def adb_default_tap(
+    def default_tap(
         self,
         params: ImageRecognitionParams,
         tap_execute_wait_time: float,

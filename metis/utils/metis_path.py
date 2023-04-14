@@ -5,7 +5,7 @@ import os
 from ..settings import Settings as ST
 from pathlib import Path
 from typing import Any
-from ..params import ImageRecognitionParams , SaveParams
+from ..params import ImageRecognitionParams, SaveParams
 
 
 class DevPath(object):
@@ -15,15 +15,11 @@ class DevPath(object):
 
     def __init__(self, current_path: str) -> None:
         self._absolute_path = os.path.abspath(current_path)
-        if os.path.exists(self._absolute_path):
-            print("Path exists:", self._absolute_path)
-        else:
-            print("Path does not exist:", self._absolute_path)
         self.initialize_dev_environment()
 
     def initialize_dev_environment(self) -> None:
         """
-        generate dev root path (icon , script , ui , log ) files
+        generate dev root path (icon , ui ) files
         """
         for _document_path in ST.DEV_ENVIRONMENT_ROOT_PATH:
             _document_path_temp = os.path.join(self._absolute_path, _document_path)
@@ -63,21 +59,18 @@ class ScriptPath(DevPath):
 
     def __init__(self, current_path: str, device_id: str) -> None:
         super().__init__(current_path)
-        self.absolute_path_without = current_path
-        self.absolute_path = os.path.abspath(os.path.join(current_path, device_id))
-        if os.path.exists(self.absolute_path):
-            print("Path exists:", self.absolute_path)
-        else:
-            print("Path does not exist:", self.absolute_path)
+        self.absolute_path = current_path
+        self.device_id_path = os.path.abspath(os.path.join(
+            current_path, device_id))  # specific device id path (init script auto generate device id file)
         self.device_id = device_id
         self.initialize_script_environment()
 
     def initialize_script_environment(self) -> None:
         """
-        generate script root path (temp_image,storage,backup ) files
+        generate script root path (temp_image,storage,backup,log ) files
         """
         for _document_path in ST.SCRIPT_ENVIRONMENT_ROOT_PATH:
-            _document_path_temp = os.path.join(self.absolute_path, _document_path)
+            _document_path_temp = os.path.join(self.device_id_path, _document_path)
             if not os.path.isdir(_document_path_temp):
                 os.makedirs(_document_path_temp)
 
@@ -107,7 +100,7 @@ class ScriptPath(DevPath):
 
     def get_image_path(self, _image_name: str = '', _image_root: str = '', _additional_root: str = '') -> str:
         _image_name = self._check_image_name_pngFormat(_image_name)
-        self._screen_image_path = os.path.join(self.absolute_path, _image_root, _additional_root, _image_name)
+        self._screen_image_path = os.path.join(self.device_id_path, _image_root, _additional_root, _image_name)
         return self._screen_image_path
 
     def get_screen_image_path(self, path_params: ImageRecognitionParams) -> str:
@@ -115,7 +108,7 @@ class ScriptPath(DevPath):
         _subdirs = ''
         if path_params.screen_image_subdirs:
             _subdirs = os.path.join(*path_params.screen_image_subdirs)
-        self._screen_image_path = os.path.join(self.absolute_path, path_params.screen_image_primary_dir,
+        self._screen_image_path = os.path.join(self.device_id_path, path_params.screen_image_primary_dir,
                                                path_params.screen_image_secondary_dir, _subdirs, _image_name)
         return self._screen_image_path
 
@@ -125,19 +118,20 @@ class ScriptPath(DevPath):
         if path_params.template_image_subdirs:
             _subdirs = os.path.join(*path_params.template_image_subdirs)
         if path_params.template_image_primary_dir == 'temp_image':  # temp_image default in the device folder , adjust path
-            self._screen_image_path = os.path.join(self.absolute_path, path_params.template_image_primary_dir,
+            self._screen_image_path = os.path.join(self.device_id_path, path_params.template_image_primary_dir,
                                                    path_params.template_image_secondary_dir, _subdirs, _image_name)
         else:
-            self._screen_image_path = os.path.join(self.absolute_path_without, path_params.template_image_primary_dir,
+            self._screen_image_path = os.path.join(self.absolute_path, path_params.template_image_primary_dir,
                                                    path_params.template_image_secondary_dir, _subdirs, _image_name)
 
         return self._screen_image_path
+
     def get_load_image_path(self, path_params: SaveParams) -> str:
         _image_name = self._check_image_name_pngFormat(path_params.load_image_name)
         _subdirs = ''
         if path_params.load_image_subdirs:
             _subdirs = os.path.join(*path_params.load_image_subdirs)
-        self._screen_image_path = os.path.join(self.absolute_path, path_params.load_image_primary_dir,
+        self._screen_image_path = os.path.join(self.device_id_path, path_params.load_image_primary_dir,
                                                path_params.load_image_secondary_dir, _subdirs, _image_name)
         return self._screen_image_path
 
@@ -147,7 +141,7 @@ class ScriptPath(DevPath):
         if path_params.save_image_subdirs:
             _subdirs = os.path.join(*path_params.save_image_subdirs)
 
-        self._screen_image_path = os.path.join(self.absolute_path, path_params.save_image_primary_dir,
-                                                path_params.save_image_secondary_dir, _subdirs, _image_name)
+        self._screen_image_path = os.path.join(self.device_id_path, path_params.save_image_primary_dir,
+                                               path_params.save_image_secondary_dir, _subdirs, _image_name)
 
         return self._screen_image_path

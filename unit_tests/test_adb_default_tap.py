@@ -21,7 +21,7 @@ class TestMyModule(unittest.TestCase):
         self.test_metis = MetisClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
-            pyqt6_ui_label_dict=UiClientParams(),
+            pyqt6_ui_label=UiClientParams(),
             os_environment='android',
         )
         self.test_metis.is_backup = True  # check save backup image
@@ -37,15 +37,15 @@ class TestMyModule(unittest.TestCase):
                                         template_image_primary_dir="example_root_key",
                                         is_backup=True)
 
-        # Call the adb_default_tap method with the prepared input parameters
-        result = self.test_metis.adb_default_tap(params)
+        # Call the default_tap method with the prepared input parameters
+        result = self.test_metis.default_tap(params)
 
         # Check if the mocked methods were called with the expected arguments
         mock_check_image_recognition.assert_called_with(params)
         mock_tap.assert_called_once()
         mock_save_screenshot_compression.assert_called_once()
 
-        # Assert the return value of the adb_default_tap method
+        # Assert the return value of the default_tap method
         self.assertTrue(result)
 
 
