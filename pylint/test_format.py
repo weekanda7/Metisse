@@ -7,4 +7,4 @@ def run_pylint(file_name):
 
 
 if __name__ == "__main__":
-    run_pylint("C:\\Users\\henrychen\\Documents\\gitlab\\metis\\core\\metis.py")
+    run_pylint("C:\\Users\\henrychen\\Documents\\gitlab\\metis\\metis\\metis.py")
