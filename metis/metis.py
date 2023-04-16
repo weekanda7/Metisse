@@ -13,12 +13,9 @@ try:
     import wda  # type: ignore
 except ImportError:
     print('No module')
-from os import listdir
-from os.path import isdir, isfile, join
 from typing import Tuple
 # pylint: disable=no-member
 from PIL import Image
-import natsort
 import inspect
 from .params import ImageRecognitionParams, SaveParams, DeviceParams, UiClientParams, ImageRecognitionResult
 from .template_metis import TemplateMetisClass
@@ -333,7 +330,6 @@ class MetisClass(TemplateMetisClass):
             f'{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}',
             save_image_secondary_dir=self.backup_time,
             is_refresh_screenshot=False)
-        # itp is accuracy between png_name and screenshot ,if > 0.9 return position else return false
         if self.check_image_recognition(params):
             self.swipe(self._img_recog_result.coordinate, swipe_offset_position, swiping_time, swipe_execute_counter_times,
                        swipe_execute_wait_time)
@@ -383,7 +379,6 @@ class MetisClass(TemplateMetisClass):
 
         if save_params.compression != 1:
             (_w, _h) = _img.size
-            #print('原始像素'+'w=%d, h=%d', w, h)
             _w = int(_w * save_params.compression)
             _h = int(_h * save_params.compression)
             _new_resize_img = _img.resize((_w, _h))
@@ -432,108 +427,4 @@ class MetisClass(TemplateMetisClass):
         _crop_img.save(_image_path)
         self._logger.info("crop_screenshot method : exported : w=%s", _save_png_image_name)
         self._ui_client.send_log_to_ui(f"crop_screenshot method : \n exported : w={_save_png_image_name}")
-        #print("exported:", path+png_string)
 
-    def scan_icon_png_to_list(
-        self,
-        template_image_primary_dir: str = 'icon_root',
-        template_image_secondary_dir: str = '',
-    ) -> list[str]:
-        #files = listdir(path)
-
-        _files = listdir(
-            self._script_path.get_image_path(_image_name='',
-                                             _image_root=template_image_primary_dir,
-                                             _additional_root=template_image_secondary_dir))
-        _png_file_list: list[str] = []
-
-        for _f in _files:
-            _fullpath = join(
-                self._script_path.get_image_path(_image_name='',
-                                                 _image_root=template_image_primary_dir,
-                                                 _additional_root=template_image_secondary_dir), _f)
-            if isfile(_fullpath):
-                if (_f[len(_f) - 1] == 'g' or _f[len(_f) - 1] == 'G') and _f[:3] != 'tmp':
-                    _png_file_list.append(_f.replace('.png', ''))
-            elif isdir(_fullpath):
-                pass
-        return natsort.natsorted(_png_file_list)
-
-    def scan_dir_to_list(
-        self,
-        template_image_primary_dir: str = 'icon_root',
-        template_image_secondary_dir: str = '',
-    ) -> list[str]:
-        #files = listdir(path)
-        _files = listdir(
-            self._script_path.get_image_path(_image_name='',
-                                             _image_root=template_image_primary_dir,
-                                             _additional_root=template_image_secondary_dir))
-        _png_file_list: list[str] = []
-
-        for _f in _files:
-            _fullpath = join(
-                self._script_path.get_image_path(_image_name='',
-                                                 _image_root=template_image_primary_dir,
-                                                 _additional_root=template_image_secondary_dir), _f)
-            if isfile(_fullpath):
-                pass
-            elif isdir(_fullpath):
-                _png_file_list.append(_f)
-        return natsort.natsorted(_png_file_list)
-
-    def process_itp_center_list(self) -> list[tuple[int, int]] | None:
-        if not self._img_recog_result.is_recognized:
-            return None
-        _temp_center_list = self._img_recog_result.coordinates_list
-
-        assert len(_temp_center_list) > 0
-
-        if len(_temp_center_list) > 1:
-            tmp_list = [_temp_center_list[0]]
-            tmp_x, tmp_y = _temp_center_list[0]
-            for i in range(1, len(_temp_center_list)):
-                tmp_x2, tmp_y2 = _temp_center_list[i]
-                if abs(tmp_x - tmp_x2) > 5 or abs(tmp_y - tmp_y2) > 5:
-                    tmp_x, tmp_y = tmp_x2, tmp_y2
-                    tmp_list.append((tmp_x, tmp_y))
-            self._logger.info("process_itp_center_list method : list = %s", tmp_list)
-            self._ui_client.send_log_to_ui(f"process_itp_center_list method : \n list = {tmp_list}")
-            return tmp_list
-        if len(_temp_center_list) == 1:
-            self._logger.info("process_itp_center_list method : list = %s", _temp_center_list)
-            self._ui_client.send_log_to_ui(f"process_itp_center_list method : \n list = {_temp_center_list}")
-            return _temp_center_list
-        return None
-
-    def except_within_range_position(self, _center_list: list[tuple[int, int]] | None,
-                                     _except_list: list[tuple[int, int]] | None, within_range_x: int,
-                                     within_range_y: int) -> list[tuple[int, int]] | None:
-
-        def do_except() -> list[tuple[int, int]] | None:
-            if not _center_list:
-                return _center_list
-            if not _except_list:
-                return _center_list
-
-            for tmp_x, tmp_y in _center_list:
-                flag = True
-                for tmp_x2, tmp_y2 in _except_list:
-                    if abs(tmp_x - tmp_x2) < within_range_x or abs(tmp_y - tmp_y2) < within_range_y:
-                        flag = False
-                        break
-                if flag:
-                    tmp_list.append((tmp_x, tmp_y))
-            return None
-
-        assert within_range_x >= 0
-        assert within_range_y >= 0
-        if _center_list == []:
-            return None
-        if _except_list == []:
-            return _center_list
-        tmp_list: list[tuple[int, int]] = []
-        do_except()
-        self._logger.info("except_within_range_position method : list = %s", tmp_list)
-        self._ui_client.send_log_to_ui(f"except_within_range_position method : \n list = {tmp_list}")
-        return tmp_list

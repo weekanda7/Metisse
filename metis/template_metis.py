@@ -81,16 +81,3 @@ class TemplateMetisClass(ABC):
     ) -> None:
         ...
 
-    @abstractmethod
-    def scan_icon_png_to_list(self) -> list[str]:
-        ...
-
-    @abstractmethod
-    def process_itp_center_list(self) -> list[tuple[int, int]] | None:
-        ...
-
-    @abstractmethod
-    def except_within_range_position(self, _center_list: list[tuple[int, int]] | None,
-                                     _except_list: list[tuple[int, int]] | None, within_range_x: int,
-                                     within_range_y: int) -> list[tuple[int, int]] | None:
-        ...

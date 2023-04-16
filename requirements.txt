@@ -1,5 +1,4 @@
 facebook_wda==1.4.6
-natsort==8.2.0
 numpy==1.19.5
 opencv_python==4.5.1.48
 Pillow==9.4.0

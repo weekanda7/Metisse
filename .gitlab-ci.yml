@@ -41,7 +41,7 @@ pylint:
     - pip install pylint
   script:
     - pylint --max-line-length=150 --disable=E0611,C0116 autoscript_kernel  > pylint-report.txt
-  allow_failure: true  # 设置为 false，如果您希望 lint 失败时停止整个 CI/CD 流程
+  allow_failure: true  
   artifacts:
     reports:
       codequality: pylint-report.txt
