@@ -87,7 +87,7 @@ class script_example(MetisClass):
 
     def __call__(self):
         self.check_image_recognition(
-            CustomImage(screen_image_name='example_screen',
+            CustomImage(screen_image_name='tmp0',
                                    template_image_name='example_template_hand',
                                    is_refresh_screenshot=False))  # simulate image recognition hand icon
         print(f'hand pos = {self._img_recog_result.coordinate}')
@@ -95,12 +95,12 @@ class script_example(MetisClass):
         self.execute_time_sleep(1)  # wait 1 second
 
         self.default_tap(
-            ImageRecognitionParams(screen_image_name='example_screen',
+            ImageRecognitionParams(screen_image_name='tmp0',
                                    template_image_name='example_template_face',
                                    template_image_secondary_dir='script_example',
                                    is_refresh_screenshot=False))  # simulate image recognition face icon and tap face pos
         self.default_tap(
-            CustomImage(screen_image_name='example_screen',
+            CustomImage(screen_image_name='tmp0',
                                    template_image_name='example_template_face',
                                    is_refresh_screenshot=False))  # simulate image recognition face icon and tap face pos
 
