@@ -35,6 +35,7 @@ from .settings import Settings as ST
 class MetisClass(TemplateMetisClass):
 
     def __init__(self, device_id: str, relatively_path: str, pyqt6_ui_label: UiClientParams, os_environment: str = 'android'):
+        assert device_id!=''
         if not relatively_path:
             self._relatively_path = MetisClass.get_current_path()
         else:
@@ -47,7 +48,7 @@ class MetisClass(TemplateMetisClass):
         self._script_path = self._dev_path.create_extended_script_path(self._device_id)
         self._logger = MetisLogger("MetisClass_logger",
                                    log_level=logging.DEBUG,
-                                   log_file=os.path.join(self._script_path.absolute_path, "log",
+                                   log_file=os.path.join(self._script_path.device_id_path, "log",
                                                          self.get_time() + self._device_id + ".log"))
         assert os_environment in ST.OS_ENVIRONMENT
         self._os_environment = os_environment  # android , ios

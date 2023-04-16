@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from metis.metis import MetisClass
 from metis.params import ImageRecognitionParams , SaveParams
 
@@ -93,5 +93,5 @@ class script_example(MetisClass):
 
 
 if __name__ == '__main__':
-    script_obj = script_example('test_uid', None, None, 'android')
+    script_obj = script_example('01234567(test_uid)', None, None, 'android')
     script_obj()
