@@ -29,12 +29,12 @@ from .utils import image_recognition
 from .settings import Settings as ST
 
 
-class MetisClass(TemplateMetisClass):
+class MetisseClass(TemplateMetisClass):
 
     def __init__(self, device_id: str, relatively_path: str, pyqt6_ui_label: UiClientParams, os_environment: str = 'android'):
-        assert device_id!=''
+        assert device_id != ''
         if not relatively_path:
-            self._relatively_path = MetisClass.get_current_path()
+            self._relatively_path = MetisseClass.get_current_path()
         else:
             self._relatively_path = relatively_path
 
@@ -427,4 +427,3 @@ class MetisClass(TemplateMetisClass):
         _crop_img.save(_image_path)
         self._logger.info("crop_screenshot method : exported : w=%s", _save_png_image_name)
         self._ui_client.send_log_to_ui(f"crop_screenshot method : \n exported : w={_save_png_image_name}")
-

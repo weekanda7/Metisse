@@ -4,7 +4,7 @@ import tempfile
 import os
 import logging
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.utils.metis_log import MetisLogger
+from metisse.utils.metis_log import MetisLogger
 
 class TestMetisLogger(unittest.TestCase):
 

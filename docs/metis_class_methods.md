@@ -1,6 +1,6 @@
-# MetisClass Methods Documentation
+# MetisseClass Methods Documentation
 
-MetisClass is the primary class in the metis package, providing a set of methods for image recognition and manipulation tasks. Here is a detailed description of the methods available in the MetisClass:
+MetisseClass is the primary class in the metisse package, providing a set of methods for image recognition and manipulation tasks. Here is a detailed description of the methods available in the MetisseClass:
 
 - `check_image_recognition(params: ImageRecognitionParams) -> bool`
 
@@ -84,5 +84,5 @@ MetisClass is the primary class in the metis package, providing a set of methods
   This method introduces a pause in the script execution for the specified duration.
 
   - `wait_time`: The duration (in seconds) to pause the script execution (default: 1 second).
-  
-These are the main methods available in the MetisClass for performing various image recognition and manipulation tasks. You can use these methods to interact with the images in your script and perform operations like tapping, swiping, and pressing based on the recognized images.
+
+These are the main methods available in the MetisseClass for performing various image recognition and manipulation tasks. You can use these methods to interact with the images in your script and perform operations like tapping, swiping, and pressing based on the recognized images.

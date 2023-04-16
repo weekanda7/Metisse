@@ -6,8 +6,8 @@ import numpy as np
 from PIL import Image
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.params import SaveParams, UiClientParams
-from metis.metis import MetisClass
+from metisse.params import SaveParams, UiClientParams
+from metisse.metisse import MetisseClass
 
 curPath = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,7 +20,7 @@ class TestCropScreenshot(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = MetisClass(
+        self.test_metis = MetisseClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
             pyqt6_ui_label=UiClientParams(),

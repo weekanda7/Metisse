@@ -3,8 +3,8 @@ import sys
 import unittest
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from unittest.mock import patch
-from metis.clients.andriod.adb import AdbClient
-from metis.params import DeviceParams
+from metisse.clients.andriod.adb import AdbClient
+from metisse.params import DeviceParams
 
 
 class TestAdbClient(unittest.TestCase):

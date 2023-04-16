@@ -1,10 +1,10 @@
-# metis Package Documentation
+# metisse Package Documentation
 
-metis is a Python library for automating image recognition and manipulation tasks. It provides a set of user-friendly methods that allow users to perform automated tapping, swiping, and pressing operations using image recognition techniques. Below is a brief overview of the main features and usage of metis:
+metisse is a Python library for automating image recognition and manipulation tasks. It provides a set of user-friendly methods that allow users to perform automated tapping, swiping, and pressing operations using image recognition techniques. Below is a brief overview of the main features and usage of metisse:
 
-## MetisClass
+## MetisseClass
 
-MetisClass is the primary class in metis containing all the basic image recognition and manipulation methods. To use metis, you need to create a subclass inheriting from MetisClass and implement custom methods as needed.
+MetisseClass is the primary class in metisse containing all the basic image recognition and manipulation methods. To use metisse, you need to create a subclass inheriting from MetisseClass and implement custom methods as needed.
 
 ### Methods:
 
@@ -18,7 +18,7 @@ MetisClass is the primary class in metis containing all the basic image recognit
 
 ## ImageRecognitionParams
 
-ImageRecognitionParams is a dataclass for configuring image recognition parameters. Users can customize this class as needed for use in metis methods.
+ImageRecognitionParams is a dataclass for configuring image recognition parameters. Users can customize this class as needed for use in metisse methods.
 
 ### Parameters:
 
@@ -39,7 +39,7 @@ ImageRecognitionParams is a dataclass for configuring image recognition paramete
 
 ## SaveParams
 
-SaveParams is a dataclass for configuring saving parameters. Users can customize this class as needed for use in metis methods.
+SaveParams is a dataclass for configuring saving parameters. Users can customize this class as needed for use in metisse methods.
 
 ### Parameters:
 
@@ -58,7 +58,7 @@ SaveParams is a dataclass for configuring saving parameters. Users can customize
 
 ## DeviceParams
 
-DeviceParams is a dataclass containing parameters related to the device on which metis is running. These parameters can be used to customize the behavior of the library according to the device's specifications.
+DeviceParams is a dataclass containing parameters related to the device on which metisse is running. These parameters can be used to customize the behavior of the library according to the device's specifications.
 
 ### Parameters:
 
@@ -67,7 +67,7 @@ DeviceParams is a dataclass containing parameters related to the device on which
 
 ## UiClientParams
 
-UiClientParams is a dataclass containing parameters related to the user interface of the metis library. These parameters can be used to customize the appearance and behavior of the user interface elements used in metis.
+UiClientParams is a dataclass containing parameters related to the user interface of the metisse library. These parameters can be used to customize the appearance and behavior of the user interface elements used in metisse.
 
 ### Parameters:
 
@@ -76,7 +76,7 @@ UiClientParams is a dataclass containing parameters related to the user interfac
 
 ## ImageRecognitionResult
 
-ImageRecognitionResult is a class containing information related to the image recognition result. This class can be used to store and manage the results of image recognition operations performed by metis.
+ImageRecognitionResult is a class containing information related to the image recognition result. This class can be used to store and manage the results of image recognition operations performed by metisse.
 
 ### Attributes:
 
@@ -85,11 +85,11 @@ ImageRecognitionResult is a class containing information related to the image re
 - `coordinates_list`: A list of tuples containing the x and y coordinates of all recognized images.
 - `recognition_threshold`: A float value representing the recognition threshold used in the image recognition process.
 
-## Typical steps for using metis are as follows:
+## Typical steps for using metisse are as follows:
 
-1. Create a subclass inheriting from MetisClass.
+1. Create a subclass inheriting from MetisseClass.
 2. Customize ImageRecognitionParams and SaveParams dataclasses as needed.
 3. Implement the required image recognition and manipulation methods in the subclass.
 4. Create an instance of the subclass and call the corresponding methods to execute the script.
 
-Please refer to the provided usage example to understand how to use metis in a real project.
+Please refer to the provided usage example to understand how to use metisse in a real project.

@@ -1,10 +1,10 @@
-# metis 套件說明文件
+# metisse 套件說明文件
 
-metis 是一個用於自動化圖像識別和操作任務的 Python 庫。它提供了一組用戶友好的方法，讓用戶能夠使用圖像識別技術執行自動點擊、滑動和按壓操作。以下是 metis 主要功能和用法的簡要概述：
+metisse 是一個用於自動化圖像識別和操作任務的 Python 庫。它提供了一組用戶友好的方法，讓用戶能夠使用圖像識別技術執行自動點擊、滑動和按壓操作。以下是 metisse 主要功能和用法的簡要概述：
 
-## MetisClass
+## MetisseClass
 
-MetisClass 是 metis 中包含所有基本圖像識別和操作方法的主要類。要使用 metis，您需要創建一個繼承自 MetisClass 的子類並根据需要實現自定義方法。
+MetisseClass 是 metisse 中包含所有基本圖像識別和操作方法的主要類。要使用 metisse，您需要創建一個繼承自 MetisseClass 的子類並根据需要實現自定義方法。
 
 ### 方法：
 
@@ -18,7 +18,7 @@ MetisClass 是 metis 中包含所有基本圖像識別和操作方法的主要�
 
 ## ImageRecognitionParams
 
-ImageRecognitionParams 是一個用於配置圖像識別參數的 dataclass。用戶可以根据需要自定義此類以在 metis 方法中使用。
+ImageRecognitionParams 是一個用於配置圖像識別參數的 dataclass。用戶可以根据需要自定義此類以在 metisse 方法中使用。
 
 ### 參數：
 
@@ -39,7 +39,7 @@ ImageRecognitionParams 是一個用於配置圖像識別參數的 dataclass。�
 
 ## SaveParams
 
-SaveParams 是一個用於配置保存參數的 dataclass。用戶可以根据需要自定義此類以在 metis 方法中使用。
+SaveParams 是一個用於配置保存參數的 dataclass。用戶可以根据需要自定義此類以在 metisse 方法中使用。
 
 ## 參數
 
@@ -58,7 +58,7 @@ SaveParams 是一個用於配置保存參數的 dataclass。用戶可以根据�
 
 ## DeviceParams
 
-DeviceParams 是一個包含與 metis 運行設備相關的參數的 dataclass。這些參數可用於根據設備的規格自定義庫的行為。
+DeviceParams 是一個包含與 metisse 運行設備相關的參數的 dataclass。這些參數可用於根據設備的規格自定義庫的行為。
 
 ### 參數
 
@@ -67,7 +67,7 @@ DeviceParams 是一個包含與 metis 運行設備相關的參數的 dataclass�
 
 ## UiClientParams
 
-UiClientParams 是一個包含與 metis 庫用戶界面相關的參數的 dataclass。這些參數可用於自定義在 metis 中使用的用戶界面元素的外觀和行為。
+UiClientParams 是一個包含與 metisse 庫用戶界面相關的參數的 dataclass。這些參數可用於自定義在 metisse 中使用的用戶界面元素的外觀和行為。
 
 ### 參數
 
@@ -76,7 +76,7 @@ UiClientParams 是一個包含與 metis 庫用戶界面相關的參數的 datacl
 
 ## ImageRecognitionResult
 
-ImageRecognitionResult 是一個包含圖像識別結果相關信息的類。此類可用於存儲和管理由 metis 執行的圖像識別操作的結果。
+ImageRecognitionResult 是一個包含圖像識別結果相關信息的類。此類可用於存儲和管理由 metisse 執行的圖像識別操作的結果。
 
 ### 屬性
 
@@ -85,11 +85,11 @@ ImageRecognitionResult 是一個包含圖像識別結果相關信息的類。此
 - `coordinates_list`：包含所有識別圖像的 x 和 y 坐標的元組列表。
 - `recognition_threshold`：表示圖像識別過程中使用的識別閾值的浮點值。
 
-## 使用 metis 的典型步驟
+## 使用 metisse 的典型步驟
 
-1. 創建一個繼承自 MetisClass 的子類。
+1. 創建一個繼承自 MetisseClass 的子類。
 2. 按需要自定義 ImageRecognitionParams 和 SaveParams dataclass。
 3. 在子類中實現所需的圖像識別和操作方法。
 4. 創建子類的實例並調用相應的方法以執行腳本。
 
-請參考提供的使用示例以了解如何在實際項目中使用 metis。
+請參考提供的使用示例以了解如何在實際項目中使用 metisse。

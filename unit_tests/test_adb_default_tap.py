@@ -5,8 +5,8 @@ from unittest.mock import patch, MagicMock
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Import other necessary modules and classes
-from metis.params import ImageRecognitionParams, UiClientParams
-from metis.metis import MetisClass
+from metisse.params import ImageRecognitionParams, UiClientParams
+from metisse.metisse import MetisseClass
 
 
 class TestMyModule(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestMyModule(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = MetisClass(
+        self.test_metis = MetisseClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
             pyqt6_ui_label=UiClientParams(),
@@ -28,9 +28,9 @@ class TestMyModule(unittest.TestCase):
         self.test_metis.screenshot_wait_time_increase = 1
         self.test_metis.is_check_gamelog = False
 
-    @patch.object(MetisClass, 'check_image_recognition', return_value=True)
-    @patch.object(MetisClass, 'tap')
-    @patch.object(MetisClass, 'save_screenshot_compression')
+    @patch.object(MetisseClass, 'check_image_recognition', return_value=True)
+    @patch.object(MetisseClass, 'tap')
+    @patch.object(MetisseClass, 'save_screenshot_compression')
     def test_adb_default_tap(self, mock_save_screenshot_compression, mock_tap, mock_check_image_recognition):
         # Set up the necessary input parameters and objects
         params = ImageRecognitionParams(template_image_name="example_template",

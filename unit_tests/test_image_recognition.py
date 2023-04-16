@@ -7,8 +7,8 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Import other necessary modules and classes
 curPath = os.path.abspath(os.path.dirname(__file__))
-from metis.utils.image_recognition import match_template
-from metis.params import ImageRecognitionResult
+from metisse.utils.image_recognition import match_template
+from metisse.params import ImageRecognitionResult
 
 class TestImageRecognition(unittest.TestCase):
 

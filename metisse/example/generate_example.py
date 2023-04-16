@@ -1,6 +1,6 @@
 import inspect
 import os
-from ..metis import MetisClass
+from ..metisse import MetisseClass
 import shutil
 
 
@@ -24,6 +24,8 @@ def copy_images(src_folder, dest_folder, extensions=('jpg', 'jpeg', 'png', 'gif'
                 src_path = os.path.join(root, file)
                 dest_path = os.path.join(dest_folder, file)
                 shutil.copy(src_path, dest_path)
+
+
 def copy_ui(src_folder, dest_folder, extensions='gui'):
     if not os.path.exists(dest_folder):
         os.makedirs(dest_folder)
@@ -42,11 +44,11 @@ def example():
 
 def create_example_py_file():
     _path = get_current_path()
-    MetisClass('01234567(test_uid)', _path, None, 'android')
+    MetisseClass('01234567(test_uid)', _path, None, 'android')
     _curPath = os.path.abspath(os.path.dirname(__file__))
 
     source_folder = os.path.join(_curPath, "example_data", 'icon')
-    destination_folder = os.path.join(_path, 'icon','script_example')
+    destination_folder = os.path.join(_path, 'icon', 'script_example')
     copy_images(source_folder, destination_folder)
 
     source_folder = os.path.join(_curPath, "example_data", 'temp_image')
@@ -60,8 +62,8 @@ def create_example_py_file():
     content = '''import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.metis import MetisClass
-from metis.params import ImageRecognitionParams , SaveParams
+from metisse.metisse import MetisseClass
+from metisse.params import ImageRecognitionParams , SaveParams
 
 class CustomImage(ImageRecognitionParams):
 
@@ -74,10 +76,10 @@ class CustomSave(SaveParams):
     def __init__(self, *args, save_image_secondary_dir='script_example', **kwargs):
         super().__init__(*args, save_image_secondary_dir=save_image_secondary_dir, **kwargs)
 
-class script_example(MetisClass):
+class script_example(MetisseClass):
 
     def __init__(self, device_id='', relatively_path='', pyqt6_ui_label={}, os_environment=''):
-        MetisClass.__init__(
+        MetisseClass.__init__(
             self,
             device_id=device_id,
             relatively_path=relatively_path,

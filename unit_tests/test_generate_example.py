@@ -4,7 +4,7 @@ import unittest
 import os
 import shutil
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.example.generate_example import create_example_py_file
+from metisse.example.generate_example import create_example_py_file
 
 class TestExample(unittest.TestCase):
 

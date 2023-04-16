@@ -15,7 +15,7 @@ Metis is a powerful image recognition and automation package designed to facilit
 To install Metis, run the following command in your terminal:
 
 ```bash
-pip install metis
+pip install metisse
 ```
 Usage
 Here's a simple example demonstrating how to use Metis for image recognition and user interaction:
@@ -23,12 +23,12 @@ Here's a simple example demonstrating how to use Metis for image recognition and
 python
 Copy code
 ```bash
-from metis.metis import MetisClass
-from metis.params import ImageRecognitionParams, SaveParams
+from metisse.metisse import MetisseClass
+from metisse.params import ImageRecognitionParams, SaveParams
 
-class script_example(MetisClass):
+class script_example(MetisseClass):
     def __init__(self, device_id="", relatively_path="", pyqt6_ui_label={}, os_environment=""):
-        MetisClass.__init__(
+        MetisseClass.__init__(
             self,
             device_id=device_id,
             relatively_path=relatively_path,
@@ -46,15 +46,15 @@ if __name__ == "__main__":
 
 Here's a function designed to generate a sample project. After running the code, it will create a sample project in the current directory, including a simple script, a device name folder automatically generated after simulating a connection to a device, an icon folder (containing test examples), and a default script GUI (which requires connection to a device to use).
 ```bash
-from metis.metis import MetisClass
-import metis.example.generate_example as ex
+from metisse.metisse import MetisseClass
+import metisse.example.generate_example as ex
 if __name__ == '__main__':
 
     ex.create_example_py_file()
 ```
 
 
-For more detailed information about the available methods and their usage, please refer to the MetisClass Methods documentation.
+For more detailed information about the available methods and their usage, please refer to the MetisseClass Methods documentation.
 
 ## Contributing
 We welcome contributions to Metis! If you'd like to contribute, please follow these steps:

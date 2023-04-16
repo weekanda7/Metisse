@@ -7,8 +7,8 @@ from PIL import Image
 import numpy as np
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.params import SaveParams, UiClientParams
-from metis.metis import MetisClass
+from metisse.params import SaveParams, UiClientParams
+from metisse.metisse import MetisseClass
 
 curPath = os.path.abspath(os.path.dirname(__file__))
 
@@ -21,7 +21,7 @@ class TestSaveScreenshotCompression(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = MetisClass(
+        self.test_metis = MetisseClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
             pyqt6_ui_label=UiClientParams(),
@@ -30,8 +30,6 @@ class TestSaveScreenshotCompression(unittest.TestCase):
         self.test_metis.is_backup = False
         self.test_metis.screenshot_wait_time_increase = 1
         self.test_metis.is_check_gamelog = False
-
-        
 
     def test_save_screenshot_compression(self):
         save_params = SaveParams(load_image_primary_dir='temp_image',

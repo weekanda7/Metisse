@@ -5,8 +5,8 @@ import os
 import shutil
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metis.params import ImageRecognitionParams, UiClientParams
-from metis.metis import MetisClass
+from metisse.params import ImageRecognitionParams, UiClientParams
+from metisse.metisse import MetisseClass
 
 
 class TestCheckImageRecognition(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestCheckImageRecognition(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = MetisClass(
+        self.test_metis = MetisseClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
             pyqt6_ui_label=UiClientParams(),
