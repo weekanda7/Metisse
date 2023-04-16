@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='metis',
-    version="0.1.10",
+    version="0.1.11",
     description="A versatile and automated testing framework for games and apps on Android and iOS platforms",
     author='Henry Chen',
     author_email='weekand7@gmail.com',
@@ -17,6 +17,7 @@ setup(
         'opencv_python>=4.5.1.48',
         'Pillow>=3.4.0',
         'PyQt6>=6.0.0',
+        'dill>=0.3.1.1',
     ],
     classifiers=[
         'Programming Language :: Python :: 3.7',

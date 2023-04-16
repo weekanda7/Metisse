@@ -15,7 +15,7 @@ from PyQt6 import QtWidgets, uic
 from PyQt6.QtCore import QTimer, QDateTime
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtGui import QImage, QPixmap
-from ui_settings import UiSettings as UI_ST
+from gui_settings import UiSettings as UI_ST
 
 curPath = os.path.abspath(os.path.dirname(__file__))
 
@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         self.current_select_script: str
         self.sub_obj_dict = {str: Dialog}
 
-    def load_scripts_from_directory(self, directory: str, script_prefix: str = "auto"):
+    def load_scripts_from_directory(self, directory: str, script_prefix: str = "script"):
         scripts = {}
 
         for file in os.listdir(directory):
