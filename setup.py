@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='metis',
-    version="0.1.8",
+    version="0.1.9",
     description="A versatile and automated testing framework for games and apps on Android and iOS platforms",
     author='Henry Chen',
     author_email='weekand7@gmail.com',

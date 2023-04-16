@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))  # add metis to path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from metis.metis import MetisClass
 from metis.params import ImageRecognitionParams , SaveParams
 

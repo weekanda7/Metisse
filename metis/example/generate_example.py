@@ -46,7 +46,7 @@ def create_example_py_file():
     _curPath = os.path.abspath(os.path.dirname(__file__))
 
     source_folder = os.path.join(_curPath, "example_data", 'icon')
-    destination_folder = os.path.join(_path, 'icon')
+    destination_folder = os.path.join(_path, 'icon','script_example')
     copy_images(source_folder, destination_folder)
 
     source_folder = os.path.join(_curPath, "example_data", 'temp_image')
