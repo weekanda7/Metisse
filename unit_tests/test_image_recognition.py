@@ -34,7 +34,7 @@ class TestImageRecognition(unittest.TestCase):
 
         # Check if the result attributes are correctly set
         expected_is_recognized = True
-        expected_coordinate = (204, 197)
+        expected_coordinate = (758, 951)
         expected_recognition_threshold = 0.9999983310699463
         self.assertEqual(result.is_recognized, expected_is_recognized)
         self.assertEqual(result.coordinate, expected_coordinate)

@@ -1,4 +1,5 @@
 import sys
+import time
 import unittest
 import os
 import shutil
@@ -13,6 +14,7 @@ class TestExample(unittest.TestCase):
         self.icon_folder_path = os.path.join(self.current_path, 'icon')
         self.temp_image_folder_path = os.path.join(self.current_path, '01234567(test_uid)', 'temp_image')
         self.ui_folder_path = os.path.join(self.current_path, 'ui')
+        self.device_folder_path = os.path.join(self.current_path, '01234567(test_uid)')
     def tearDown(self):
         if os.path.exists(self.example_py_path):
             os.remove(self.example_py_path)

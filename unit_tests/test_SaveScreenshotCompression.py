@@ -31,6 +31,8 @@ class TestSaveScreenshotCompression(unittest.TestCase):
         self.test_metis.screenshot_wait_time_increase = 1
         self.test_metis.is_check_gamelog = False
 
+        
+
     def test_save_screenshot_compression(self):
         save_params = SaveParams(load_image_primary_dir='temp_image',
                                  load_image_name='tmp0',
