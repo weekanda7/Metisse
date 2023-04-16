@@ -23,11 +23,6 @@ Here's a simple example demonstrating how to use Metis for image recognition and
 python
 Copy code
 ```bash
-import os
-import sys
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
 from metis.metis import MetisClass
 from metis.params import ImageRecognitionParams, SaveParams
 
@@ -51,10 +46,6 @@ if __name__ == "__main__":
 
 Here's a function designed to generate a sample project. After running the code, it will create a sample project in the current directory, including a simple script, a device name folder automatically generated after simulating a connection to a device, an icon folder (containing test examples), and a default script GUI (which requires connection to a device to use).
 ```bash
-import os
-import sys
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from metis.metis import MetisClass
 import metis.example.generate_example as ex
 if __name__ == '__main__':

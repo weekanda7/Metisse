@@ -3,6 +3,7 @@ __pycache__/
 *.pyo
 *.pyd
 dist/
+build/
 *.egg-info/
 test_init/
 pylint/

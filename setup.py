@@ -9,8 +9,7 @@ setup(
     license = 'Apache License 2.0',
     packages=find_packages(exclude=['unit_tests', 'unit_tests.*']),
     package_data={
-        'metis': ['example/**/*.png'],
-        'metis': ['example/example_data/ui/*'],
+        'metis': ['example/example_data/**/*'],
     },
     install_requires=[
         'facebook_wda>=1.3.3',
