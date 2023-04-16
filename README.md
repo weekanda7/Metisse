@@ -31,14 +31,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 from metis.metis import MetisClass
 from metis.params import ImageRecognitionParams, SaveParams
 
-class CustomImage(ImageRecognitionParams):
-    def __init__(self, *args, template_image_secondary_dir="script_example", **kwargs):
-        super().__init__(*args, template_image_secondary_dir=template_image_secondary_dir, **kwargs)
-
-class CustomSave(SaveParams):
-    def __init__(self, *args, save_image_secondary_dir="script_example", **kwargs):
-        super().__init__(*args, save_image_secondary_dir=save_image_secondary_dir, **kwargs)
-
 class script_example(MetisClass):
     def __init__(self, device_id="", relatively_path="", pyqt6_ui_label={}, os_environment=""):
         MetisClass.__init__(
@@ -53,13 +45,28 @@ class script_example(MetisClass):
         # Your custom script implementation goes here
 
 if __name__ == "__main__":
-    script_obj = script_example("test_uid", None, None, "android")
+    script_obj = script_example("01234567(test_uid)", None, None, "android")
     script_obj()
 ```
+
+Here's a function designed to generate a sample project. After running the code, it will create a sample project in the current directory, including a simple script, a device name folder automatically generated after simulating a connection to a device, an icon folder (containing test examples), and a default script GUI (which requires connection to a device to use).
+```bash
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from metis.metis import MetisClass
+import metis.example.generate_example as ex
+if __name__ == '__main__':
+
+    ex.create_example_py_file()
+```
+
+
 For more detailed information about the available methods and their usage, please refer to the MetisClass Methods documentation.
 
 ## Contributing
-We welcome contributions to Metis! If you'd like to contribute, please follow these steps:  
+We welcome contributions to Metis! If you'd like to contribute, please follow these steps:
 - Fork the repository
 - Create a new branch for your changes
 - Make your changes and test them thoroughly
