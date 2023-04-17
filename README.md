@@ -1,4 +1,4 @@
-# se
+# Metisse
 
 Metisse is a powerful image recognition and automation package designed to facilitate the development of scripts for mobile devices. It provides an extensive set of tools for image recognition, screenshot manipulation, and user interaction, such as tapping, swiping, and pressing.
 
