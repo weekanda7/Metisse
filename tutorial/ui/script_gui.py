@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
     def __init__(self, *args: Any, **kwargs: Any):
 
 
-        self.lang_list = ['_tw', '_cn', '_jp', '_en', '_kr']
+        self.lang_list =  ['_tc', '_sc', '_jp', '_en', '_kr']
         directory = os.path.dirname(curPath)  #upper level directory
         self.loaded_scripts = self.load_scripts_from_directory(directory)
         self.script_list = []

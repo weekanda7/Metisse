@@ -4,6 +4,8 @@ Metisse is a powerful image recognition and automation package designed to facil
 
 ## Features
 
+![image](./demo.gif)
+
 - Image recognition using template matching
 - Screenshot manipulation, including cropping and saving
 - Automation of user interactions, such as tapping, swiping, and pressing
