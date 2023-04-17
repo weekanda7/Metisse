@@ -38,7 +38,7 @@ class script_example(MetisseClass):
             os_environment=os_environment,
         )
 
-    def __call__(self):
+    def __call__(self, *args, **kwargs):
         # Your custom script implementation goes here
 
 if __name__ == "__main__":
