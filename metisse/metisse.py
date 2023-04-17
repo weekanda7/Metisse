@@ -185,7 +185,7 @@ class MetisseClass(TemplateMetisClass):
                                   self._img_recog_result.is_recognized)
                 self._ui_client.send_image_path_to_ui(_image_path=_template_image_path)
                 self._ui_client.send_log_to_ui(
-                    "image_recognition method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._img_recog_result.is_recognized}"
+                    f"image_recognition method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n accuracy_val={params.accuracy_val:.4f} \n {self._img_recog_result.is_recognized}"
                 )
                 if self._img_recog_result.is_recognized:
                     if self.is_backup and params.is_backup:
