@@ -2,7 +2,7 @@ import logging
 import os
 
 
-class MetisLogger(logging.Logger):
+class MetisseLogger(logging.Logger):
 
     def __init__(self, logger_name, log_level=logging.INFO, log_file=None):
         self.logger = logging.getLogger(logger_name)

@@ -1,6 +1,6 @@
-# Metis
+# se
 
-Metis is a powerful image recognition and automation package designed to facilitate the development of scripts for mobile devices. It provides an extensive set of tools for image recognition, screenshot manipulation, and user interaction, such as tapping, swiping, and pressing.
+Metisse is a powerful image recognition and automation package designed to facilitate the development of scripts for mobile devices. It provides an extensive set of tools for image recognition, screenshot manipulation, and user interaction, such as tapping, swiping, and pressing.
 
 ## Features
 
@@ -12,13 +12,13 @@ Metis is a powerful image recognition and automation package designed to facilit
 
 ## Installation
 
-To install Metis, run the following command in your terminal:
+To install Metisse, run the following command in your terminal:
 
 ```bash
 pip install metisse
 ```
 Usage
-Here's a simple example demonstrating how to use Metis for image recognition and user interaction:
+Here's a simple example demonstrating how to use Metisse for image recognition and user interaction:
 
 python
 Copy code
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 For more detailed information about the available methods and their usage, please refer to the MetisseClass Methods documentation.
 
 ## Contributing
-We welcome contributions to Metis! If you'd like to contribute, please follow these steps:
+We welcome contributions to Metisse! If you'd like to contribute, please follow these steps:
 - Fork the repository
 - Create a new branch for your changes
 - Make your changes and test them thoroughly
@@ -66,4 +66,4 @@ We welcome contributions to Metis! If you'd like to contribute, please follow th
 - Please make sure to follow the code style and conventions used in the project.
 
 ## License
-Metis is licensed under the Apache License 2.0.
+Metisse is licensed under the Apache License 2.0.

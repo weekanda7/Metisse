@@ -21,15 +21,15 @@ class TestSaveScreenshotCompression(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = MetisseClass(
+        self.test_metisse = MetisseClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
             pyqt6_ui_label=UiClientParams(),
             os_environment='android',
         )
-        self.test_metis.is_backup = False
-        self.test_metis.screenshot_wait_time_increase = 1
-        self.test_metis.is_check_gamelog = False
+        self.test_metisse.is_backup = False
+        self.test_metisse.screenshot_wait_time_increase = 1
+        self.test_metisse.is_check_gamelog = False
 
     def test_save_screenshot_compression(self):
         save_params = SaveParams(load_image_primary_dir='temp_image',
@@ -40,20 +40,20 @@ class TestSaveScreenshotCompression(unittest.TestCase):
                                  is_refresh_screenshot=False,
                                  is_save_image_name_add_time=False)
 
-        self.test_metis.save_screenshot_compression(save_params)
+        self.test_metisse.save_screenshot_compression(save_params)
 
-        expected_output_path = os.path.join(self.test_metis._script_path.device_id_path, save_params.save_image_primary_dir,
+        expected_output_path = os.path.join(self.test_metisse._script_path.device_id_path, save_params.save_image_primary_dir,
                                             save_params.save_image_name)
         print(expected_output_path)
         self.assertTrue(os.path.exists(expected_output_path), 'Output file not found.')
-        expected_output_path = os.path.join(self.test_metis._script_path.device_id_path, save_params.save_image_primary_dir,
+        expected_output_path = os.path.join(self.test_metisse._script_path.device_id_path, save_params.save_image_primary_dir,
                                             save_params.save_image_name)
         self.assertTrue(os.path.exists(expected_output_path), 'Output file not found.')
 
         with Image.open(expected_output_path) as output_image:  # avoid ResourceWarning
             with Image.open(
-                    os.path.join(self.test_metis._script_path.device_id_path, save_params.load_image_primary_dir,
-                                 self.test_metis._script_path._check_image_name_pngFormat(
+                    os.path.join(self.test_metisse._script_path.device_id_path, save_params.load_image_primary_dir,
+                                 self.test_metisse._script_path._check_image_name_pngFormat(
                                      save_params.load_image_name))) as original_image:
 
                 expected_size = tuple(int(x * save_params.compression) for x in original_image.size)

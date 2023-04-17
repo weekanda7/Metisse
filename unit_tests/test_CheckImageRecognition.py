@@ -20,15 +20,15 @@ class TestCheckImageRecognition(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = MetisseClass(
+        self.test_metisse = MetisseClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
             pyqt6_ui_label=UiClientParams(),
             os_environment='android',
         )
-        self.test_metis.is_backup = False
-        self.test_metis.screenshot_wait_time_increase = 1
-        self.test_metis.is_check_gamelog = False
+        self.test_metisse.is_backup = False
+        self.test_metisse.screenshot_wait_time_increase = 1
+        self.test_metisse.is_check_gamelog = False
 
         # Copy test images to the temporary directory
         src_test_images = curPath + '/test_virtual_device/temp_image'
@@ -47,7 +47,7 @@ class TestCheckImageRecognition(unittest.TestCase):
             # Fill in other appropriate values for the parameters
         )
 
-        result = self.test_metis.check_image_recognition(params)
+        result = self.test_metisse.check_image_recognition(params)
         self.assertTrue(result, "check_image_recognition failed with basic params")
 
     def test_check_image_recognition_specific_case(self):
@@ -58,7 +58,7 @@ class TestCheckImageRecognition(unittest.TestCase):
             # Fill in other appropriate values for the parameters
         )
 
-        result = self.test_metis.check_image_recognition(params)
+        result = self.test_metisse.check_image_recognition(params)
         self.assertTrue(result, "check_image_recognition failed with specific params")
 
     # Add more test methods as needed to cover various aspects of the check_image_recognition method

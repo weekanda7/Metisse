@@ -20,15 +20,15 @@ class TestCropScreenshot(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = MetisseClass(
+        self.test_metisse = MetisseClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
             pyqt6_ui_label=UiClientParams(),
             os_environment='android',
         )
-        self.test_metis.is_backup = False
-        self.test_metis.screenshot_wait_time_increase = 1
-        self.test_metis.is_check_gamelog = False
+        self.test_metisse.is_backup = False
+        self.test_metisse.screenshot_wait_time_increase = 1
+        self.test_metisse.is_check_gamelog = False
 
     def test_crop_screenshot(self):
         save_params = SaveParams(save_image_primary_dir='storage',
@@ -42,9 +42,9 @@ class TestCropScreenshot(unittest.TestCase):
         coordinate1 = (100, 50)
         coordinate2 = (300, 400)
 
-        self.test_metis.crop_screenshot(coordinate1, coordinate2, save_params)
+        self.test_metisse.crop_screenshot(coordinate1, coordinate2, save_params)
 
-        expected_output_path = os.path.join(self.test_metis._script_path.device_id_path, save_params.save_image_primary_dir,
+        expected_output_path = os.path.join(self.test_metisse._script_path.device_id_path, save_params.save_image_primary_dir,
                                             save_params.save_image_name)
         self.assertTrue(os.path.exists(expected_output_path), 'Cropped image file was not created.')
 
@@ -53,7 +53,7 @@ class TestCropScreenshot(unittest.TestCase):
             self.assertEqual(cropped_image.size, expected_size, 'Cropped image size does not match expected size.')
 
     def tearDown(self):
-        self.test_metis = None
+        self.test_metisse = None
 
 
 if __name__ == '__main__':

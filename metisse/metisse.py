@@ -20,11 +20,11 @@ import inspect
 from .params import ImageRecognitionParams, SaveParams, DeviceParams, UiClientParams, ImageRecognitionResult
 from .template_metis import TemplateMetisClass
 from .clients.ios.wda import WdaClient
-from .clients.andriod.adb import AdbClient
-from .utils.metis_path import DevPath
+from .clients.android.adb import AdbClient
+from .utils.metisse_path import DevPath
 from .utils.opencv_utils import Opencv_utils
 from .utils.ui_client import UiClient
-from .utils.metis_log import MetisLogger
+from .utils.metisse_log import MetisseLogger
 from .utils import image_recognition
 from .settings import Settings as ST
 
@@ -43,10 +43,10 @@ class MetisseClass(TemplateMetisClass):
         self._device_id = device_id
         self._dev_path = DevPath(self._relatively_path)
         self._script_path = self._dev_path.create_extended_script_path(self._device_id)
-        self._logger = MetisLogger("MetisClass_logger",
-                                   log_level=logging.DEBUG,
-                                   log_file=os.path.join(self._script_path.device_id_path, "log",
-                                                         self.get_time() + self._device_id + ".log"))
+        self._logger = MetisseLogger("MetisClass_logger",
+                                     log_level=logging.DEBUG,
+                                     log_file=os.path.join(self._script_path.device_id_path, "log",
+                                                           self.get_time() + self._device_id + ".log"))
         assert os_environment in ST.OS_ENVIRONMENT
         self._os_environment = os_environment  # android , ios
         self.ios_device_scale = 2  # init var

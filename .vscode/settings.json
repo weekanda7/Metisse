@@ -1,5 +1,8 @@
 {
     "python.analysis.extraPaths": [
       "${workspaceFolder}/metisse",
+    ],
+    "cSpell.ignoreWords": [
+      "metisse"
     ]
   }

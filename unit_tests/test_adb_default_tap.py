@@ -18,15 +18,15 @@ class TestMyModule(unittest.TestCase):
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         relatively_path = './{}/'.format(os.path.relpath(curPath, start=os.curdir))
-        self.test_metis = MetisseClass(
+        self.test_metisse = MetisseClass(
             device_id='test_virtual_device',
             relatively_path=relatively_path,
             pyqt6_ui_label=UiClientParams(),
             os_environment='android',
         )
-        self.test_metis.is_backup = True  # check save backup image
-        self.test_metis.screenshot_wait_time_increase = 1
-        self.test_metis.is_check_gamelog = False
+        self.test_metisse.is_backup = True  # check save backup image
+        self.test_metisse.screenshot_wait_time_increase = 1
+        self.test_metisse.is_check_gamelog = False
 
     @patch.object(MetisseClass, 'check_image_recognition', return_value=True)
     @patch.object(MetisseClass, 'tap')
@@ -38,7 +38,7 @@ class TestMyModule(unittest.TestCase):
                                         is_backup=True)
 
         # Call the default_tap method with the prepared input parameters
-        result = self.test_metis.default_tap(params)
+        result = self.test_metisse.default_tap(params)
 
         # Check if the mocked methods were called with the expected arguments
         mock_check_image_recognition.assert_called_with(params)
