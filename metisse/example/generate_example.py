@@ -87,7 +87,7 @@ class script_example(MetisseClass):
             os_environment=os_environment,
         )
 
-    def __call__(self):
+    def __call__(self, *args, **kwargs):
         self.check_image_recognition(
             CustomImage(screen_image_name='tmp0',
                                    template_image_name='example_template_hand',
