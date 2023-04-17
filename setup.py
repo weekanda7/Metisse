@@ -1,9 +1,12 @@
 from setuptools import setup, find_packages
-
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 setup(
     name='metisse',
-    version="0.0.2",
+    version="0.0.3",
     description="A versatile and automated testing framework for games and apps on Android and iOS platforms",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author='Henry Chen',
     author_email='weekand7@gmail.com',
     license='Apache License 2.0',

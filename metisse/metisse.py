@@ -40,7 +40,7 @@ class MetisseClass(TemplateMetisClass):
 
         super(TemplateMetisClass, self).__init__()
 
-        self._device_id = device_id
+        self._device_id = self.check_device_id_path_valid(device_id)
         self._dev_path = DevPath(self._relatively_path)
         self._script_path = self._dev_path.create_extended_script_path(self._device_id)
         self._logger = MetisseLogger("MetisClass_logger",
@@ -81,6 +81,11 @@ class MetisseClass(TemplateMetisClass):
         self._logger.info("execute_time_sleep : wait_time= %.2f", wait_time)
         self._ui_client.send_log_to_ui(f"execute_time_sleep method : \n wait_time= {wait_time:.2f}")
         time.sleep(wait_time)
+
+    def check_device_id_path_valid(self,input:str) -> str:
+        if ':' in input:
+            return input.replace(':', '_')
+        return input
 
     @property
     def get_device_id(self) -> str:
