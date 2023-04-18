@@ -86,8 +86,21 @@ if __name__ == '__main__':
 
     ex.create_example_py_file()
 ```
-
-
+This is a script structure diagram.
+```bash
+your project
+│   script_example.py
+│
+├───ui
+├───icon
+│   └───script_example
+└───01234567(test_uid)
+    ├───backup
+    ├───log
+    ├───storage
+    │   └───script_example
+    └───temp_image
+```
 For more detailed information about the available methods and their usage, please refer to the MetisseClass Methods documentation.
 
 ## Contributing
