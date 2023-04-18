@@ -19,7 +19,40 @@ To install Metisse, run the following command in your terminal:
 ```bash
 pip install metisse
 ```
-Usage
+
+### Additional Requirements
+
+#### Android Devices
+
+1. Enable Developer Mode on your Android device.
+2. Turn on USB Debugging (adb) on your Android device.
+3. Install Android Debug Bridge (adb) on your computer.
+4. Add adb to your system path.
+
+#### iOS Devices
+
+1. Install Appium/WebDriverAgent.
+2. Install tidevice (required for GUI).
+
+### Enabling Developer Mode and USB Debugging (adb) on Android Devices
+
+Follow these steps to enable Developer Mode and USB Debugging on your Android device:
+
+1. Open the Settings app on your Android device.
+2. Scroll down and tap "About phone" or "About device."
+3. Find the "Build number" or "Software version" and tap it 7 times. You will see a message that you are now a developer.
+4. Go back to the main Settings menu and tap "Developer options" (it should be visible now).
+5. Enable "USB Debugging."
+
+### Android Debug Bridge (adb) Installation and Configuration
+
+Follow these steps to install and configure adb:
+
+1. Download the Android SDK Platform Tools from the following link: https://developer.android.com/studio/releases/platform-tools
+2. Extract the downloaded zip file to a location of your choice.
+3. Add the extracted folder to your system's PATH variable.
+
+### Usage
 Here's a simple example demonstrating how to use Metisse for image recognition and user interaction:
 
 python
