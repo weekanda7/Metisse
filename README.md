@@ -31,8 +31,7 @@ pip install metisse
 
 #### iOS Devices
 
-1. Install Appium/WebDriverAgent.
-2. Install tidevice (required for GUI).
+1. Install Appium/WebDriverAgent on your ios device.
 
 ### Enabling Developer Mode and USB Debugging (adb) on Android Devices
 

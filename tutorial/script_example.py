@@ -30,7 +30,7 @@ class script_example(MetisseClass):
         self.check_image_recognition(
             CustomImage(screen_image_name='tmp0',
                                    template_image_name='example_template_hand',
-                                   is_refresh_screenshot=False))  # simulate image recognition hand icon
+                                   is_refresh_screenshot=False))  # simulate image recognition hand icon , if you want to use this function on real device , you need to set is_refresh_screenshot=True
         print(f'hand pos = {self._img_recog_result.coordinate}')
 
         self.execute_time_sleep(1)  # wait 1 second
@@ -39,11 +39,11 @@ class script_example(MetisseClass):
             ImageRecognitionParams(screen_image_name='tmp0',
                                    template_image_name='example_template_face',
                                    template_image_secondary_dir='script_example',
-                                   is_refresh_screenshot=False))  # simulate image recognition face icon and tap face pos
+                                   is_refresh_screenshot=False)) # simulate image recognition hand icon , if you want to use this function on real device , you need to set is_refresh_screenshot=True
         self.default_tap(
             CustomImage(screen_image_name='tmp0',
                                    template_image_name='example_template_face',
-                                   is_refresh_screenshot=False))  # simulate image recognition face icon and tap face pos
+                                   is_refresh_screenshot=False))  # simulate image recognition hand icon , if you want to use this function on real device , you need to set is_refresh_screenshot=True
 
         self.save_screenshot_compression( SaveParams(
                        save_image_name='save_image',
@@ -89,7 +89,7 @@ class script_example(MetisseClass):
                                    template_image_name='small_image_tmp',
                                    template_image_primary_dir='temp_image',
                                    template_image_secondary_dir='crop',
-                                   is_refresh_screenshot=False))  # simulate image recognition face icon and tap face pos
+                                   is_refresh_screenshot=False))  # simulate image recognition hand icon , if you want to use this function on real device , you need to set is_refresh_screenshot=True
 
 
 if __name__ == '__main__':
