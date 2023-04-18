@@ -104,6 +104,7 @@ your project
 For more detailed information about the available methods and their usage, please refer to the MetisseClass Methods documentation.
 You can also use this tool for rapid development of automation scripts: [AndroidScreenCaptureTool](https://github.com/weekanda7/AndroidScreenCaptureTool).
 
+![image](./demo2.png)
 
 ## Contributing
 We welcome contributions to Metisse! If you'd like to contribute, please follow these steps:
