@@ -41,22 +41,22 @@ pylint:
     - pip install pylint
   script:
     - pylint --max-line-length=150 --disable=E0611,C0116 autoscript_kernel  > pylint-report.txt
-  allow_failure: true  
+  allow_failure: true
   artifacts:
     reports:
       codequality: pylint-report.txt
 
-run_unittests:
+run_pytest:
   stage: test
   tags:
     - shell
   before_script:
     - python -V
+    - python -m pip install pytest
     - $env:PYTHONPATH = "$($env:PYTHONPATH);$($env:CI_PROJECT_DIR)"
     - echo $env:PYTHONPATH
   script:
-    - python -m unittest discover -s unit_tests -p "test*.py"
-
+    - python -m pytest -s pytest_metisse
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
