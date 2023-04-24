@@ -5,3 +5,4 @@ Pillow==9.4.0
 PyQt6==6.1.0
 dill==0.3.6
 tidevice==0.9.12
+pytest==7.3.1

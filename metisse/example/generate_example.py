@@ -44,7 +44,8 @@ def example():
 
 def create_example_py_file():
     _path = get_current_path()
-    MetisseClass('01234567(test_uid)', _path, None, 'android')
+    _tmp = MetisseClass('01234567(test_uid)', _path, None, 'android')
+    _tmp._logger.close()
     _curPath = os.path.abspath(os.path.dirname(__file__))
 
     source_folder = os.path.join(_curPath, "example_data", 'icon')
