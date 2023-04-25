@@ -21,6 +21,7 @@ from .params import ImageRecognitionParams, SaveParams, DeviceParams, UiClientPa
 from .template_metis import TemplateMetisClass
 from .clients.ios.wda import WdaClient
 from .clients.android.adb import AdbClient
+from .clients.windows.windows import WindowsClient
 from .utils.metisse_path import DevPath
 from .utils.opencv_utils import Opencv_utils
 from .utils.ui_client import UiClient
@@ -55,6 +56,8 @@ class MetisseClass(TemplateMetisClass):
             self._client = WdaClient(DeviceParams(device_id, os_environment))
         elif self._os_environment == 'android':
             self._client = AdbClient(DeviceParams(device_id, os_environment))
+        elif self._os_environment == 'windows':
+            self._client = WindowsClient(DeviceParams(device_id, os_environment))
         else:
             raise ValueError('os_environment must be android or ios')
         self._img_recog_result = ImageRecognitionResult()
@@ -146,6 +149,10 @@ class MetisseClass(TemplateMetisClass):
                 f"{self._script_path.get_image_path(save_screenshot_name,save_screenshot_root_key,save_screenshot_additional_root)}"
             )
         elif self._os_environment == 'ios':
+            self._client.screenshot(
+                f"{self._script_path.get_image_path(save_screenshot_name,save_screenshot_root_key,save_screenshot_additional_root)}"
+            )
+        elif self._os_environment == 'windows':
             self._client.screenshot(
                 f"{self._script_path.get_image_path(save_screenshot_name,save_screenshot_root_key,save_screenshot_additional_root)}"
             )
