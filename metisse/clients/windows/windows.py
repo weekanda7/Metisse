@@ -1,3 +1,5 @@
+# -*- coding=UTF-8 -*-
+
 from typing import Tuple
 from mss import mss
 import win32api
