@@ -97,20 +97,18 @@ class MetisseClass(TemplateMetisClass):
         params.template_image_name = 'log_button'
         try:
             _screen_image_path = self._script_path.get_screen_image_path(params)
+            if not os.path.isfile(_screen_image_path):
+                self.screenshot()
             _template_image_path = self._script_path.get_template_image_path(params)
+            if not os.path.isfile(_template_image_path):
+                raise FileNotFoundError(f"FileNotFoundError: {_template_image_path}")
             self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
             self._img_recog_result = image_recognition.match_template(self.opencv_utils.screen_image_mat,
                                                                       self.opencv_utils.template_image_mat, params.accuracy_val)
         except FileNotFoundError as error_msg:
             self._logger.info("FileNotFoundError: %s", error_msg)
-        except ValueError as error_msg:
-            self._logger.info("ValueError: %s", error_msg)
-            self.screenshot()
-            _screen_image_path = self._script_path.get_screen_image_path(params)
-            _template_image_path = self._script_path.get_template_image_path(params)
-            self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
-            self._img_recog_result = image_recognition.match_template(self.opencv_utils.screen_image_mat,
-                                                                      self.opencv_utils.template_image_mat, params.accuracy_val)
+        except Exception as error:
+            self._logger.error("An unexpected error occurred: %s", error)
 
         if self._img_recog_result.is_recognized:
             self._logger.info("match_template method : template_name=%s prob=%.4f accuracy_val=%.4f %s",
