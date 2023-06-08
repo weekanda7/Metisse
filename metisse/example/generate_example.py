@@ -65,17 +65,8 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from metisse.metisse import MetisseClass
 from metisse.params import ImageRecognitionParams , SaveParams
-
-class CustomImage(ImageRecognitionParams):
-
-    def __init__(self, *args, template_image_secondary_dir='script_example', **kwargs):
-        super().__init__(*args, template_image_secondary_dir=template_image_secondary_dir, **kwargs)
-
-
-class CustomSave(SaveParams):
-
-    def __init__(self, *args, save_image_secondary_dir='script_example', **kwargs):
-        super().__init__(*args, save_image_secondary_dir=save_image_secondary_dir, **kwargs)
+TEMPLATE = {'template_image_secondary_dir' : 'script_example'}
+SAVE = {'save_image_secondary_dir' : 'script_example'}
 
 class script_example(MetisseClass):
 
@@ -90,9 +81,9 @@ class script_example(MetisseClass):
 
     def __call__(self, *args, **kwargs):
         self.check_image_recognition(
-            CustomImage(screen_image_name='tmp0',
+            ImageRecognitionParams(screen_image_name='tmp0',
                                    template_image_name='example_template_hand',
-                                   is_refresh_screenshot=False))  # simulate image recognition hand icon
+                                   is_refresh_screenshot=False,**TEMPLATE))  # simulate image recognition hand icon
         print(f'hand pos = {self._img_recog_result.coordinate}')
 
         self.execute_time_sleep(1)  # wait 1 second
@@ -103,9 +94,9 @@ class script_example(MetisseClass):
                                    template_image_secondary_dir='script_example',
                                    is_refresh_screenshot=False))  # simulate image recognition face icon and tap face pos
         self.default_tap(
-            CustomImage(screen_image_name='tmp0',
+            ImageRecognitionParams(screen_image_name='tmp0',
                                    template_image_name='example_template_face',
-                                   is_refresh_screenshot=False))  # simulate image recognition face icon and tap face pos
+                                   is_refresh_screenshot=False,**TEMPLATE))  # simulate image recognition face icon and tap face pos
 
         self.save_screenshot_compression( SaveParams(
                        save_image_name='save_image',
@@ -116,15 +107,16 @@ class script_example(MetisseClass):
                        is_save_image_name_add_time=True,
                        is_refresh_screenshot=False,
                        ))
-        self.save_screenshot_compression( CustomSave(
+        self.save_screenshot_compression( SaveParams(
                        save_image_name='save_image',
                        save_image_primary_dir='storage',
                        compression=0.5,
                        screenshot_wait_time=1,
                        is_save_image_name_add_time=True,
                        is_refresh_screenshot=False,
+                       **SAVE,
                        ))
-        self.save_screenshot_compression( CustomSave(
+        self.save_screenshot_compression( SaveParams(
                        save_image_name='save_image',
                        save_image_primary_dir='storage',
                        save_image_subdirs = ['third','forth'],
@@ -132,6 +124,7 @@ class script_example(MetisseClass):
                        screenshot_wait_time=1,
                        is_save_image_name_add_time=True,
                        is_refresh_screenshot=False,
+                       **SAVE,
                        ))
         self.crop_screenshot((288, 260), (340, 294),
                              SaveParams(load_image_primary_dir='temp_image',
