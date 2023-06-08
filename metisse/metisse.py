@@ -206,7 +206,7 @@ class MetisseClass(TemplateMetisClass):
                     self.screenshot(_temp_screen_image_name, params.screen_image_primary_dir, params.screen_image_secondary_dir)
                 for _temp_screen_image_name in _screen_image_name_list:
                     _screen_image_path = self._script_path.get_screen_image_path(params)
-
+                    params.screen_image_name = _temp_screen_image_name
                     self.opencv_utils = Opencv_utils(_screen_image_path, _template_image_path)
                     self._img_recog_result = image_recognition.match_template(self.opencv_utils.screen_image_mat,
                                                                               self.opencv_utils.template_image_mat,
