@@ -3,7 +3,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 setup(
     name='metisse',
-    version="0.0.6",
+    version="0.0.7",
     description="A versatile and automated testing framework for games and apps on Android and iOS platforms",
     long_description=long_description,
     long_description_content_type="text/markdown",
