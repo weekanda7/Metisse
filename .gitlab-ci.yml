@@ -17,59 +17,14 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:          # List of stages for jobs, and their order of execution
-  - build
-  - lint
-  - test
-  - deploy
-  - cleanup
+  - release
 
-
-build-job:       # This job runs in the build stage, which runs first.
-  stage: build
+release-job:
+  stage: release
   tags:
     - shell
+  only:
+    - tags
   script:
-    - echo "Compiling the code..."
-    - echo "Compile complete."
-
-pylint:
-  stage: lint
-  tags:
-    - shell
-  before_script:
-    - python -m pip install --upgrade pip
-    - pip install pylint
-  script:
-    - pylint --max-line-length=150 --disable=E0611,C0116 autoscript_kernel  > pylint-report.txt
-  allow_failure: true
-  artifacts:
-    reports:
-      codequality: pylint-report.txt
-
-run_pytest:
-  stage: test
-  tags:
-    - shell
-  before_script:
-    - python -V
-    - python -m pip install pytest
-    - $env:PYTHONPATH = "$($env:PYTHONPATH);$($env:CI_PROJECT_DIR)"
-    - echo $env:PYTHONPATH
-  script:
-    - python -m pytest -s pytest_metisse
-
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  tags:
-    - shell
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
-
-cleanup_pyc:
-  stage: cleanup
-  tags:
-    - shell
-  script:
-    - Get-ChildItem -Path . -Filter *.pyc -Recurse -File | Remove-Item -Force
+    - git remote add github https://weekanda7:%GITHUB_ACCESS_TOKEN%@github.com/weekanda7/Metisse.git
+    - git push github --tags
