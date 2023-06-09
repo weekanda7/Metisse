@@ -24,4 +24,4 @@ release-job:
   script:
     - if [ -z "${GITHUB_ACCESS_TOKEN}" ]; then echo "GITHUB_ACCESS_TOKEN is empty"; else echo "GITHUB_ACCESS_TOKEN is set"; fi
     - git remote add github https://weekanda7:${GITHUB_ACCESS_TOKEN}@github.com/weekanda7/Metisse.git
-    - git push github
+    - git push github HEAD:test_cd
