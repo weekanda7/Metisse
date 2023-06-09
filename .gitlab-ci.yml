@@ -21,8 +21,6 @@ stages:          # List of stages for jobs, and their order of execution
 
 release-job:
   stage: release
-  tags:
-    - shell
   only:
     - tags
   script:
