@@ -16,19 +16,12 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - release
 
 release-job:
   stage: release
-  only:
-    - tags
   script:
-    - if [ -z "${GITHUB_ACCESS_TOKEN}" ]
-    - then
-      - echo "GITHUB_ACCESS_TOKEN is empty"
-    - else
-      - echo "GITHUB_ACCESS_TOKEN is set"
-    - fi
+    - if [ -z "${GITHUB_ACCESS_TOKEN}" ]; then echo "GITHUB_ACCESS_TOKEN is empty"; else echo "GITHUB_ACCESS_TOKEN is set"; fi
     - git remote add github https://weekanda7:${GITHUB_ACCESS_TOKEN}@github.com/weekanda7/Metisse.git
-    - git push github --tags
+    - git push github
