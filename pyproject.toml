@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "metisse"
+version = "0.0.7"
+description = "A versatile and automated testing framework for games and apps on Android and iOS platforms"
+authors = ["weekanda7 <87613475+weekanda7@users.noreply.github.com>"]
+license = "Apache License 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+facebook-wda = "1.4.6"
+numpy = "1.19.5"
+opencv-python = "4.5.1.48"
+pillow = "9.4.0"
+pyqt6 = "6.1.0"
+dill = "0.3.6"
+tidevice = "0.9.12"
+pytest = "7.3.1"
+isort = "^5.12.0"
+black = "^23.9.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
