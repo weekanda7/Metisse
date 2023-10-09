@@ -1,6 +1,6 @@
 # local-test
 test:
-	@make pytest test_env="poetry run"
+	@poetry run pytest -s pytest_metisse
 .PHONY: test
 
 
