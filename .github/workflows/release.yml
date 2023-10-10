@@ -29,15 +29,12 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
 
-        git checkout -b mock_main
-        git push origin HEAD:mock_main
-
         git add setup.py pyproject.toml version
-        git checkout -b test_version_auto
+        git checkout -b auto_version
         git commit -m "Update version to ${{ env.VERSION }}"
-        git push origin HEAD:test_version_auto
-        
-        gh pr create --base mock_main --head test_version_auto --title "New feature" --body "Add a new feature"
+        git push origin HEAD:auto_version
+
+        gh pr create --base main --head auto_version --title "Auto Update Version" --body "Update Version"
 
     - name: Approve and Merge PR
       env:
@@ -45,3 +42,25 @@ jobs:
       run: |
         gh pr review --approve
         gh pr merge --merge
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.8"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine setuptools wheel
+
+    - name: Build source tar
+      run: |
+        python -m build
+
+    - name: Publish wheels to PyPI
+      continue-on-error: true
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        twine upload dist/*.whl dist/*tar*
