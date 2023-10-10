@@ -15,5 +15,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Run pytest
-      run: python -m pytest -s pytest_metisse
+      run: python -m pytest --cov=metisse -s pytest_metisse
 
+    - name: Generate coverage xml reports
+      run: coverage xml -o cov.xml
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./cov.xml
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

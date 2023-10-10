@@ -9,6 +9,7 @@ from metisse.settings import Settings as ST
 from metisse.utils.metisse_path import DevPath
 
 
+@pytest.mark.run(order=1)
 @pytest.fixture
 def test_dev_path_setup():
     with mock.patch("builtins.print") as print_mock:

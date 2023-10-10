@@ -1,10 +1,10 @@
 pytest:
-	${test_env} /bin/bash -c "pytest -s -q /app/pytest_metisse/*"
+	${test_env} /bin/bash -c "pytest --cov=metisse -s -q /app/pytest_metisse/*"
 .PHONY: pytest
 
 # local-test
 local-test:
-	@poetry run pytest -s pytest_metisse
+	@poetry run pytest --cov=metisse -s pytest_metisse
 .PHONY: local-test
 
 # docker run
@@ -13,6 +13,18 @@ test:
 	server='--server=\"xvfb-service\"'
 .PHONY: test
 
+# coverage
+coverage-local-test:
+	@poetry run pytest --cov=metisse -s pytest_metisse
+.PHONY: coverage-local-test
+
+coverage-html:
+	coverage html
+.PHONY: coverage-html
+
+coverage-xml:
+	coverage xml -o cov.xml
+.PHONY: coverage-xml
 
 # docker
 build:
