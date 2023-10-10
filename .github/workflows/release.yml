@@ -25,3 +25,5 @@ jobs:
         git add setup.py pyproject.toml
         git commit -m "Update version to ${{ env.VERSION }}"
         git push origin HEAD:test_version_auto
+      env:
+        GIT_AUTH_TOKEN: ${{ secrets.AUTO_RELEASE_KEY }}
