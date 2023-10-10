@@ -2,8 +2,14 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+.pytest_cache
+.env
+.venv/
 dist/
 build/
-*.egg-info/
 test_init/
 pylint/
+report/
+report.xml
+test_result/
