@@ -1,7 +1,8 @@
 import inspect
 import os
-from ..metisse import MetisseClass
 import shutil
+
+from ..metisse import MetisseClass
 
 
 def get_current_path() -> str:
@@ -14,7 +15,7 @@ def get_current_path() -> str:
     return _path
 
 
-def copy_images(src_folder, dest_folder, extensions=('jpg', 'jpeg', 'png', 'gif')):
+def copy_images(src_folder, dest_folder, extensions=("jpg", "jpeg", "png", "gif")):
     if not os.path.exists(dest_folder):
         os.makedirs(dest_folder)
 
@@ -26,7 +27,7 @@ def copy_images(src_folder, dest_folder, extensions=('jpg', 'jpeg', 'png', 'gif'
                 shutil.copy(src_path, dest_path)
 
 
-def copy_ui(src_folder, dest_folder, extensions='gui'):
+def copy_ui(src_folder, dest_folder, extensions="gui"):
     if not os.path.exists(dest_folder):
         os.makedirs(dest_folder)
 
@@ -44,23 +45,23 @@ def example():
 
 def create_example_py_file():
     _path = get_current_path()
-    _tmp = MetisseClass('01234567(test_uid)', _path, None, 'android')
+    _tmp = MetisseClass("01234567(test_uid)", _path, None, "android")
     _tmp._logger.close()
     _curPath = os.path.abspath(os.path.dirname(__file__))
 
-    source_folder = os.path.join(_curPath, "example_data", 'icon')
-    destination_folder = os.path.join(_path, 'icon', 'script_example')
+    source_folder = os.path.join(_curPath, "example_data", "icon")
+    destination_folder = os.path.join(_path, "icon", "script_example")
     copy_images(source_folder, destination_folder)
 
-    source_folder = os.path.join(_curPath, "example_data", 'temp_image')
-    destination_folder = os.path.join(_path, '01234567(test_uid)', 'temp_image')
+    source_folder = os.path.join(_curPath, "example_data", "temp_image")
+    destination_folder = os.path.join(_path, "01234567(test_uid)", "temp_image")
     copy_images(source_folder, destination_folder)
 
-    source_folder = os.path.join(_curPath, "example_data", 'ui')
-    destination_folder = os.path.join(_path, 'ui')
+    source_folder = os.path.join(_curPath, "example_data", "ui")
+    destination_folder = os.path.join(_path, "ui")
     copy_ui(source_folder, destination_folder)
 
-    content = '''import os
+    content = """import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from metisse.metisse import MetisseClass
@@ -150,7 +151,7 @@ class script_example(MetisseClass):
 if __name__ == '__main__':
     script_obj = script_example('01234567(test_uid)', None, None, 'android')
     script_obj()
-'''
+"""
 
     with open(os.path.join(_path, "script_example.py"), "w", encoding="utf-8") as file:
         file.write(content)

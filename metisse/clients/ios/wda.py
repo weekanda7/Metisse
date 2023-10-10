@@ -1,9 +1,11 @@
 # -*- coding=UTF-8 -*-
 # pyright: strict
 from typing import Tuple
+
 import wda  # type: ignore
-from ..client import Client
+
 from ...params import DeviceParams
+from ..client import Client
 
 
 class WdaClient(Client):
@@ -12,7 +14,9 @@ class WdaClient(Client):
     """
 
     def __init__(self, device_params: DeviceParams, skip_wda_launch: bool = False):
-        assert device_params.os_environment == 'ios', 'device_params.os_environment must be ios'
+        assert (
+            device_params.os_environment == "ios"
+        ), "device_params.os_environment must be ios"
         self.device_params = device_params
         if not skip_wda_launch:
             self.wda_client = wda.USBClient(self.device_params.device_id, port=8100)
@@ -35,7 +39,12 @@ class WdaClient(Client):
         _x, _y = coordinates
         self.wda_client.tap(int(_x / self.ios_device_scale), int(_y / self.ios_device_scale))  # type: ignore
 
-    def swipe(self, start_coordinates: Tuple[int, int], end_coordinates: Tuple[int, int], swiping_time: int) -> None:
+    def swipe(
+        self,
+        start_coordinates: Tuple[int, int],
+        end_coordinates: Tuple[int, int],
+        swiping_time: int,
+    ) -> None:
         """
         swipe device
         """
@@ -47,4 +56,5 @@ class WdaClient(Client):
             int(_y / self.ios_device_scale),  # type: ignore
             int(_x2 / self.ios_device_scale),  # type: ignore
             int(_y2 / self.ios_device_scale),  # type: ignore
-            _ios_swipe_time)  # type: ignore
+            _ios_swipe_time,
+        )  # type: ignore

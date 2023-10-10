@@ -9,7 +9,6 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Dialog(object):
-
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(456, 537)
@@ -41,7 +40,11 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.stop_Button.setText(_translate("Dialog", "中止"))
         self.record_label.setText(
-            _translate("Dialog", "<html><head/><body><p><span style=\" font-size:36pt;\">執行時間 :</span></p></body></html>"))
+            _translate(
+                "Dialog",
+                '<html><head/><body><p><span style=" font-size:36pt;">執行時間 :</span></p></body></html>',
+            )
+        )
         self.log_label.setText(_translate("Dialog", "TextLabel"))
         self.image_label.setText(_translate("Dialog", "TextLabel"))
         self.info_label.setText(_translate("Dialog", "TextLabel"))

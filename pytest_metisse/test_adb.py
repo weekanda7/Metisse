@@ -1,10 +1,14 @@
 import os
 import sys
+
 import pytest
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from unittest.mock import patch
+
 from metisse.clients.android.adb import AdbClient
 from metisse.params import DeviceParams
+
 
 @pytest.fixture
 def adb_client():
@@ -49,5 +53,6 @@ def test_swipe(adb_client):
             f"adb -s {adb_client.device_params.device_id} shell input swipe {start_coordinates[0]} {start_coordinates[1]} {end_coordinates[0]} {end_coordinates[1]} {swiping_time}"
         )
 
+
 if __name__ == "__main__":
-    pytest.main(['pytest_metisse/test_adb.py'])
+    pytest.main(["pytest_metisse/test_adb.py"])
