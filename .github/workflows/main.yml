@@ -1,0 +1,19 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  run_pytest:
+    name: run pytest
+    runs-on: ubuntu-latest
+    container:
+      image: weekanda7/metisse-test:latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Run pytest
+      run: python -m pytest -s pytest_metisse
+

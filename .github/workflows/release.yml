@@ -1,0 +1,66 @@
+name: Python package build and publish
+
+on:
+  push:
+    tags:
+      - 'release-*'
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    environment:
+      name: your-environment-name
+    steps:
+    - uses: actions/checkout@v3
+    - name: Extract release tag
+      run: echo "VERSION=${GITHUB_REF#refs/tags/release-}" >> $GITHUB_ENV
+
+    - name: Update version in setup.py and pyproject.toml and version
+      run: |
+        sed -i "s/version=.*,/version='${{ env.VERSION }}',/" setup.py
+        sed -i "s/version = \".*\"/version = \"${{ env.VERSION }}\"/" pyproject.toml
+        sed -i "s/version = \".*\"/version = \"${{ env.VERSION }}\"/" version
+
+    - name: Commit and push changes
+      env:
+        GIT_AUTH_TOKEN: ${{ secrets.AUTO_RELEASE_KEY }}
+        GH_TOKEN: ${{ secrets.AUTO_RELEASE_KEY }}
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+        git add setup.py pyproject.toml version
+        git checkout -b auto_version
+        git commit -m "Update version to ${{ env.VERSION }}"
+        git push origin HEAD:auto_version
+
+        gh pr create --base main --head auto_version --title "Auto Update Version" --body "Update Version"
+
+    - name: Approve and Merge PR
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh pr review --approve
+        gh pr merge --merge
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.8"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine setuptools wheel
+
+    - name: Build source tar
+      run: |
+        python -m build
+
+    - name: Publish wheels to PyPI
+      continue-on-error: true
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        twine upload dist/*.whl dist/*tar*
