@@ -15,13 +15,15 @@ jobs:
     - name: Extract release tag
       run: echo "VERSION=${GITHUB_REF#refs/tags/release-}" >> $GITHUB_ENV
 
-    - name: Update version in setup.py and pyproject.toml
+    - name: Update version in setup.py and pyproject.toml and version
       run: |
         sed -i "s/version=.*,/version='${{ env.VERSION }}',/" setup.py
         sed -i "s/version = \".*\"/version = \"${{ env.VERSION }}\"/" pyproject.toml
         sed -i "s/version = \".*\"/version = \"${{ env.VERSION }}\"/" version
 
     - name: Commit and push changes
+      env:
+        GIT_AUTH_TOKEN: ${{ secrets.AUTO_RELEASE_KEY }}
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
@@ -36,6 +38,8 @@ jobs:
         gh pr create --base mock_main --head test_version_auto --title "New feature" --body "Add a new feature"
 
     - name: Approve and Merge PR
+      env:
+        GIT_AUTH_TOKEN: ${{ secrets.AUTO_RELEASE_KEY }}
       run: |
         gh pr review --approve
         gh pr merge --merge
