@@ -22,15 +22,11 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        # 用於調試，完成後請移除
-        echo "Token starts with: ${GIT_AUTH_TOKEN:0:4}"
-
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add setup.py pyproject.toml
 
-        git checkout -b test_version_auto  # 創建並切換到新分支
+        git checkout -b test_version_auto
         git commit -m "Update version to ${{ env.VERSION }}"
-        git push https://weekanda7:${{secrets.AUTO_RELEASE_KEY}}@github.com/weekanda7/Metisse.git HEAD:test_version_auto
-      env:
-        GIT_AUTH_TOKEN: ${{ secrets.AUTO_RELEASE_KEY }}
+        git push origin HEAD:test_version_auto
+
