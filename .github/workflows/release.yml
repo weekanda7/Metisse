@@ -35,11 +35,13 @@ jobs:
         git checkout -b test_version_auto
         git commit -m "Update version to ${{ env.VERSION }}"
         git push origin HEAD:test_version_auto
-        gh pr create --base mock_main --head test_version_auto --title "New feature" --body "Add a new feature"
+
 
     - name: Approve and Merge PR
       env:
         GIT_AUTH_TOKEN: ${{ secrets.AUTO_RELEASE_KEY }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        gh pr create --base mock_main --head test_version_auto --title "New feature" --body "Add a new feature"
         gh pr review --approve
         gh pr merge --merge
