@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from metisse.example.generate_example import create_example_py_file
 
 
+@pytest.mark.run(order=2)
 @pytest.fixture
 def test_generate_example_setup():
     current_path = os.path.abspath(os.path.dirname(__file__))
