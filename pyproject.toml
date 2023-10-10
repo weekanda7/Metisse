@@ -8,17 +8,17 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
+opencv-python-headless = "^4.8.1.78"
 facebook-wda = "1.4.6"
 numpy = "1.21.4"
 pillow = "9.4.0"
-pyqt6 = "6.1.0"
 dill = "0.3.6"
 tidevice = "0.9.12"
 pytest = "7.3.1"
 isort = "^5.12.0"
 black = "^23.9.1"
-pyqt6-qt6 = "6.1.0"
-opencv-python-headless = "^4.8.1.78"
+pyqt6 = "6.4.2"
+
 
 
 [build-system]

@@ -1,5 +1,7 @@
 # Base Stage
 FROM python:3.8 AS base
+ENV QT_QPA_PLATFORM=offscreen
+
 RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -14,7 +16,6 @@ RUN apt-get update && \
     curl -sSL https://install.python-poetry.org | python3 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
 # Set Environment Variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -38,5 +39,8 @@ RUN pip install -U pip && \
     pip install --no-cache /wheels/* && \
     rm -rf /wheels
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends xvfb && \
+    apt-get install -y --no-install-recommends python3-pyqt6
 # Copy only necessary files for the application to run
 COPY . .

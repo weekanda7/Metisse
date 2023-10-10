@@ -1,0 +1,6 @@
+services:
+  xvfb-service:
+    image: weekanda7/metisse-test:latest
+    volumes:
+      - ./:/app
+    command: "echo xvfb-service started"
