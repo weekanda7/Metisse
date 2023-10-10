@@ -19,14 +19,23 @@ jobs:
       run: |
         sed -i "s/version=.*,/version='${{ env.VERSION }}',/" setup.py
         sed -i "s/version = \".*\"/version = \"${{ env.VERSION }}\"/" pyproject.toml
+        sed -i "s/version = \".*\"/version = \"${{ env.VERSION }}\"/" version
 
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add setup.py pyproject.toml
 
+        git checkout -b mock_main
+        git push origin HEAD:mock_main
+
+        git add setup.py pyproject.toml version
         git checkout -b test_version_auto
         git commit -m "Update version to ${{ env.VERSION }}"
         git push origin HEAD:test_version_auto
+        gh pr create --base mock_main --head test_version_auto --title "New feature" --body "Add a new feature"
 
+    - name: Approve and Merge PR
+      run: |
+        gh pr review --approve
+        gh pr merge --merge
