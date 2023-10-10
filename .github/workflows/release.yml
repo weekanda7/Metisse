@@ -8,6 +8,8 @@ on:
 jobs:
   versioning:
     runs-on: ubuntu-latest
+    environment:
+      name: your-environment-name
     steps:
     - uses: actions/checkout@v3
     - name: Extract release tag
@@ -26,7 +28,9 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add setup.py pyproject.toml
+
+        git checkout -b test_version_auto  # 創建並切換到新分支
         git commit -m "Update version to ${{ env.VERSION }}"
-        git push https://${{ secrets.AUTO_RELEASE_KEY }}@github.com/weekanda7/Metisse.git HEAD:test_version_auto
+        git push https://weekanda7:${{secrets.AUTO_RELEASE_KEY}}@github.com/weekanda7/Metisse.git HEAD:test_version_auto
       env:
         GIT_AUTH_TOKEN: ${{ secrets.AUTO_RELEASE_KEY }}
