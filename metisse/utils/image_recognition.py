@@ -1,13 +1,18 @@
 import cv2
-from cv2 import Mat
-from ..params import ImageRecognitionResult
 import numpy as np  # type: ignore
+from cv2 import Mat
+
+from ..params import ImageRecognitionResult
 
 
-def match_template(_screen_image_mat: Mat, _template_image_mat: Mat, _accuracy_val: float) -> ImageRecognitionResult:
+def match_template(
+    _screen_image_mat: Mat, _template_image_mat: Mat, _accuracy_val: float
+) -> ImageRecognitionResult:
     _img_recog_result = ImageRecognitionResult()
     image_x, image_y = _template_image_mat.shape[:2]
-    result = cv2.matchTemplate(_screen_image_mat, _template_image_mat, cv2.TM_CCOEFF_NORMED)
+    result = cv2.matchTemplate(
+        _screen_image_mat, _template_image_mat, cv2.TM_CCOEFF_NORMED
+    )
     _, max_val, _, max_loc = cv2.minMaxLoc(result)  # type: ignore unused var
 
     if max_val > _accuracy_val:  # accuracy between two image
@@ -22,7 +27,7 @@ def match_template(_screen_image_mat: Mat, _template_image_mat: Mat, _accuracy_v
             for i in range(loc_ren):
                 _temp_center = (int(loc[1][i] + image_y / 2), int(loc[0][i] + image_x / 2))  # type: ignore
                 _temp_center_list.append(_temp_center)  # type: ignore
-                #if (): print("pos:", _temp_center)
+                # if (): print("pos:", _temp_center)
             _img_recog_result.coordinates_list = _temp_center_list
     else:
         _img_recog_result.is_recognized = False

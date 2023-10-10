@@ -9,7 +9,6 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Dialog(object):
-
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(463, 351)
@@ -61,6 +60,6 @@ class Ui_Dialog(object):
         self.adb_button.setText(_translate("Dialog", "adb connect"))
         self.dpi_adjust_button.setText(_translate("Dialog", "調整dpi"))
         self.dpi_reset_button.setText(_translate("Dialog", "回復dpi"))
-        self.get_device_info_Button.setText(_translate("Dialog", "獲取當前裝置\n"
-                                                       "螢幕解析度\n"
-                                                       "dpi"))
+        self.get_device_info_Button.setText(
+            _translate("Dialog", "獲取當前裝置\n" "螢幕解析度\n" "dpi")
+        )

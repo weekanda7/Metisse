@@ -1,10 +1,10 @@
-from ..params import UiClientParams
-from PyQt6.QtGui import QImage, QPixmap
 import cv2
+from PyQt6.QtGui import QImage, QPixmap
+
+from ..params import UiClientParams
 
 
 class UiClient(object):
-
     def __init__(self, ui_client_params: UiClientParams) -> None:
         self.ui_client_params = ui_client_params
 
@@ -22,5 +22,6 @@ class UiClient(object):
                 _width,
                 _height,
                 _bytes_perline,  # type: ignore
-                QImage.Format.Format_RGB888).rgbSwapped()  # type: ignore
+                QImage.Format.Format_RGB888,
+            ).rgbSwapped()  # type: ignore
             self.ui_client_params.image_label.setPixmap(QPixmap.fromImage(self.qimg))

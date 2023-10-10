@@ -1,6 +1,7 @@
 # -*- coding=UTF-8 -*-
 # pyright: strict
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from typing import Tuple
 
@@ -33,8 +34,13 @@ class TemplateMetisClass(ABC):
         ...
 
     @abstractmethod
-    def tap(self, center: Tuple[int, int], tap_execute_counter_times: int, tap_execute_wait_time: float,
-            tap_offset: Tuple[int, int]) -> None:
+    def tap(
+        self,
+        center: Tuple[int, int],
+        tap_execute_counter_times: int,
+        tap_execute_wait_time: float,
+        tap_offset: Tuple[int, int],
+    ) -> None:
         ...
 
     @abstractmethod
@@ -80,4 +86,3 @@ class TemplateMetisClass(ABC):
         save_params: SaveParams,
     ) -> None:
         ...
-
