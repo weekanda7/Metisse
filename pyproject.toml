@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metisse"
-version = "0.0.7"
+version = "0.0.0"
 description = "A versatile and automated testing framework for games and apps on Android and iOS platforms"
 authors = ["weekanda7 <87613475+weekanda7@users.noreply.github.com>"]
 license = "Apache License 2.0"
