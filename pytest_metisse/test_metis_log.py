@@ -12,6 +12,7 @@ from metisse.utils.metisse_log import MetisseLogger
 
 @pytest.fixture
 def test_metis_log_setup():
+    """Create a temporary logger and corresponding log file."""
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         log_file = temp_file.name
         unique_id = int(time.time() * 1000)
@@ -29,46 +30,26 @@ def test_log_file_creation(test_metis_log_setup):
     assert os.path.exists(log_file)
 
 
-def test_log_debug_message(test_metis_log_setup):
+@pytest.mark.parametrize(
+    "method,message",
+    [
+        ("debug", "Test debug message"),
+        ("info", "Test info message"),
+        ("warning", "Test warning message"),
+        ("error", "Test error message"),
+        ("critical", "Test critical message"),
+    ],
+)
+def test_log_methods(test_metis_log_setup, method: str, message: str) -> None:
+    """Ensure each log method writes the expected message."""
+
     metisse_logger, log_file = test_metis_log_setup
-    message = "Test debug message"
-    metisse_logger.debug(message)
-    _assert_log_contains(message, log_file)
-
-
-def test_log_info_message(test_metis_log_setup):
-    metisse_logger, log_file = test_metis_log_setup
-    message = "Test info message"
-    metisse_logger.info(message)
-    _assert_log_contains(message, log_file)
-
-
-def test_log_warning_message(test_metis_log_setup):
-    metisse_logger, log_file = test_metis_log_setup
-    message = "Test warning message"
-    metisse_logger.warning(message)
-    _assert_log_contains(message, log_file)
-
-
-def test_log_error_message(test_metis_log_setup):
-    metisse_logger, log_file = test_metis_log_setup
-    message = "Test error message"
-    metisse_logger.error(message)
-    _assert_log_contains(message, log_file)
-
-
-def test_log_critical_message(test_metis_log_setup):
-    metisse_logger, log_file = test_metis_log_setup
-    message = "Test critical message"
-    metisse_logger.critical(message)
+    getattr(metisse_logger, method)(message)
     _assert_log_contains(message, log_file)
 
 
 def _assert_log_contains(message, log_file):
+    """Check that the log file contains the provided message."""
     with open(log_file, "r") as log_file:
         log_contents = log_file.read()
         assert message in log_contents
-
-
-if __name__ == "__main__":
-    pytest.main(["-v", "-s", "pytest_metisse/test_metis_log.py"])
