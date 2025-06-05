@@ -41,3 +41,10 @@ def test_execute_time_sleep(mock_sleep, metisse_basic_setup):
         mock_info.assert_called_with("execute_time_sleep : wait_time= %.2f", 1.5)
         mock_send.assert_called_with("execute_time_sleep method : \n wait_time= 1.50")
         mock_sleep.assert_called_once_with(1.5)
+
+
+@mock.patch("metisse.metisse.time.strftime", return_value="2025-01-01_00_00_00_")
+def test_get_time(mock_strftime, metisse_basic_setup):
+    result = metisse_basic_setup.get_time()
+    assert result == "2025-01-01_00_00_00_"
+    mock_strftime.assert_called_once()
