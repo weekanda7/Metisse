@@ -154,3 +154,62 @@ def test_tap_invokes_client_with_offset(metisse_actions_setup):
         assert m_info.call_count == 2
         assert m_send.call_count == 2
         assert m_sleep.call_count == 2
+
+
+def test_default_press_fail_backup(metisse_actions_setup):
+    mc = metisse_actions_setup
+    mc.is_backup = True
+    params = ImageRecognitionParams(template_image_name="tpl", is_backup=True)
+    with mock.patch.object(
+        mc, "check_image_recognition", return_value=False
+    ) as m_check, mock.patch.object(mc, "press") as m_press, mock.patch.object(
+        mc, "save_screenshot_compression"
+    ) as m_save:
+        result = mc.default_press(params)
+        assert result is False
+        m_check.assert_called_once_with(params)
+        m_press.assert_not_called()
+        m_save.assert_called_once()
+
+
+def test_swipe_calls_client(metisse_actions_setup):
+    mc = metisse_actions_setup
+    with mock.patch.object(mc._client, "swipe") as m_swipe, mock.patch.object(
+        mc._logger, "info"
+    ) as m_info, mock.patch.object(
+        mc._ui_client, "send_log_to_ui"
+    ) as m_send, mock.patch(
+        "metisse.metisse.time.sleep"
+    ) as m_sleep:
+        mc.swipe(
+            (0, 0),
+            (10, 10),
+            swiping_time=200,
+            swipe_execute_counter_times=2,
+            swipe_execute_wait_time=0.1,
+        )
+        assert m_swipe.call_count == 2
+        m_swipe.assert_called_with((0, 0), (10, 10), 200)
+        assert m_info.call_count == 2
+        assert m_send.call_count == 2
+        assert m_sleep.call_count == 2
+
+
+@mock.patch("metisse.metisse.WdaClient")
+def test_screenshot_ios_environment(mock_wda_client, tmp_path):
+    mock_client_instance = mock_wda_client.return_value
+    mc = MetisseClass(
+        device_id="dev",
+        relatively_path=str(tmp_path),
+        pyqt6_ui_label=UiClientParams(),
+        os_environment="ios",
+    )
+    mc._logger.close()
+    expected_path = mc._script_path.get_image_path("snap.png", "temp_image", "")
+    with mock.patch.object(mc._logger, "debug") as m_debug, mock.patch.object(
+        mc._ui_client, "send_log_to_ui"
+    ) as m_send:
+        mc.screenshot("snap.png", "temp_image", "")
+        mock_client_instance.screenshot.assert_called_once_with(expected_path)
+        m_debug.assert_called_once()
+        m_send.assert_called_once()
