@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 import tempfile
+from unittest.mock import patch
 
 import pytest
 from PIL import Image
@@ -82,6 +83,45 @@ def test_save_screenshot_compression(test_test_save_screenshot_compression_setup
             assert (
                 output_image.size == expected_size
             ), "Output image size does not match expected size."
+
+
+def test_save_screenshot_compression_no_compress(
+    test_test_save_screenshot_compression_setup,
+):
+    test_metisse = test_test_save_screenshot_compression_setup
+    save_params = SaveParams(
+        load_image_primary_dir="temp_image",
+        load_image_name="tmp0",
+        save_image_primary_dir="storage",
+        save_image_name="save_nocompress",
+        compression=1,
+        is_refresh_screenshot=False,
+        is_save_image_name_add_time=False,
+    )
+
+    with patch.object(test_metisse._logger, "info") as m_info, patch.object(
+        test_metisse._ui_client, "send_log_to_ui"
+    ) as m_send:
+        test_metisse.save_screenshot_compression(save_params)
+        m_info.assert_called()
+        m_send.assert_called()
+
+    output_path = os.path.join(
+        test_metisse._script_path.device_id_path,
+        save_params.save_image_primary_dir,
+        save_params.save_image_name,
+    )
+    assert os.path.exists(output_path), "Output file not found."
+    with Image.open(output_path) as output_image, Image.open(
+        os.path.join(
+            test_metisse._script_path.device_id_path,
+            save_params.load_image_primary_dir,
+            test_metisse._script_path._check_image_name_pngFormat(
+                save_params.load_image_name
+            ),
+        )
+    ) as original_image:
+        assert output_image.size == original_image.size
 
 
 if __name__ == "__main__":
