@@ -1,3 +1,4 @@
+import os
 import shutil
 from unittest import mock
 
@@ -48,3 +49,13 @@ def test_get_time(mock_strftime, metisse_basic_setup):
     result = metisse_basic_setup.get_time()
     assert result == "2025-01-01_00_00_00_"
     mock_strftime.assert_called_once()
+
+
+def _wrapper_for_current_path() -> str:
+    """Helper used to test ``get_current_path``."""
+    return MetisseClass.get_current_path()
+
+
+def test_get_current_path():
+    expected = os.path.dirname(os.path.abspath(__file__))
+    assert _wrapper_for_current_path() == expected

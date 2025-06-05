@@ -123,3 +123,34 @@ def test_press_success_calls_swipe_and_logs(metisse_actions_setup):
             "adb_press method : \n (x,y) = (3, 4) \n pressing_time = 50"
         )
         m_sleep.assert_called()
+
+
+def test_screenshot_invalid_environment(metisse_actions_setup):
+    mc = metisse_actions_setup
+    mc._os_environment = "windows"
+    with mock.patch.object(mc._client, "screenshot") as m_shot:
+        with pytest.raises(RuntimeError):
+            mc.screenshot()
+        m_shot.assert_not_called()
+
+
+def test_tap_invokes_client_with_offset(metisse_actions_setup):
+    mc = metisse_actions_setup
+    with mock.patch.object(mc._client, "tap") as m_tap, mock.patch.object(
+        mc._logger, "info"
+    ) as m_info, mock.patch.object(
+        mc._ui_client, "send_log_to_ui"
+    ) as m_send, mock.patch(
+        "metisse.metisse.time.sleep"
+    ) as m_sleep:
+        mc.tap(
+            (10, 20),
+            tap_execute_counter_times=2,
+            tap_execute_wait_time=0.1,
+            tap_offset=(5, -5),
+        )
+        assert m_tap.call_count == 2
+        m_tap.assert_called_with((15, 15))
+        assert m_info.call_count == 2
+        assert m_send.call_count == 2
+        assert m_sleep.call_count == 2

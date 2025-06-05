@@ -2,7 +2,7 @@ import os
 import shutil
 import sys
 import tempfile
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -74,6 +74,29 @@ def test_adb_default_tap(
 
     # Assert the return value of the default_tap method
     assert result, "check_image_recognition failed with basic params"
+
+
+@patch.object(MetisseClass, "check_image_recognition", return_value=False)
+@patch.object(MetisseClass, "tap")
+@patch.object(MetisseClass, "save_screenshot_compression")
+def test_adb_default_tap_fail(
+    mock_save_screenshot_compression,
+    mock_tap,
+    mock_check_image_recognition,
+    test_default_tap_setUp,
+):
+    params = ImageRecognitionParams(
+        template_image_name="test_template",
+        template_image_primary_dir="icon",
+        is_backup=True,
+    )
+
+    result = test_default_tap_setUp.default_tap(params)
+
+    mock_check_image_recognition.assert_called_with(params)
+    mock_tap.assert_not_called()
+    mock_save_screenshot_compression.assert_called_once()
+    assert result is False
 
 
 if __name__ == "__main__":
