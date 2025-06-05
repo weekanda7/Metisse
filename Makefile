@@ -4,7 +4,7 @@ pytest:
 
 # local-test
 local-test:
-	@poetry run pytest --cov=metisse -s pytest_metisse
+	@poetry run pytest --cov=metisse --cov-config=.coveragerc -s pytest_metisse
 .PHONY: local-test
 
 # docker run

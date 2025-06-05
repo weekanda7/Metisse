@@ -98,3 +98,27 @@ def test_press_handles_oserror(metisse_actions_setup):
         m_swipe.assert_called_once()
         m_exc.assert_called_once()
         m_send.assert_called_once()
+
+
+def test_press_success_calls_swipe_and_logs(metisse_actions_setup):
+    mc = metisse_actions_setup
+    with (
+        mock.patch.object(mc, "swipe") as m_swipe,
+        mock.patch.object(mc._logger, "info") as m_info,
+        mock.patch.object(mc._ui_client, "send_log_to_ui") as m_send,
+        mock.patch("metisse.metisse.time.sleep") as m_sleep,
+    ):
+        mc.press(
+            (3, 4),
+            pressing_time=50,
+            press_execute_counter_times=2,
+            press_execute_wait_time=0,
+        )
+        assert m_swipe.call_count == 2
+        m_info.assert_called_with(
+            "adb_press method : (x,y) = %s pressing_time = %d", (3, 4), 50
+        )
+        m_send.assert_called_with(
+            "adb_press method : \n (x,y) = (3, 4) \n pressing_time = 50"
+        )
+        m_sleep.assert_called()
