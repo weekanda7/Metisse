@@ -39,6 +39,104 @@ from .utils.opencv_utils import Opencv_utils
 from .utils.ui_client import UiClient
 
 
+class ImageHandler:
+    """Handle screenshot post-processing such as compression and cropping."""
+
+    def __init__(
+        self,
+        script_path: DevPath,
+        logger: MetisseLogger,
+        ui_client: UiClient,
+        screenshot_cb: callable,
+    ) -> None:
+        self._script_path = script_path
+        self._logger = logger
+        self._ui_client = ui_client
+        self._screenshot_cb = screenshot_cb
+
+    def save_screenshot_compression(self, save_params: SaveParams) -> None:
+        if save_params.is_refresh_screenshot:
+            time.sleep(save_params.screenshot_wait_time)
+            self._screenshot_cb()
+        _img = Image.open(self._script_path.get_load_image_path(save_params))
+        if save_params.is_save_image_name_add_time:
+            _save_png_image_name = self._get_timestamped_name(
+                save_params.save_image_name
+            )
+        else:
+            _save_png_image_name = f"{save_params.save_image_name}.png"
+        save_params.save_image_name = _save_png_image_name
+        _image_path = self._script_path.get_save_image_path(save_params)
+        self._script_path.check_path(os.path.dirname(_image_path))
+
+        if save_params.compression != 1:
+            (_w, _h) = _img.size
+            _w = int(_w * save_params.compression)
+            _h = int(_h * save_params.compression)
+            _new_resize_img = _img.resize((_w, _h))
+            _new_resize_img.save(_image_path)
+            self._logger.info(
+                "save_screenshot_compression method : raw data w=%d, h=%d compression = %.2f name=%s ",
+                _w,
+                _h,
+                save_params.compression,
+                _save_png_image_name,
+            )
+            self._ui_client.send_log_to_ui(
+                f"save_screenshot_compression method :\n raw data w={_w}, h={_h}\n compression = {save_params.compression}\n name={_save_png_image_name} "
+            )
+        else:
+            (_w, _h) = _img.size
+            _img.save(_image_path)
+            self._logger.info(
+                "save_screenshot_compression method : raw data w=%d, h=%d name=%s",
+                _w,
+                _h,
+                _save_png_image_name,
+            )
+            self._ui_client.send_log_to_ui(
+                f"save_screenshot_compression method : \n raw data w={_w}, h={_h} \n name={_save_png_image_name}"
+            )
+
+    def crop_screenshot(
+        self,
+        coordinate1_tuple1: Tuple[int, int],
+        coordinate2_tuple2: Tuple[int, int],
+        save_params: SaveParams,
+    ) -> None:
+        if save_params.is_refresh_screenshot:
+            time.sleep(save_params.screenshot_wait_time)
+            self._screenshot_cb()
+        _img = Image.open(self._script_path.get_load_image_path(save_params))
+        _pos_x, _pos_y = coordinate1_tuple1
+        _pos_x2, _pos_y2 = coordinate2_tuple2
+        _pos_x2 -= _pos_x
+        _pos_y2 -= _pos_y
+        _region = (_pos_x, _pos_y, _pos_x + _pos_x2, _pos_y + _pos_y2)
+        _crop_img = _img.crop(_region)
+        if save_params.is_save_image_name_add_time:
+            _save_png_image_name = self._get_timestamped_name(
+                save_params.save_image_name
+            )
+        else:
+            _save_png_image_name = f"{save_params.save_image_name}.png"
+
+        save_params.save_image_name = _save_png_image_name
+        _image_path = self._script_path.get_save_image_path(save_params)
+        self._script_path.check_path(os.path.dirname(_image_path))
+        _crop_img.save(_image_path)
+        self._logger.info(
+            "crop_screenshot method : exported : w=%s",
+            _save_png_image_name,
+        )
+        self._ui_client.send_log_to_ui(
+            f"crop_screenshot method : \n exported : w={_save_png_image_name}"
+        )
+
+    def _get_timestamped_name(self, name: str) -> str:
+        return f"{time.strftime('%Y-%m-%d_%H_%M_%S_', time.localtime())}{name}.png"
+
+
 class MetisseClass(TemplateMetisClass):
     def __init__(
         self,
@@ -80,12 +178,58 @@ class MetisseClass(TemplateMetisClass):
         self._img_recog_result = ImageRecognitionResult()
 
         self._ui_client = UiClient(pyqt6_ui_label)
+        self._image_handler = ImageHandler(
+            self._script_path,
+            self._logger,
+            self._ui_client,
+            lambda: self.screenshot(),
+        )
 
         self.is_backup = False
         self.backup_time = time.strftime("%Y-%m-%d_%H_%M_%S", time.localtime())
         assert isinstance(self.backup_time, str)
         self.screenshot_wait_time_increase: float = 1
         self.is_check_gamelog: bool = False
+
+    def _perform_action(
+        self,
+        params: ImageRecognitionParams,
+        action: callable,
+        log_prefix: str,
+        *args,
+    ) -> bool:
+        save_params = SaveParams(
+            save_image_primary_dir="storage",
+            save_image_name=f"{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}",
+            save_image_secondary_dir=self.backup_time,
+            is_refresh_screenshot=False,
+        )
+        if self.check_image_recognition(params):
+            action(*args)
+            self._logger.info(
+                f"{log_prefix} method : template_name=%s  prob=%.4f %s",
+                params.template_image_name,
+                self._img_recog_result.recognition_threshold,
+                self._img_recog_result.is_recognized,
+            )
+            self._ui_client.send_log_to_ui(
+                f"{log_prefix} method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
+            )
+            if self.is_backup and params.is_backup:
+                self.save_screenshot_compression(save_params)
+            return True
+        self._logger.info(
+            f"{log_prefix} method : template_name=%s  prob=%.4f %s",
+            params.template_image_name,
+            self._img_recog_result.recognition_threshold,
+            self._img_recog_result.is_recognized,
+        )
+        self._ui_client.send_log_to_ui(
+            f"{log_prefix} method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
+        )
+        if self.is_backup and params.is_backup:
+            self.save_screenshot_compression(save_params)
+        return False
 
     @staticmethod
     def get_current_path() -> str:
@@ -167,16 +311,15 @@ class MetisseClass(TemplateMetisClass):
         save_screenshot_root_key: str = "temp_image",
         save_screenshot_additional_root: str = "",
     ) -> None:
-        if self._os_environment == "android":
-            self._client.screenshot(
-                f"{self._script_path.get_image_path(save_screenshot_name,save_screenshot_root_key,save_screenshot_additional_root)}"
-            )
-        elif self._os_environment == "ios":
-            self._client.screenshot(
-                f"{self._script_path.get_image_path(save_screenshot_name,save_screenshot_root_key,save_screenshot_additional_root)}"
-            )
-        else:
+        if self._os_environment not in ST.OS_ENVIRONMENT:
             raise RuntimeError("Unsupported OS environment")
+        self._client.screenshot(
+            self._script_path.get_image_path(
+                save_screenshot_name,
+                save_screenshot_root_key,
+                save_screenshot_additional_root,
+            )
+        )
         self._logger.debug("adb_screenshot method : process %s", save_screenshot_name)
         self._ui_client.send_log_to_ui(
             f"adb_screenshot method : \n process {save_screenshot_name:s}"
@@ -364,44 +507,16 @@ class MetisseClass(TemplateMetisClass):
         tap_execute_counter_times: int = 1,
         tap_offset: Tuple[int, int] = (0, 0),
     ) -> bool:
-        save_params = SaveParams(
-            save_image_primary_dir="storage",
-            save_image_name=f"{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}",
-            save_image_secondary_dir=self.backup_time,
-            is_refresh_screenshot=False,
-        )
-        if self.check_image_recognition(params):
-            self.tap(
+        return self._perform_action(
+            params,
+            lambda: self.tap(
                 self._img_recog_result.coordinate,
                 tap_execute_counter_times,
                 tap_execute_wait_time,
                 tap_offset,
-            )
-            self._logger.info(
-                "default_tap method : template_name=%s  prob=%.4f %s",
-                params.template_image_name,
-                self._img_recog_result.recognition_threshold,
-                self._img_recog_result.is_recognized,
-            )
-            self._ui_client.send_log_to_ui(
-                f"default_tap method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
-            )
-            if self.is_backup and params.is_backup:
-                self.save_screenshot_compression(save_params)
-            return True
-
-        self._logger.info(
-            "default_tap method : template_name=%s  prob=%.4f %s",
-            params.template_image_name,
-            self._img_recog_result.recognition_threshold,
-            self._img_recog_result.is_recognized,
+            ),
+            "default_tap",
         )
-        self._ui_client.send_log_to_ui(
-            f"default_tap method : \n template_name={params.template_image_name}  \n prob={self._img_recog_result.recognition_threshold:.4f} \n {self._img_recog_result.is_recognized}"
-        )
-        if self.is_backup and params.is_backup:
-            self.save_screenshot_compression(save_params)
-        return False
 
     def default_swipe(
         self,
@@ -411,27 +526,17 @@ class MetisseClass(TemplateMetisClass):
         swipe_execute_counter_times: int = 1,
         swipe_execute_wait_time: float = 0,
     ) -> bool:
-        save_params = SaveParams(
-            save_image_primary_dir="storage",
-            save_image_name=f"{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}",
-            save_image_secondary_dir=self.backup_time,
-            is_refresh_screenshot=False,
-        )
-        if self.check_image_recognition(params):
-            self.swipe(
+        return self._perform_action(
+            params,
+            lambda: self.swipe(
                 self._img_recog_result.coordinate,
                 swipe_offset_position,
                 swiping_time,
                 swipe_execute_counter_times,
                 swipe_execute_wait_time,
-            )
-            if self.is_backup and params.is_backup:
-                self.save_screenshot_compression(save_params)
-            return True
-
-        if self.is_backup and params.is_backup:
-            self.save_screenshot_compression(save_params)
-        return False
+            ),
+            "default_swipe",
+        )
 
     def default_press(
         self,
@@ -440,72 +545,19 @@ class MetisseClass(TemplateMetisClass):
         press_execute_counter_times: int = 1,
         press_execute_wait_time: float = 0,
     ) -> bool:
-        save_params = SaveParams(
-            save_image_primary_dir="storage",
-            save_image_name=f"{self.get_time()}_{params.template_image_name}_{self._img_recog_result.recognition_threshold:.2f}{self._img_recog_result.is_recognized}",
-            save_image_secondary_dir=self.backup_time,
-            is_refresh_screenshot=False,
-        )
-        if self.check_image_recognition(params):
-            self.press(
+        return self._perform_action(
+            params,
+            lambda: self.press(
                 self._img_recog_result.coordinate,
                 pressing_time,
                 press_execute_counter_times,
                 press_execute_wait_time,
-            )
-            if self.is_backup and params.is_backup:
-                self.save_screenshot_compression(save_params)
-            return True
-
-        if self.is_backup and params.is_backup:
-            self.save_screenshot_compression(save_params)
-        return False
+            ),
+            "default_press",
+        )
 
     def save_screenshot_compression(self, save_params: SaveParams) -> None:
-        if save_params.is_refresh_screenshot:
-            time.sleep(save_params.screenshot_wait_time)
-            self.screenshot()
-        _img = Image.open(self._script_path.get_load_image_path(save_params))
-        if save_params.is_save_image_name_add_time:
-            _save_png_image_name = (
-                self.get_time() + save_params.save_image_name + ".png"
-            )
-        else:
-            _save_png_image_name = save_params.save_image_name + ".png"
-        save_params.save_image_name = _save_png_image_name
-        _image_path = self._script_path.get_save_image_path(save_params)
-        self._script_path.check_path(os.path.dirname(_image_path))
-
-        if save_params.compression != 1:
-            (_w, _h) = _img.size
-            _w = int(_w * save_params.compression)
-            _h = int(_h * save_params.compression)
-            _new_resize_img = _img.resize((_w, _h))
-            _new_resize_img.save(_image_path)
-            if not self.is_backup:
-                self._logger.info(
-                    "save_screenshot_compression method : raw data w=%d, h=%d compression = %.2f name=%s ",
-                    _w,
-                    _h,
-                    save_params.compression,
-                    _save_png_image_name,
-                )
-                self._ui_client.send_log_to_ui(
-                    f"save_screenshot_compression method :\n raw data w={_w}, h={_h}\n compression = {save_params.compression}\n name={_save_png_image_name} "
-                )
-        else:
-            (_w, _h) = _img.size
-            _img.save(_image_path)
-            if not self.is_backup:
-                self._logger.info(
-                    "save_screenshot_compression method : raw data w=%d, h=%d name=%s",
-                    _w,
-                    _h,
-                    _save_png_image_name,
-                )
-                self._ui_client.send_log_to_ui(
-                    f"save_screenshot_compression method : \n raw data w={_w}, h={_h} \n name={_save_png_image_name}"
-                )
+        self._image_handler.save_screenshot_compression(save_params)
 
     def crop_screenshot(
         self,
@@ -513,31 +565,8 @@ class MetisseClass(TemplateMetisClass):
         coordinate2_tuple2: Tuple[int, int],
         save_params: SaveParams,
     ) -> None:
-        if save_params.is_refresh_screenshot:
-            time.sleep(save_params.screenshot_wait_time)
-            self.screenshot()
-        _img = Image.open(self._script_path.get_load_image_path(save_params))
-        _pos_x, _pos_y = coordinate1_tuple1
-        _pos_x2, _pos_y2 = coordinate2_tuple2
-
-        _pos_x2 -= _pos_x
-        _pos_y2 -= _pos_y
-        _region = (_pos_x, _pos_y, _pos_x + _pos_x2, _pos_y + _pos_y2)
-        _crop_img = _img.crop(_region)
-        if save_params.is_save_image_name_add_time:
-            _save_png_image_name = (
-                self.get_time() + save_params.save_image_name + ".png"
-            )
-        else:
-            _save_png_image_name = save_params.save_image_name + ".png"
-
-        save_params.save_image_name = _save_png_image_name
-        _image_path = self._script_path.get_save_image_path(save_params)
-        self._script_path.check_path(os.path.dirname(_image_path))
-        _crop_img.save(_image_path)
-        self._logger.info(
-            "crop_screenshot method : exported : w=%s", _save_png_image_name
-        )
-        self._ui_client.send_log_to_ui(
-            f"crop_screenshot method : \n exported : w={_save_png_image_name}"
+        self._image_handler.crop_screenshot(
+            coordinate1_tuple1,
+            coordinate2_tuple2,
+            save_params,
         )
