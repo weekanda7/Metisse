@@ -85,8 +85,7 @@ class ScriptPath(DevPath):
         caller_file_path = caller_frame.filename  # 获取调用该方法的文件路径
 
         _path = os.path.dirname(os.path.abspath(caller_file_path))
-        _path = os.path.join(_path, device_id)
-        script_path = ScriptPath(device_id, _path)
+        script_path = ScriptPath(_path, device_id)
         script_path.initialize_script_environment()
         return script_path
 
