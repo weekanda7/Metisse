@@ -31,20 +31,20 @@ def test_log_file_creation(test_metis_log_setup):
 
 
 @pytest.mark.parametrize(
-    "method,message",
+    "log_fn,message",
     [
-        ("debug", "Test debug message"),
-        ("info", "Test info message"),
-        ("warning", "Test warning message"),
-        ("error", "Test error message"),
-        ("critical", "Test critical message"),
+        (MetisseLogger.debug, "Test debug message"),
+        (MetisseLogger.info, "Test info message"),
+        (MetisseLogger.warning, "Test warning message"),
+        (MetisseLogger.error, "Test error message"),
+        (MetisseLogger.critical, "Test critical message"),
     ],
 )
-def test_log_methods(test_metis_log_setup, method: str, message: str) -> None:
-    """Ensure each log method writes the expected message."""
+def test_log_methods(test_metis_log_setup, log_fn: callable, message: str) -> None:
+    """Ensure each log level writes the expected message."""
 
     metisse_logger, log_file = test_metis_log_setup
-    getattr(metisse_logger, method)(message)
+    log_fn(metisse_logger, message)
     _assert_log_contains(message, log_file)
 
 
