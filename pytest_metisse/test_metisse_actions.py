@@ -102,12 +102,13 @@ def test_press_handles_oserror(metisse_actions_setup):
 
 def test_press_success_calls_swipe_and_logs(metisse_actions_setup):
     mc = metisse_actions_setup
-    with (
-        mock.patch.object(mc, "swipe") as m_swipe,
-        mock.patch.object(mc._logger, "info") as m_info,
-        mock.patch.object(mc._ui_client, "send_log_to_ui") as m_send,
-        mock.patch("metisse.metisse.time.sleep") as m_sleep,
-    ):
+    with mock.patch.object(mc, "swipe") as m_swipe, mock.patch.object(
+        mc._logger, "info"
+    ) as m_info, mock.patch.object(
+        mc._ui_client, "send_log_to_ui"
+    ) as m_send, mock.patch(
+        "metisse.metisse.time.sleep"
+    ) as m_sleep:
         mc.press(
             (3, 4),
             pressing_time=50,
